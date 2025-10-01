@@ -4,4 +4,4 @@ from common import models
 
 class HomeView(View):
     def get(self, request):
-        return render(request, "index.html")
+        return render(request, "base/index.html")

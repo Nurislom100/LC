@@ -65,29 +65,31 @@ class Course(BaseModel):
         return self.title
 
 
+class Group(BaseModel):
+    day_choices = [
+        ("mo we fri","Mo We Fri"),
+        ("tu thu sa","Tu Thu Sa"),
+    ]
+    status_choices = [
+        ("active", "ACTIVE"),
+        ("finished", "FINISHED"),
+        ("archived", "ARCHIVED"),
+    ]
+    title = models.CharField(_("title"), max_length=256)
+    course = models.ForeignKey("common.Course", on_delete=models.SET_NULL, verbose_name="course", related_name="groups")
+    teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups")
+    lesson_days = models.CharField(_("lesson days"), max_length=256, choices=day_choices)
+    time = models.TimeField(_("time"))
+    date_started = models.DateField(auto_now_add=True)
+    status = models.CharField(_("status"), max_length=256, choices=status_choices, default="ACTIVE") 
 
-    
+    class Meta:
+        db_table = "groups"
+        verbose_name = _("group")
+        verbose_name_plural = _("groups")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def __str__(self):
+        return self.title
 
 
 

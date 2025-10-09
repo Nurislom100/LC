@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
     'common',
     'manager',
     'accountant',
@@ -81,6 +82,9 @@ try:
     from .local_settings import *
 except:
     print("Create local_settings")
+
+
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

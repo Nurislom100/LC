@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
-
-
 from helpers.models import BaseModel
 
 
@@ -20,8 +18,8 @@ class BaseUser(AbstractUser):
     role = models.CharField(_("role"), max_length=256, choices=role_choices, null=True)
     teacher_profile = models.ForeignKey("common.Teacher", on_delete=models.CASCADE, verbose_name="teacher profile", related_name="users", null=True, blank=True)
     password = models.CharField(_("password"), max_length=256)
-    created_at = models.DateTimeField(auto_now_add=True) 
-    updated_at = models.DateTimeField(auto_now_add=True) 
+    created_at = models.DateTimeField() 
+    updated_at = models.DateTimeField() 
 
     class Meta:
         db_table = "users"
@@ -55,7 +53,7 @@ class Course(BaseModel):
     title = models.CharField(_("title"), max_length=256)
     description = models.TextField(_("description"), null=True, blank=True)
     duration = models.CharField(_("duration"), max_length=256)
-    price = models.DecimalField(_("price"), max_digits=16, decimal_places=2)
+    price = models.IntegerField(_("price"))
 
     class Meta:
         db_table = "courses"
@@ -81,7 +79,7 @@ class Group(BaseModel):
     teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True)
     lesson_days = models.CharField(_("lesson days"), max_length=256, choices=day_choices)
     time = models.TimeField(_("time"))
-    date_started = models.DateField(auto_now_add=True)
+    date_started = models.DateField()
     status = models.CharField(_("status"), max_length=256, choices=status_choices, default="ACTIVE") 
 
     class Meta:
@@ -102,10 +100,9 @@ class Student(BaseModel):
     birth_date = models.DateField(_("birth date"))
     phone = models.CharField(_("phone"), max_length=256)
     address = models.CharField(_("address"), max_length=256)
-    balance = models.DecimalField(_("balance"), max_digits=16, decimal_places=2)
+    balance = models.IntegerField(_("balance"))
     date_joined = models.DateTimeField(_("date joined"))
     status = models.CharField(_("status"), max_length=256, choices=status_choices)
-    parent_profile = models.CharField(_("parent profile"), max_length=256)
 
     class Meta:
         db_table = "students"

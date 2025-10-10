@@ -1,3 +1,13 @@
 from django.shortcuts import render
+from django.views.generic import View
+from helpers.permissions import AccountantPassesTestMixin
+from common import models
 
-# Create your views here.
+
+
+class HomeView(AccountantPassesTestMixin, View):
+    def get(self, request):
+        print(request.user.role)
+        return render(request, "accountant/base/index.html")
+
+

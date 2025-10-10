@@ -4,14 +4,16 @@ from django.views.generic import ListView
 from common import models
 from manager import forms
 from helpers.views import CreateView, UpdateView, DeleteView
+from helpers.permissions import ManagerPassesTestMixin
 
-class HomeView(View):
+
+class HomeView(ManagerPassesTestMixin, View):
     def get(self, request):
         print(request.user.role)
         return render(request, "base/index.html")
 
 
-class TeacherListView(ListView):
+class TeacherListView(ManagerPassesTestMixin, ListView):
     model = models.Teacher
     template_name = "manager/teacher/list.html"
     context_object_name = "objects"
@@ -26,7 +28,7 @@ class TeacherListView(ListView):
             )
         return queryset
 
-class TeacherCreateView(CreateView):
+class TeacherCreateView(ManagerPassesTestMixin, CreateView):
     model = models.Teacher
     form_class = forms.TeacherForm
     template_name = "manager/teacher/create.html"
@@ -35,7 +37,7 @@ class TeacherCreateView(CreateView):
     success_create_url = 'manager:teacher-create'
     
     
-class TeacherUpdateView(UpdateView):
+class TeacherUpdateView(ManagerPassesTestMixin, UpdateView):
     model = models.Teacher
     form_class = forms.TeacherForm
     template_name = "manager/teacher/update.html"
@@ -44,13 +46,13 @@ class TeacherUpdateView(UpdateView):
     success_create_url = 'manager:teacher-update'
     
 
-class TeacherDeleteView(DeleteView):
+class TeacherDeleteView(ManagerPassesTestMixin, DeleteView):
     model = models.Teacher
     success_url = 'manager:teacher-list'
     
    
 
-class CourseListView(ListView):
+class CourseListView(ManagerPassesTestMixin, ListView):
     model = models.Course
     template_name = "manager/course/list.html"
     context_object_name = "courses"
@@ -65,7 +67,7 @@ class CourseListView(ListView):
 
 
 
-class CourseCreateView(CreateView):
+class CourseCreateView(ManagerPassesTestMixin, CreateView):
     model = models.Course
     form_class = forms.CourseForm
     context_object_name = "object"
@@ -74,7 +76,7 @@ class CourseCreateView(CreateView):
     success_create_url = "manager:course-list"
 
 
-class CourseUpdateView(UpdateView):
+class CourseUpdateView(ManagerPassesTestMixin, UpdateView):
     model = models.Course
     form_class = forms.CourseForm
     context_object_name = "object"
@@ -83,12 +85,12 @@ class CourseUpdateView(UpdateView):
     success_update_url = "manager:course-update"
 
 
-class CourseDeleteView(DeleteView):
+class CourseDeleteView(ManagerPassesTestMixin, DeleteView):
     model = models.Course
     success_url = "manager:course-list"
 
 
-class GroupListView(ListView):
+class GroupListView(ManagerPassesTestMixin, ListView):
     model = models.Group
     template_name = "manager/group/list.html"
     context_object_name = "objects"
@@ -104,7 +106,7 @@ class GroupListView(ListView):
 
 
 
-class GroupCreateView(CreateView):
+class GroupCreateView(ManagerPassesTestMixin, CreateView):
     model = models.Group
     template_name = "manager/group/create.html"
     context_object_name = 'object'
@@ -113,7 +115,7 @@ class GroupCreateView(CreateView):
     success_update_url = "manager:group-update"
 
 
-class GroupUpdateView(UpdateView):
+class GroupUpdateView(ManagerPassesTestMixin, UpdateView):
     model = models.Group
     template_name = "manager/group/update.html"
     context_object_name = 'object'
@@ -121,11 +123,11 @@ class GroupUpdateView(UpdateView):
     success_url = "manager:group-list"
     success_update_url = "manager:group-update"
 
-class GroupDeleteView(DeleteView):
+class GroupDeleteView(ManagerPassesTestMixin, DeleteView):
     model = models.Group
     success_url = "manager:group-list"
 
-class StudentListView(ListView):
+class StudentListView(ManagerPassesTestMixin, ListView):
     model = models.Student
     template_name = "manager/student/list.html"
     context_object_name = "objects"
@@ -140,7 +142,7 @@ class StudentListView(ListView):
             )
         return queryset
 
-class StudentCreateView(CreateView):
+class StudentCreateView(ManagerPassesTestMixin, CreateView):
     model = models.Student
     form_class = forms.StudentForm
     template_name = "manager/student/create.html"
@@ -149,7 +151,7 @@ class StudentCreateView(CreateView):
     success_create_url = 'manager:student-create'
     
     
-class StudentUpdateView(UpdateView):
+class StudentUpdateView(ManagerPassesTestMixin, UpdateView):
     model = models.Student
     form_class = forms.StudentForm
     template_name = "manager/student/update.html"
@@ -158,33 +160,39 @@ class StudentUpdateView(UpdateView):
     success_create_url = 'manager:student-update'
     
 
-class StudentDeleteView(DeleteView):
+class StudentDeleteView(ManagerPassesTestMixin, DeleteView):
     model = models.Student
     success_url = 'manager:student-list'
 
 
 
-class BaseUserListView(ListView):
+class BaseUserListView(ManagerPassesTestMixin, ListView):
     model = models.BaseUser
-    template_name = "base/user/list.html"
+    template_name = "manager/user/list.html"
     context_object_name = "objects"
     queryset = models.BaseUser.objects.all().order_by("-id")
     paginate_by = 10
 
 
-class BaseUserCreateView(CreateView):
+class BaseUserCreateView(ManagerPassesTestMixin, CreateView):
     model = models.BaseUser
     form_class = forms.BaseUserForm
-    template_name = "base/user/create.html"
+    template_name = "manager/user/create.html"
     context_object_name = "object"
     success_url = "manager:user-list"
     success_create_url = "manager:user-create"
 
 
-class BaseUserUpdateView(UpdateView):
+class BaseUserUpdateView(ManagerPassesTestMixin, UpdateView):
     model = models.BaseUser
     form_class = forms.BaseUserForm
-    template_name = "base/user/update.html"
+    template_name = "manager/user/update.html"
     context_object_name = "object"
     success_url = "manager:user-list"
     success_create_url = "manager:user-update"
+
+
+class BaseUserDeleteView(ManagerPassesTestMixin, DeleteView):
+    model = models.BaseUser
+    success_url = 'manager:user-list'
+    

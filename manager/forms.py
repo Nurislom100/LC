@@ -21,6 +21,36 @@ class BaseUserForm(forms.ModelForm):
             "teacher_profile" : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_3"}),
             "password" : forms.PasswordInput(attrs={"class" : "form-control", "placeholder" : "Password"})
         }
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        user.is_active = True
+        if commit:
+            user.save()
+        return user
+
+class CustomUserInfoForm(forms.ModelForm):
+    class Meta:
+        model = models.BaseUser
+        fields = [
+            'full_name',
+            "username",
+            "phone",
+        ]
+        widgets = {
+            'full_name' : forms.TextInput(attrs={"class": "form-control"}),
+            "username": forms.TextInput(attrs={"class": "form-control", "autocomplete" : "off"}),
+            "phone": forms.TextInput(attrs={"class": "form-control"}),
+        }
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        user.is_active = True
+        if commit:
+            user.save()
+        return user
+
 
 
 class TeacherForm(forms.ModelForm):

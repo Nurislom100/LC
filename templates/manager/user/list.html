@@ -57,8 +57,8 @@
                             </thead>
                             <tbody>
                               {% for object in objects %}
-                              {% url 'manager:teacher-update' object.id as u %}
-                              {% url 'manager:teacher-delete' object.id as d %}
+                              {% url 'manager:user-update' object.id as u %}
+                              {% url 'manager:user-delete' object.id as d %}
                               <tr>
                                 <td class="pl-0 py-6">
                                   <div class="d-flex align-items-center">
@@ -78,6 +78,7 @@
                                   <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.role}}</span>
                                 </td>
                                 <td nowrap="nowrap">
+                                  {% include 'parts/actions.html' with update_url=u  delete_url=d %}
                                 </td>
                               </tr>
                               {% endfor %}

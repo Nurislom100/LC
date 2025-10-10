@@ -45,7 +45,7 @@ class AccountantPassesTestMixin(UserPassesTestMixin):
 
 class TeacherPassesTestMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.role == "Teacher"
+        return self.request.user.role == "teacher"
 
     def handle_no_permission(self):
         user = self.request.user

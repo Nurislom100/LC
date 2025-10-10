@@ -3,10 +3,8 @@
 <!--end::Head-->
 <!--begin::Body-->
 
-<body
-    id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
->
+<body id="kt_body"
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
     <!--begin::Main-->
     <!--begin::Header Mobile-->
     {% include "parts/header-mobile.html" %}
@@ -15,7 +13,7 @@
         <!--begin::Page-->
         <div class="d-flex flex-row flex-column-fluid page">
             <!--begin::Aside-->
-            {% include "parts/aside.html" with menu_parent="users" menu_child="user-create" %}
+            {% include "parts/aside.html" with menu_parent='users' menu_child='user_create' %}
             <!--end::Aside-->
             <!--begin::Wrapper-->
             <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
@@ -23,27 +21,17 @@
                 {% include "parts/header.html" %}
                 <!--end::Header-->
                 <!--begin::Content-->
-                <div
-                    class="content d-flex flex-column flex-column-fluid"
-                    id="kt_content"
-                >
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <div class="d-flex flex-column-fluid">
                         <div class="container">
-                            <div
-                                class="card card-custom card-sticky"
-                                id="kt_page_sticky_card"
-                            >
+                            <div class="card card-custom">
                                 <div class="card-header">
-                                    <div class="card-title">
-                                        <h3 class="card-label">
-                                            Updating user <i class="mr-2"></i>
-                                        </h3>
-                                    </div>
+                                    <h3 class="card-title">Update User</h3>
                                 </div>
-                                <div class="card-body">
-                                    <!--begin::Form-->
-                                    <form class="form" method="post" enctype="multipart/form-data">
-                                        {% csrf_token %}
+                                <!--begin::Form-->
+                                <form class="form" method="post" enctype="multipart/form-data" autocomplete="off">
+                                    {%csrf_token%}
+                                    <div class="card-body">
                                         {% for field in form %}
 
                                         <div class="form-group row">
@@ -60,21 +48,23 @@
                                             </div>
                                         </div>
                                         {% endfor %}    
-                                        <div class="card-footer">
-                                            <div class="row">
-                                                <div class="col-lg-3"></div>
-                                                <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
-                                                    <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
-                                                    <a href="{% url 'manager:home' %}" class="btn btn-secondary"><span>Cancel</span></a>
-                                                </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col-2"></div>
+                                            <div class="col-10">
+                                                <button type="submit" class="btn btn-success mr-2" name="saved">
+                                                   Save 
+                                                </button>
+                                                <button type="submit" class="btn btn-success mr-2" name="save-create">
+                                                   Save and add new
+                                                </button>
+                                                <a href="{% url 'manager:user-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-
+                                    </div>
+                                </form>
                             </div>
-
                         </div>
                         <!-- .container -->
                     </div>
@@ -105,8 +95,6 @@
     <!--end::Sticky Toolbar-->
     <!--begin::Demo Panel-->
     <!--end::Demo Panel-->
-    <!--end::Page Scripts-->
 </body>
 <!--end::Body-->
 {% endblock %}
-

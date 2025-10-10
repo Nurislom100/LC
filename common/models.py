@@ -10,7 +10,7 @@ class BaseUser(AbstractUser):
         ("manager", "Manager"),
         ("reception", "Reception"),
         ("accountant", "Accountant"),
-        ("teacher", "Teacher"),
+        ("teacher", "teacher"),
     ]
     full_name = models.CharField(_("full name"), max_length=256, null=True, blank=True)
     username = models.CharField(_("username"), max_length=256, unique=True)
@@ -18,8 +18,8 @@ class BaseUser(AbstractUser):
     role = models.CharField(_("role"), max_length=256, choices=role_choices, null=True)
     teacher_profile = models.ForeignKey("common.Teacher", on_delete=models.CASCADE, verbose_name="teacher profile", related_name="users", null=True, blank=True)
     password = models.CharField(_("password"), max_length=256)
-    created_at = models.DateTimeField() 
-    updated_at = models.DateTimeField() 
+    created_at = models.DateTimeField(auto_now_add=True) 
+    updated_at = models.DateTimeField(auto_now_add=True) 
 
     class Meta:
         db_table = "users"

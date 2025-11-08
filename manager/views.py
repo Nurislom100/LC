@@ -1,11 +1,9 @@
-<<<<<<< HEAD
 from django.shortcuts import render ,get_object_or_404
 from django.views import View
 from django.views.generic import ListView , DeleteView
 from django.urls import reverse_lazy   
 from django.db.models import Q 
 from common import models
-=======
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -16,11 +14,9 @@ from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from common import models, serializers
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 from manager import forms
 from common.models import Group,Course,Teacher,Student
 from helpers.views import CreateView, UpdateView, DeleteView
-<<<<<<< HEAD
 from common import mixins
 from django.views.generic import TemplateView, ListView, View
 from datetime import date ,datetime
@@ -35,27 +31,22 @@ from django.utils.dateparse import parse_date
 from common.models import Attendance , Student ,Grade
 from common.serializers import AttendanceSerializer , StudentSerializer
 from common import serializers
-
-
-
-class ManagerHomeView(mixins.RoleRequiredMixin, TemplateView):
-    template_name = "manager/base/index.html"
-    allowed_roles = ['manager']
-=======
 from helpers.permissions import ManagerPassesTestMixin
 from django.db.models import Q
+
+
+
 
 class HomeView(ManagerPassesTestMixin,View):
     def get(self, request):
         print(request.user.role)
         return render(request, "base/index.html")
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 
 
 class Settings(ListView):
     template_name = "manager/settings/list.html"
     model = Group
-    context_object_name = "groups"  # template-da shu nom bilan ishlatamiz
+    context_object_name = "groups"
 
     def get_queryset(self):
         pk = self.kwargs.get("pk")
@@ -63,9 +54,8 @@ class Settings(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # bitta group obyektini template-da alohida olish uchun
         context['group'] = self.get_queryset().first()
-        context['active_tab'] = 'all'  # All tab faollash
+        context['active_tab'] = 'all'  
         return context
     
 def student_monthly_stats(request, group_id):
@@ -76,14 +66,12 @@ def student_monthly_stats(request, group_id):
     end_date = datetime.date(year, month, 28) + datetime.timedelta(days=4)
     end_date = end_date - datetime.timedelta(days=end_date.day)
 
-    # Active qo'shilganlar
     new_added = Student.objects.filter(
         group_id=group_id,
         date_joined__range=[start_date, end_date],
         status="Active"
     ).count()
 
-    # Archive bo'lganlar shu oy qo'shilganlar va status="Archive"
     archived = Student.objects.filter(
         group_id=group_id,
         date_joined__range=[start_date, end_date],
@@ -251,9 +239,6 @@ class GroupDeleteView(DeleteView):
     model = models.Group
     success_url ="manager:group-list"
 
-<<<<<<< HEAD
-class StudentListView(ListView):
-=======
 class GroupDetailView(DetailView):
     models = models.Group
     template_name = "manager/group/detail.html"
@@ -264,7 +249,6 @@ class GroupDetailView(DetailView):
 
         return queryset
 class StudentListView(ManagerPassesTestMixin, ListView):
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     model = models.Student
     template_name = "manager/student/list.html"
     context_object_name = "objects"
@@ -306,20 +290,20 @@ class StudentDeleteView(DeleteView):
 
 
 class UserListView(ListView):
-    model = models.User
+    model = models.BaseUser
     template_name = "manager/user/list.html"
-    context_object_name = "objects"  # template'da objects ishlatiladi
+    context_object_name = "objects"  
 
     paginate_by = 10
 
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['request'] = self.request  # formga request yuboramiz
+        kwargs['request'] = self.request  
         return kwargs
 
 class UserCreateView(CreateView):
-    model = models.User
+    model = models.BaseUser
     form_class = forms.UserForm
     template_name = "manager/user/create.html"
     context_object_name = "object"
@@ -328,17 +312,16 @@ class UserCreateView(CreateView):
 
 
 class UserUpdateView(UpdateView):
-    model = models.User
+    model = models.BaseUser
     form_class = forms.UserForm
     template_name = "manager/user/update.html"
     context_object_name = "object"
     success_url = "manager:user-list"
     success_update_url = "manager:user-update"
 
-<<<<<<< HEAD
 
 class UserDeleteView(DeleteView):
-    model = models.User
+    model = models.BaseUser
     success_url = "manager:user-list"
 
    
@@ -485,7 +468,6 @@ class AttendanceView(View):
 class GroupStudentsAPIView(ListAPIView):
     serializer_class = serializers.StudentSerializer
     
-=======
 class BaseUserDeleteView(ManagerPassesTestMixin, DeleteView):
     model = models.BaseUser
     success_url = 'manager:user-list'
@@ -501,7 +483,6 @@ class AttendanceView(View):
 class GroupStudentsAPIView(ListAPIView):
     serializer_class = serializers.StudentSerializer
     
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     def get_queryset(self):
         return models.Student.objects.filter(group_id=self.kwargs['group_id']).only('id', 'full_name', 'date_joined')
 
@@ -579,116 +560,6 @@ class SaveAttendanceAPIView(APIView):
             'created': created,
             'updated': updated
         })
-<<<<<<< HEAD
     
 
-class GradeView(View):
-    def get(self, request, group_id):
-        group = get_object_or_404(models.Group, id=group_id)
-        return render(request, "manager/Rating/rating.html", {"group": group})
 
-
-class GroupStudentsAPIView(ListAPIView):
-    serializer_class = serializers.StudentSerializer
-    
-    def get_queryset(self):
-        return models.Student.objects.filter(
-            group_id=self.kwargs['group_id']
-        ).only('id', 'full_name', 'date_joined')
-
-
-class GradeListAPIView(ListAPIView):
-    serializer_class = serializers.GradeSerializer
-    
-    def get_queryset(self):
-        params = self.request.query_params
-        filters = Q()
-        
-        if group_id := params.get('group'):
-            filters &= Q(group_id=group_id)
-        if start := parse_date(params.get('start_date', '')):
-            filters &= Q(date_time__gte=start)
-        if end := parse_date(params.get('end_date', '')):
-            filters &= Q(date_time__lte=end)
-        if subject_id := params.get('subject'):
-            filters &= Q(subject_id=subject_id)
-        
-        return models.Grade.objects.filter(filters).select_related(
-            'student', 'subject'
-        ).only(
-            'id', 'student_id', 'subject_id', 'date_time', 'grade', 'comment'
-        ).order_by('date_time')
-
-
-class SaveGradeAPIView(APIView):
-    def post(self, request):
-        grade_list = request.data.get('grades', [])
-        
-        if not grade_list:
-            return Response({'success': False, 'error': 'No grades provided'})
-        
-        data_map = {}
-        student_ids = set()
-        dates = set()
-        
-        for item in grade_list:
-            date_str = item.get('date_time', '').split('T')[0]
-            if date_obj := parse_date(date_str):
-                student_id = item['student']
-                subject_id = item.get('subject')
-                key = f"{student_id}-{subject_id}-{date_obj}"
-                
-                data_map[key] = {
-                    'student_id': student_id,
-                    'group_id': item['group'],
-                    'subject_id': subject_id,
-                    'date': date_obj,
-                    'grade': item['grade'],
-                    'comment': item.get('comment', '')
-                }
-                student_ids.add(student_id)
-                dates.add(date_obj)
-        
-        # Mavjud baholarni topish
-        existing = {
-            f"{obj.student_id}-{obj.subject_id}-{obj.date_time}": obj
-            for obj in models.Grade.objects.filter(
-                student_id__in=student_ids,
-                date_time__in=dates
-            )
-        }
-        
-        to_create = []
-        to_update = []
-        
-        for key, data in data_map.items():
-            if key in existing:
-                obj = existing[key]
-                obj.grade = data['grade']
-                obj.comment = data['comment']
-                to_update.append(obj)
-            else:
-                to_create.append(models.Grade(
-                    student_id=data['student_id'],
-                    group_id=data['group_id'],
-                    subject_id=data['subject_id'],
-                    date_time=data['date'],
-                    grade=data['grade'],
-                    comment=data['comment']
-                ))
-        
-        created = len(models.Grade.objects.bulk_create(
-            to_create, ignore_conflicts=True
-        )) if to_create else 0
-        
-        updated = len(models.Grade.objects.bulk_update(
-            to_update, ['grade', 'comment']
-        )) if to_update else 0
-        
-        return Response({
-            'success': True,
-            'created': created,
-            'updated': updated
-        })
-=======
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f

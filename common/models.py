@@ -9,7 +9,7 @@ from django.utils import timezone
 
 
 
-class User(AbstractUser):
+class BaseUser(AbstractUser):
     ROLE_CHOICES = [
         ('manager', 'Manager'),
         ('teacher', 'Teacher'),
@@ -45,7 +45,6 @@ class Course(BaseModel):
     title = models.CharField(_("title"), max_length=256)
     description = models.TextField(_("description"), null=True, blank=True)
     duration = models.CharField(_("duration"), max_length=256)
-    price = models.IntegerField(_("price"))
 
     class Meta:
         db_table = "courses"
@@ -66,15 +65,14 @@ class Group(BaseModel):
         ("Finished", "Finished"),
     ]
     title = models.CharField(_("title"), max_length=256)
-    course = models.ForeignKey("common.Course", on_delete=models.SET_NULL, verbose_name="course", related_name="groups", null=True, blank=True)
-    teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True, blank=True)
+    course = models.ForeignKey("common.Course", on_delete=models.SET_NULL, verbose_name="course", related_name="groups", null=True, blank=False)
+    price = models.IntegerField(_("price"))
+    room = models.ForeignKey("common.Classroom", on_delete=models.SET_NULL, null=True, blank=False)
+    teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True, blank=False)
     lesson_days = models.CharField(_("lesson days"), max_length=256, choices=day_choices)
-<<<<<<< HEAD
     time = models.CharField(_("time"), max_length=30)
     date_started = models.DateField()
-=======
     date_started = models.DateField("date")
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     status = models.CharField(_("status"), max_length=256, choices=status_choices, default="ACTIVE") 
 
     class Meta:
@@ -88,16 +86,9 @@ class Group(BaseModel):
 
 class Student(BaseModel):
     status_choices = [
-<<<<<<< HEAD
         (_("Active"), _("Active")),
         (_("Archive"), _("Archive")),
-        # (_("DEBTOR"), _("DEBTOR")),
-=======
-        ("active", "ACTIVE"),
-        ("frozen", "frozen"),
-        ("archived", "ARCHIVED"),
 
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     ]
     full_name = models.CharField(_("full name"), max_length=256)
     group = models.ForeignKey("common.Group", on_delete=models.CASCADE, null=True, blank=True, verbose_name="group", related_name="students")
@@ -126,13 +117,10 @@ class Attendance(models.Model):
     class Meta:
         unique_together = ("student", "date_time") 
         ordering = ["-date_time"]
-<<<<<<< HEAD
-=======
 
     def __str__(self):
         return f"{self.student.full_name} - {self.date_time} - {'Bor' if self.is_present else 'Yo‘q'}"
 
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 
     def str(self):
         return f"{self.student.full_name}"
@@ -164,8 +152,7 @@ class Payment(models.Model):
     student = models.ForeignKey(Student, on_delete=CASCADE, related_name='payments')
     amount = models.PositiveIntegerField(_("amount"))
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="payment", null=True, blank=True)
-    date = models.DateField(_("date"), default=date.today)   # ✅
-
+    date = models.DateField(_("date"), default=date.today)   
     class Meta:
         db_table = "payment"
         verbose_name = "payment"
@@ -201,17 +188,10 @@ class Grade(models.Model):
     grade = models.PositiveSmallIntegerField(default=0)
 
 class Classroom(models.Model):
-    Name = models.CharField(_("Name"), max_length=100)
+    name = models.CharField(_("name"), max_length=100)
     capacity = models.CharField(_("capacity"), max_length=100)
     
     def __str__(self):
         return self.Name
     
 
-class RoomSchedule(models.Model):
-    room = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='schedules')
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    time = models.CharField(_("time"), max_length=100)
-    teacher = models.ForeignKey(Teacher, on_delete=CASCADE)
-    def __str__(self):
-        return f"{self.room.Name}"

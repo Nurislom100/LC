@@ -73,11 +73,10 @@
                           <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
                             <thead>
                               <tr class="text-left text-uppercase">
-                                <th style="min-width: 100px">Name</th>
-                                <th style="min-width: 100px">Sig'imi</th>
-                                <th style="min-width: 100px">Groups</th>
-                                <th style="min-width: 100px">Time</th>
-                                <th style="min-width: 100px">Actions</th>
+                                <th style="min-width: 100px">name</th>
+                                <th style="min-width: 100px">capacity</th>
+                                <th style="min-width: 100px">actions</th>
+
                               </tr>
                             </thead>
                             <tbody>
@@ -90,19 +89,13 @@
                                     <div class="mr-4 symbol symbol-40 symbol-light-success">
                                       <span class="symbol-label">{{ object.full_name|slice:':1' }}</span>
                                     </div>
-                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.Name}}</span>      
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.name}}</span>      
                                   </div>
                                 </td>
                                 <td>
                                   <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.capacity}}</span>
                                 </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.groups}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.time}}</span>
-                                </td>
-                                <td nowrap="nowrap">
+                                                                <td nowrap="nowrap">
                                   {% include "parts/actions.html" with update_url=u delete_url=d %}
                                 </td>
                               </tr>

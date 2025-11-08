@@ -4,8 +4,7 @@ from manager import views
 app_name = "manager"
 
 urlpatterns = [
-<<<<<<< HEAD
-    path("", views.ManagerHomeView.as_view(), name="home"),
+    path("", views.HomeView.as_view(), name="home"),
     path("archive/", views.Archive_list_view, name="archive_list"),
     path("manager/settings/<int:pk>/", views.Settings.as_view(), name="group-settings"),
     path('api/student-stats/<int:group_id>/', views.student_monthly_stats, name='student-stats'),
@@ -15,18 +14,16 @@ urlpatterns = [
     path('manager/user/create/',views.UserCreateView.as_view(),name='user-create'),
     path('manager/user/<int:pk>/update/',views.UserUpdateView.as_view(),name='user-update'),
     path('manager/user/<int:pk>/delete/',views.UserDeleteView.as_view(),name='user-delete'),
-=======
     path("api/attendance/", views.AttendanceListAPIView.as_view(), name="attendance-list"),
     path("api/attendance/save/", views.SaveAttendanceAPIView.as_view(), name="save-attendance"),
     path("attendance/<int:group_id>/", views.AttendanceView.as_view(), name="attendance-page"),
     path("api/groups/<int:group_id>/students/", views.GroupStudentsAPIView.as_view(), name="group-students"),
     path("", views.HomeView.as_view(), name='home'),
-    path("user/list/", views.BaseUserListView.as_view(), name="user-list"),
-    path("user/create/", views.BaseUserCreateView.as_view(), name="user-create"),
-    path("user/<int:pk>/update/", views.BaseUserUpdateView.as_view(), name="user-update"),
-    path("user/<int:pk>/delete/", views.BaseUserDeleteView.as_view(), name="user-delete"),
+    path("user/list/", views.UserListView.as_view(), name="user-list"),
+    path("user/create/", views.UserCreateView.as_view(), name="user-create"),
+    path("user/<int:pk>/update/", views.UserUpdateView.as_view(), name="user-update"),
+    path("user/<int:pk>/delete/", views.UserDeleteView.as_view(), name="user-delete"),
 
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 
     path("teacher/list/", views.TeacherListView.as_view(), name="teacher-list"),
     path("teacher/create/", views.TeacherCreateView.as_view(), name="teacher-create"),
@@ -45,10 +42,7 @@ urlpatterns = [
     path("groups/<int:pk>/students/", views.group_students, name="group-students"),
     path("group/<int:pk>/update/", views.GroupUpdateView.as_view(), name="group-update"),
     path("group/<int:pk>/delete/", views.GroupDeleteView.as_view(), name="group-delete"),
-<<<<<<< HEAD
-=======
     path("group/<int:pk>/detail/", views.GroupDetailView.as_view(), name="group-detail"),
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 
     path("student/list/", views.StudentListView.as_view(), name="student-list"),
     path("student/create/", views.StudentCreateView.as_view(), name="student-create"),
@@ -75,8 +69,4 @@ urlpatterns = [
     path("api/attendance/save/", views.SaveAttendanceAPIView.as_view(), name="attendance-save"),
     path("api/groups/<int:group_id>/students/", views.GroupStudentsAPIView.as_view(), name="group-students"),
     
-    path("grade/<int:group_id>/", views.GradeView.as_view(), name="grade-view"),
-    path("api/groups/<int:group_id>/students/", views.GroupStudentsAPIView.as_view(), name="group-students-api"),
-    path("api/grade/list/", views.GradeListAPIView.as_view(), name="grade-list"),
-    path("api/grade/save/", views.SaveGradeAPIView.as_view(), name="grade-save"),
 ]

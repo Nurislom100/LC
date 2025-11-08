@@ -37,14 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    'django.contrib.humanize', 
     'django.forms',
-<<<<<<< HEAD
     'rest_framework',
-=======
     'drf_yasg',
     "debug_toolbar",
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     'common',
     'manager',
     'accountant',
@@ -59,7 +56,7 @@ INTERNAL_IPS = [
 
 MIDDLEWARE = [
     "querycount.middleware.QueryCountMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",  # 👈 shu yerda bo‘lishi kerak
+    "debug_toolbar.middleware.DebugToolbarMiddleware",  
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,10 +139,10 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"
 
 
-AUTH_USER_MODEL = "common.User"
+AUTH_USER_MODEL = "common.BaseUser"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = "/sign-in/"
+LOGIN_URL = "/accounts/sign-in/"

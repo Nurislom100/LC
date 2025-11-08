@@ -5,42 +5,22 @@ from django.contrib.auth.forms import UserCreationForm
 
 class UserForm(UserCreationForm):
     class Meta:
-        model = models.User
+        model = models.BaseUser
         fields = ['username', 'email', 'role', 'first_name', 'last_name', 'password1', 'password2']
         widgets = {
-<<<<<<< HEAD
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
             'role': forms.Select(attrs={'class': 'form-control', 'id': 'kt_select2_1'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Password fieldlarni chiroyli qilish
-        self.fields['password1'].widget = forms.PasswordInput(
-            attrs={'class': 'form-control', 'placeholder': 'Password'}
-        )
-        self.fields['password2'].widget = forms.PasswordInput(
-            attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}
-        )
-
-        # Manager rolini chiqarib tashlash
-        if 'role' in self.fields:
-            self.fields['role'].choices = [
-                (value, label) for value, label in self.fields['role'].choices
-                if label != 'Manager'
-            ]
-=======
-            "full_name" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Full name"}),
-            "username" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Username"}),
             "phone" : forms.TelInput(attrs={"class" : "form-control", "placeholder" : "Phone"}),
             "role" : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_2"}),
             "teacher_profile" : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_3"}),
             "password" : forms.PasswordInput(attrs={"class" : "form-control", "placeholder" : "Password"})
+
+
         }
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password"])
@@ -48,7 +28,6 @@ class UserForm(UserCreationForm):
         if commit:
             user.save()
         return user
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 
 
 class TeacherForm(forms.ModelForm):
@@ -76,14 +55,12 @@ class CourseForm(forms.ModelForm):
         fields = [
             "title",
             "duration",
-            "price",
             "description",
         ]
         widgets = {
             "title" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Title"}),
             "duration" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Duration"}),
             "address" : forms.TextInput(attrs={"class" : "form-control", "id" : "address"}),
-            "price" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Price"}),
             "description" : forms.Textarea(attrs={"class" : "form-control", "placeholder": "description"})
         }
 
@@ -93,7 +70,9 @@ class GroupForm(forms.ModelForm):
         fields = [
             "title",
             "course",
+            "room",
             "teacher",
+            "price",
             "lesson_days",
             'date_started',
             'status'
@@ -103,9 +82,12 @@ class GroupForm(forms.ModelForm):
             "title" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Title"}),
             "course" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
             "teacher" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
+            "room" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
             "lesson_days" : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_2"}),
             "date_started" : widget.DateWidget(attrs={"class" : "form-control", "id": "kt_datetimepicker_3"}),
-            "status" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"})
+            "status" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
+            "price" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Price"}),
+
         }
 
 class StudentForm(forms.ModelForm):
@@ -130,13 +112,10 @@ class StudentForm(forms.ModelForm):
             "address" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Address"}),
             "group" : forms.Select(attrs={"class" : "form-control", "placeholder" : "group", "id": "kt_select2_2"}),
             "balance" : forms.TextInput(attrs={"class" : "form-control", "placeholder": "balance"}),
-<<<<<<< HEAD
             "date_joined": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
             "status" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
-=======
             "date_joined" : widget.DateWidget(attrs={"class" : "form-control", "id": "kt_datetimepicker_2"}),
             
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
         }
 
 
@@ -179,18 +158,14 @@ class LeadForm(forms.ModelForm):
 class ClassroomForm(forms.ModelForm):
     class Meta:
         model = models.Classroom
-        fields = ['Name', 'capacity']
+        fields = ['name', 'capacity']
         widgets = {
-            'Name': forms.TextInput(attrs={
+            'name': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Xona nomini kiriting (masalan: 1-xona)'
+                'placeholder': 'Enter room'
             }),
             'capacity': forms.NumberInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Sig‘imi (masalan: 20 o‘quvchi)'
             }),
         }
-        labels = {
-            'Name': 'Xona nomi',
-            'capacity': 'Sig‘imi',
-        }
+

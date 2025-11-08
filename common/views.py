@@ -43,7 +43,7 @@ class LoginView(View):
             return HttpResponseRedirect(reverse_lazy("reception:home"))
         return HttpResponseRedirect("/")
 
-class SignoutView(View, LoginRequiredMixin):
+class LogoutView(View, LoginRequiredMixin):
 
     def get(self, request):
         logout(request)

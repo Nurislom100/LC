@@ -37,15 +37,9 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
-   
     path("sign-in/", views.LoginView.as_view(), name="sign-in"), 
-    path("sign-out/", views.SignoutView.as_view(), name="sign-out"), 
+    path("sign-out/", views.LogoutView.as_view(), name="sign-out"), 
 
-=======
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
->>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     path('', include("common.urls")),
     path('manager/', include("manager.urls")),
     path('reception/', include("reception.urls")),

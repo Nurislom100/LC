@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import User
+
 from django.contrib.auth.admin import UserAdmin
 from common import models
 
-@admin.register(User)
+@admin.register(models.BaseUser)
 class CustomUserAdmin(UserAdmin):
-    model = User
+    model = models.BaseUser
     list_display = ('username', 'email', 'first_name', 'last_name', 'role', 'is_active')
     list_filter = ('role', 'is_active')
 

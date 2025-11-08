@@ -7,11 +7,15 @@ from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from common import models
 from helpers.views import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from common.mixins import RoleRequiredMixin
 
 
-class HomeView(View):
+
+class HomeView(RoleRequiredMixin,View):
     def get(self, request):
         return render(request, "base/index.html")
+
 
 class LoginView(View):
     def get(self, request):
@@ -20,31 +24,33 @@ class LoginView(View):
         return render(request, "base/user/login.html")
 
     def post(self, request):
-        req = request.POST.dict()
-        username = req.get("username")
-        password = req.get("password")
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
             return self.redirect_by_role(user)
-        else:
-            return render(request, "base/user/login.html", {"error": True})
+        return render(request, "base/user/login.html", {"error": True})
 
     def redirect_by_role(self, user):
-        if user.role == "manager":
+        if user.role == 'manager':
             return HttpResponseRedirect(reverse_lazy("manager:home"))
-        if user.role == "accountant":
+        if user.role == 'accountant':
             return HttpResponseRedirect(reverse_lazy("accountant:home"))
-        if user.role == "reception":
-            return HttpResponseRedirect(reverse_lazy("reception:home"))
-        if user.role == "teacher":
+        elif user.role == 'teacher':
             return HttpResponseRedirect(reverse_lazy("teacher:home"))
-        raise PermissionDenied("You don't have access to this page")
+        elif user.role == 'reception':
+            return HttpResponseRedirect(reverse_lazy("reception:home"))
+        return HttpResponseRedirect("/")
 
+class SignoutView(View, LoginRequiredMixin):
 
-class LogoutView(View):
     def get(self, request):
         logout(request)
-        return HttpResponseRedirect(reverse_lazy("login"))
+        return HttpResponseRedirect(reverse_lazy("sign-in"))
+
+
+def custom_404(request, exception):
+    return render(request, 'pages/404.html', status=404)
 
 

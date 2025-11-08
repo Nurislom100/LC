@@ -38,6 +38,21 @@
                         <small class='mt-2'>Total: {{objects | length}}</small>
                       </h3>
                     </div>
+                    
+                    <form method="get">
+                      <div class="form-group row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                              <input type="text" class="form-control datatable-input" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                          </div>
+
+                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
+                              <span class="nav-icon">
+                                  <i class="fas fa-search"></i>
+                              </span>
+                              <span class="nav-text">Search</span>
+                          </button>
+                      </div>
+                    </form>
                     <!--end::Header-->
                     <!--begin::Body-->
                     <div class="card-body pt-0 pb-3">
@@ -54,6 +69,7 @@
                                 <th style="min-width: 100px">Phone number</th>
                                 <th style="min-width: 100px">Address</th>
                                 <th style="min-width: 100px">Balance</th>
+                                <th style="min-width: 100px">Actions</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -83,7 +99,7 @@
                                   <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.address}}</span>
                                 </td>
                                 <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.Balance}}</span>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.balance}}</span>
                                 </td>
                                 <td nowrap="nowrap">
                                   {% include "parts/actions.html" with update_url=u delete_url=d %}

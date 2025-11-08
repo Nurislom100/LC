@@ -2,7 +2,7 @@
 					<!--begin::Brand-->
 					<div class="brand flex-column-auto" id="kt_brand">
 						<!--begin::Logo-->
-						<a href="{% url 'common:home' %}" class="brand-logo">
+						<a href="{% url 'reception:home' %}" class="brand-logo">
 						</a>
 						<!--end::Logo-->
 						<!--begin::Toggle-->
@@ -29,7 +29,7 @@
 							<!--begin::Menu Nav-->
 							<ul class="menu-nav">
 								<li class="menu-item menu-item-active" aria-haspopup="true">
-                  <a href="{% url 'common:home' %}" class="menu-link">
+                  <a href="{% url 'reception:home' %}" class="menu-link">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Design/Layers.svg-->
 											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -48,7 +48,174 @@
 									<h4 class="menu-text">Main</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
 								</li>
-
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'course-all' %} menu-item-open {% endif %}" 
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+											<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+											<path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+										<span class="menu-text">Courses</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Courses</span>
+												</span>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'course-create' %} menu-item-active{% endif %}"
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'reception:course-create' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Create Course</span>
+												</a>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'course-list' %} menu-item-active{% endif %}"
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'reception:course-list' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">All Course</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'group-all' %} menu-item-open{% endif %}"
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-fill" viewBox="0 0 16 16">
+											<path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3m-8.322.12q.322-.119.684-.12h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981z"/>
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+										<span class="menu-text">Groups</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Groups</span>
+												</span>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'group-create' %} menu-item-active{% endif %}"
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'reception:group-create' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Create Group</span>
+												</a>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'group-list' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'reception:group-list' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">All Group</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'student-all' %} menu-item-open{% endif %}" 
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+											<path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+										<span class="menu-text">Students</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Stuedents</span>
+												</span>
+											</li>
+										<li class="menu-item menu-item-submenu {% if menu_child == 'student-create' %} menu-item-active{% endif %}"
+										aria-haspopup="true" data-menu-toggle="hover">
+											<a href="{% url 'reception:student-create' %}" class="menu-link menu-toggle">
+												<i class="menu-bullet menu-bullet-line">
+													<span></span>
+												</i>
+												<span class="menu-text">Create Students</span>
+											</a>
+										</li>
+										<li class="menu-item menu-item-submenu {% if menu_child == 'student-list' %} menu-item-active{% endif %}"
+										aria-haspopup="true" data-menu-toggle="hover">
+											<a href="{% url 'reception:student-list' %}" class="menu-link menu-toggle">
+												<i class="menu-bullet menu-bullet-line">
+													<span></span>
+												</i>
+												<span class="menu-text">All Students</span>
+											</a>
+										</li>
+										</ul>
+									</div>
+								</li>
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'lead' %} menu-item-open{% endif %}" 
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+											<path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+											<path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+											</svg>
+										</span>
+										<span class="menu-text">Lead</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Lead</span>
+												</span>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'user_list' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'reception:lead-list' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Lead list</span>
+												</a>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'user_create' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'reception:lead-create' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Create lead</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li>
 								
 							</ul>
 							<!--end::Menu Nav-->

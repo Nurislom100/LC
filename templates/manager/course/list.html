@@ -4,6 +4,12 @@
 <!--begin::Head-->
 <!--end::Head-->
 <!--begin::Body-->
+<style>
+.card-toolbar{
+  padding-left: 10px;
+}
+</style>
+
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <!--begin::Main-->
   <!--begin::Header Mobile-->
@@ -38,23 +44,41 @@
                         <small class='mt-2'>Total: {{objects | length}}</small>
                       </h3>
                     </div>
+                    <form method="get">
+                      <div class="form-group row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                              <input type="text" class="form-control datatable-input" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                          </div>
+
+                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
+                              <span class="nav-icon">
+                                  <i class="fas fa-search"></i>
+                              </span>
+                              <span class="nav-text">Search</span>
+                          </button>
+                          <div class="card-toolbar">
+                          <a href="{% url 'manager:course-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">Add new course</a>
+                          </div>
+                      </div>
+                    </form>
                     <!--end::Header-->
                     <!--begin::Body-->
                     <div class="card-body pt-0 pb-3">
                       <div class="tab-content">
                         <!--begin::Table-->
                         <div class="table-responsive">
-                          {% if objects %}
+                          {% if courses %}
                           <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
                             <thead>
                               <tr class="text-left text-uppercase">
                                 <th style="min-width: 100px">Title</th>
-                                <th style="min-width: 100px">duration</th>
-                                <th style="min-width: 100px">price</th>
+                                <th style="min-width: 100px">Duration</th>
+                                <th style="min-width: 100px">Price</th>
+                                <th style="min-width: 100px">Actions</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {% for object in objects %}
+                              {% for object in courses %}
                               {% url 'manager:course-update' object.id as u %}
                               {% url 'manager:course-delete' object.id as d %}
                               <tr>
@@ -63,18 +87,18 @@
                                     <div class="mr-4 symbol symbol-40 symbol-light-success">
                                       <span class="symbol-label">{{ object.full_name|slice:':1' }}</span>
                                     </div>
-                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span>      
+                                    <a href="{% url 'manager:course-groups' object.pk %}"><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span> </a>     
                                   </div>
                                 </td>
                                 
                                 <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.duration}}</span>
                                 </td>
                                 <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.price}}</span>
                                 </td>
                                 <td nowrap="nowrap">
-                                                                        {% include "parts/actions.html" with update_url=u delete_url=d %}
+                                  {% include "parts/actions.html" with update_url=u delete_url=d %}
                                 </td>
                               </tr>
                               {% endfor %}

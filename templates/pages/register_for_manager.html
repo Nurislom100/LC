@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container" id="container">
+
+	<!-- Background animation -->
+	<div class="aaa" id="bgTransition"></div>
+
+	<!-- Role Selection -->
+	<div class="form-container role-select-container" id="roleSelectContainer">
+		<form>
+			<h1>Select a Role</h1>
+			<button type="button" class="role-btn mt-5" data-role="teacher">Teacher</button>
+			<button type="button" class="role-btn mt-5" data-role="student">Student</button>
+		</form>
+	</div>
+
+	<!-- Registration Form -->
+	<div class="form-container sign-in-container" id="registerContainer">
+		<form method="POST">
+			{% csrf_token %}
+			<h1>Create Account</h1>
+			<p id="roleText">Role: <strong><span id="chosenRole"></span></strong></p>
+			<input type="hidden" name="role" id="roleInput" />
+
+			{{ form.username.label_tag }} {{ form.username }}
+			{{ form.email.label_tag }} {{ form.email }}
+			{{ form.password1.label_tag }} {{ form.password1 }}
+			{{ form.password2.label_tag }} {{ form.password2 }}
+
+			<button type="submit">Create</button>
+		</form>
+	</div>
+
+</div>
+
+<style>
+.container {
+	position: relative;
+	width: 100%;
+	max-width: 600px;
+	margin: auto;
+	overflow: hidden;
+	padding: 40px;
+	background-color: white;
+	border-radius: 20px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+.aaa {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #FF4B2B;
+	z-index: 1;
+	transition: transform 1s ease-in-out;
+	transform: translateX(0%);
+	border-radius: 20px;
+}
+.role-select-container,
+.sign-in-container {
+	position: relative;
+	z-index: 2;
+	transition: opacity 0.5s ease;
+}
+#registerContainer {
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+#registerContainer.active {
+	opacity: 1;
+	pointer-events: auto;
+}
+</style>
+
+<script>
+	const roleButtons = document.querySelectorAll('.role-btn');
+	const roleSelectContainer = document.getElementById('roleSelectContainer');
+	const registerContainer = document.getElementById('registerContainer');
+	const roleInput = document.getElementById('roleInput');
+	const chosenRole = document.getElementById('chosenRole');
+	const bg = document.getElementById('bgTransition');
+
+	roleButtons.forEach(button => {
+		button.addEventListener('click', () => {
+			const role = button.getAttribute('data-role');
+			roleInput.value = role;
+			chosenRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+
+			bg.style.transform = "translateX(100%)";
+			roleSelectContainer.style.opacity = 0;
+			roleSelectContainer.style.pointerEvents = 'none';
+
+			setTimeout(() => {
+				registerContainer.classList.add('active');
+			}, 500);
+		});
+	});
+</script>
+{% endblock %}

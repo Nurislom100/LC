@@ -1,36 +1,19 @@
 <span style="overflow: visible; position: relative; width: 125px">
     <a href="{{update_url}}" class="btn btn-sm btn-light btn-text-primary btn-icon mr-2" title="Edit details">
         <span class="svg-icon svg-icon-md">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                height="24px" viewBox="0 0 24 24" version="1.1">
-                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                    <rect x="0" y="0" width="24" height="24"></rect>
-                    <path d="M8,17.9148182 L8,5.96685884 C8,5.56391781 
-                        8.16211443,5.17792052 8.44982609,4.89581508 
-                        L10.965708,2.42895648 C11.5426798,1.86322723 
-                        12.4640974,1.85620921 13.0496196,2.41308426 
-                        L15.5337377,4.77566479 C15.8314604,5.0588212 
-                        16,5.45170806 16,5.86258077 L16,17.9148182 
-                        C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 
-                        L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 
-                        8,17.9148182 Z" fill="#000000" fill-rule="nonzero"
-                        transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409)">
-                    </path>
-                    <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1"></rect>
-                </g>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
             </svg>
         </span>
     </a>
 
     
-    <a
-        href="{{delete_url}}"
-        data-toggle="modal"
-        data-target="#deleteModal"
-        class="btn btn-sm btn-clean btn-icon removeButton"
-        title="Delete"
-    >
-        <i class="la la-trash"></i>
+    <a href="{{delete_url}}" data-toggle="modal" data-target="#deleteModal" class="btn btn-sm btn-clean btn-icon removeButton" title="Delete">
+        <span class="svg-icon svg-icon-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+            </svg>
+        </span>
     </a>
 
     <!-- Success Popup -->

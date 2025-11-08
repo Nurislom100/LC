@@ -20,8 +20,9 @@ from common import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
+   
+    path("sign-in/", views.LoginView.as_view(), name="sign-in"), 
+    path("sign-out/", views.SignoutView.as_view(), name="sign-out"), 
 
     path('', include("common.urls")),
     path('manager/', include("manager.urls")),

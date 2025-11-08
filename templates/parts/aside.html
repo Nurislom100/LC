@@ -1,8 +1,9 @@
-				<div class="aside aside-left aside-fixed d-flex flex-column flex-row-auto" id="kt_aside">
+<div class="aside aside-left aside-fixed d-flex flex-column flex-row-auto" id="kt_aside">
 					<!--begin::Brand-->
 					<div class="brand flex-column-auto" id="kt_brand">
 						<!--begin::Logo-->
 						<a href="{% url 'common:home' %}" class="brand-logo">
+							<img src="/staticfiles/assets/media/logos/logo_fonus.png" class="max-h-60px" alt="Img">
 						</a>
 						<!--end::Logo-->
 						<!--begin::Toggle-->
@@ -29,15 +30,13 @@
 							<!--begin::Menu Nav-->
 							<ul class="menu-nav">
 								<li class="menu-item menu-item-active" aria-haspopup="true">
-                  <a href="{% url 'common:home' %}" class="menu-link">
+                  					<a href="{% url 'common:home' %}" class="menu-link">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Design/Layers.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<polygon points="0 0 24 0 24 24 0 24" />
-													<path d="M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z" fill="#000000" fill-rule="nonzero" />
-													<path d="M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z" fill="#000000" opacity="0.3" />
-												</g>
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-gear-fill" viewBox="0 0 16 16">
+											<path d="M7.293 1.5a1 1 0 0 1 1.414 0L11 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l2.354 2.353a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708z"/>
+											<path d="M11.07 9.047a1.5 1.5 0 0 0-1.742.26l-.02.021a1.5 1.5 0 0 0-.261 1.742 1.5 1.5 0 0 0 0 2.86 1.5 1.5 0 0 0-.12 1.07H3.5A1.5 1.5 0 0 1 2 13.5V9.293l6-6 4.724 4.724a1.5 1.5 0 0 0-1.654 1.03"/>
+											<path d="m13.158 9.608-.043-.148c-.181-.613-1.049-.613-1.23 0l-.043.148a.64.64 0 0 1-.921.382l-.136-.074c-.561-.306-1.175.308-.87.869l.075.136a.64.64 0 0 1-.382.92l-.148.045c-.613.18-.613 1.048 0 1.229l.148.043a.64.64 0 0 1 .382.921l-.074.136c-.306.561.308 1.175.869.87l.136-.075a.64.64 0 0 1 .92.382l.045.149c.18.612 1.048.612 1.229 0l.043-.15a.64.64 0 0 1 .921-.38l.136.074c.561.305 1.175-.309.87-.87l-.075-.136a.64.64 0 0 1 .382-.92l.149-.044c.612-.181.612-1.049 0-1.23l-.15-.043a.64.64 0 0 1-.38-.921l.074-.136c.305-.561-.309-1.175-.87-.87l-.136.075a.64.64 0 0 1-.92-.382ZM12.5 14a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
 											</svg>
 											<!--end::Svg Icon-->
 										</span>
@@ -48,86 +47,42 @@
 									<h4 class="menu-text">Main</h4>
 									<i class="menu-icon ki ki-bold-more-hor icon-md"></i>
 								</li>
-                <li class="menu-item menu-item-submenu {% if menu_parent == "teacher-all" %}menu-item-open{%endif%}" aria-haspopup="true" data-menu-toggle="hover">
-									<a href="javascript:;" class="menu-link menu-toggle">
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'teacher-all' %}{% endif %}"
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="{% url 'manager:teacher-list' %}" class="menu-link">
 										<span class="svg-icon menu-icon">
-											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M320 312C386.3 312 440 258.3 440 192C440 125.7 386.3 72 320 72C253.7 72 200 125.7 200 192C200 258.3 253.7 312 320 312zM290.3 368C191.8 368 112 447.8 112 546.3C112 562.7 125.3 576 141.7 576L498.3 576C514.7 576 528 562.7 528 546.3C528 447.8 448.2 368 349.7 368L290.3 368z"/></svg>
-											<!--end::Svg Icon-->
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16">
+											<path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+											<path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z"/>
+											</svg>
 										</span>
-										<span class="menu-text">Users</span>
+										<span class="menu-text">Teachers</span>
 										<i class="menu-arrow"></i>
 									</a>
-									<div class="menu-submenu">
-										<i class="menu-arrow"></i>
-										<ul class="menu-subnav">
-											<li class="menu-item menu-item-parent" aria-haspopup="true">
-												<span class="menu-link">
-													<span class="menu-text">Users</span>
-												</span>
-											</li>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "teacher-create" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-                        <a href="{% url "manager:teacher-create" %}" class="menu-link menu-toggle">
-													<i class="menu-bullet menu-bullet-line">
-														<span></span>
-													</i>
-													<span class="menu-text">Teacher create</span>
-												</a>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "teacher-list" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-												<a href="{% url "manager:teacher-list" %}" class="menu-link menu-toggle">
-													<i class="menu-bullet menu-bullet-line">
-														<span></span>
-													</i>
-													<span class="menu-text">Teacher list</span>
-												</a>
-											</li>
-											</li>
-										</ul>
-									</div>
 								</li>
-
-                <li class="menu-item menu-item-submenu {% if menu_parent == "course-all" %}menu-item-open{%endif%}" aria-haspopup="true" data-menu-toggle="hover">
-									<a href="javascript:;" class="menu-link menu-toggle">
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'course-all' %}{% endif %}" 
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="{% url 'manager:course-list' %}" class="menu-link menu-toggle">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M320 312C386.3 312 440 258.3 440 192C440 125.7 386.3 72 320 72C253.7 72 200 125.7 200 192C200 258.3 253.7 312 320 312zM290.3 368C191.8 368 112 447.8 112 546.3C112 562.7 125.3 576 141.7 576L498.3 576C514.7 576 528 562.7 528 546.3C528 447.8 448.2 368 349.7 368L290.3 368z"/></svg>
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+											<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+											<path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+											</svg>
 											<!--end::Svg Icon-->
 										</span>
 										<span class="menu-text">Courses</span>
 										<i class="menu-arrow"></i>
 									</a>
-									<div class="menu-submenu">
-										<i class="menu-arrow"></i>
-										<ul class="menu-subnav">
-											<li class="menu-item menu-item-parent" aria-haspopup="true">
-												<span class="menu-link">
-													<span class="menu-text">Courses</span>
-												</span>
-											</li>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "course-create" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-                        <a href="{% url "manager:course-create" %}" class="menu-link menu-toggle">
-													<i class="menu-bullet menu-bullet-line">
-														<span></span>
-													</i>
-													<span class="menu-text">Course create</span>
-												</a>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "course-list" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-												<a href="{% url "manager:course-list" %}" class="menu-link menu-toggle">
-													<i class="menu-bullet menu-bullet-line">
-														<span></span>
-													</i>
-													<span class="menu-text">Course list</span>
-												</a>
-											</li>
-											</li>
-										</ul>
-									</div>
 								</li>
-                <li class="menu-item menu-item-submenu {% if menu_parent == "group-all" %}menu-item-open{%endif%}" aria-haspopup="true" data-menu-toggle="hover">
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'group-all' %} menu-item-open{% endif %}"
+								aria-haspopup="true" data-menu-toggle="hover">
 									<a href="javascript:;" class="menu-link menu-toggle">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M320 312C386.3 312 440 258.3 440 192C440 125.7 386.3 72 320 72C253.7 72 200 125.7 200 192C200 258.3 253.7 312 320 312zM290.3 368C191.8 368 112 447.8 112 546.3C112 562.7 125.3 576 141.7 576L498.3 576C514.7 576 528 562.7 528 546.3C528 447.8 448.2 368 349.7 368L290.3 368z"/></svg>
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-fill" viewBox="0 0 16 16">
+											<path d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3m-8.322.12q.322-.119.684-.12h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981z"/>
+											</svg>
 											<!--end::Svg Icon-->
 										</span>
 										<span class="menu-text">Groups</span>
@@ -141,30 +96,48 @@
 													<span class="menu-text">Groups</span>
 												</span>
 											</li>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "group-create" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-                        <a href="{% url "manager:course-create" %}" class="menu-link menu-toggle">
+											<li class="menu-item menu-item-submenu {% if menu_child == 'group-create' %} menu-item-active{% endif %}"
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'manager:group-create' %}" class="menu-link menu-toggle">
 													<i class="menu-bullet menu-bullet-line">
 														<span></span>
 													</i>
-													<span class="menu-text">Group create</span>
-												</a>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "group-list" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-												<a href="{% url "manager:course-list" %}" class="menu-link menu-toggle">
-													<i class="menu-bullet menu-bullet-line">
-														<span></span>
-													</i>
-													<span class="menu-text">Group list</span>
+													<span class="menu-text">Create Group</span>
 												</a>
 											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'group-list' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'manager:group-list' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">All Group</span>
+												</a>
 											</li>
 										</ul>
 									</div>
 								</li>
-                <li class="menu-item menu-item-submenu {% if menu_parent == "student-all" %}menu-item-open{%endif%}" aria-haspopup="true" data-menu-toggle="hover">
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'classroom-all' %}{% endif %}"
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="{% url 'manager:classroom-list' %}" class="menu-link">
+										<span class="svg-icon menu-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16">
+											<path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+											<path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z"/>
+											</svg>
+										</span>
+										<span class="menu-text">Classroom</span>
+										<i class="menu-arrow"></i>
+									</a>
+								</li>
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'student-all' %} menu-item-open{% endif %}" 
+								aria-haspopup="true" data-menu-toggle="hover">
 									<a href="javascript:;" class="menu-link menu-toggle">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M320 312C386.3 312 440 258.3 440 192C440 125.7 386.3 72 320 72C253.7 72 200 125.7 200 192C200 258.3 253.7 312 320 312zM290.3 368C191.8 368 112 447.8 112 546.3C112 562.7 125.3 576 141.7 576L498.3 576C514.7 576 528 562.7 528 546.3C528 447.8 448.2 368 349.7 368L290.3 368z"/></svg>
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+											<path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+											</svg>
 											<!--end::Svg Icon-->
 										</span>
 										<span class="menu-text">Students</span>
@@ -178,30 +151,105 @@
 													<span class="menu-text">Stuedents</span>
 												</span>
 											</li>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "student-create" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-                        <a href="{% url "manager:student-create" %}" class="menu-link menu-toggle">
+										<li class="menu-item menu-item-submenu {% if menu_child == 'student-create' %} menu-item-active{% endif %}"
+										aria-haspopup="true" data-menu-toggle="hover">
+											<a href="{% url 'manager:student-create' %}" class="menu-link menu-toggle">
+												<i class="menu-bullet menu-bullet-line">
+													<span></span>
+												</i>
+												<span class="menu-text">Create Students</span>
+											</a>
+										</li>
+										<li class="menu-item menu-item-submenu {% if menu_child == 'student-list' %} menu-item-active{% endif %}"
+										aria-haspopup="true" data-menu-toggle="hover">
+											<a href="{% url 'manager:student-list' %}" class="menu-link menu-toggle">
+												<i class="menu-bullet menu-bullet-line">
+													<span></span>
+												</i>
+												<span class="menu-text">All Students</span>
+											</a>
+										</li>
+										</ul>
+									</div>
+								</li>
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'lead' %} menu-item-open{% endif %}" 
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+											<path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+											<path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+											</svg>
+										</span>
+										<span class="menu-text">Lead</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Lead</span>
+												</span>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'user_create' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'manager:lead-create' %}" class="menu-link menu-toggle">
 													<i class="menu-bullet menu-bullet-line">
 														<span></span>
 													</i>
-													<span class="menu-text">Student create</span>
-												</a>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "student-list" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-												<a href="{% url "manager:student-list" %}" class="menu-link menu-toggle">
-													<i class="menu-bullet menu-bullet-line">
-														<span></span>
-													</i>
-													<span class="menu-text">Student list</span>
+													<span class="menu-text">Create lead</span>
 												</a>
 											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'user_list' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'manager:lead-list' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">All Lead</span>
+												</a>
 											</li>
 										</ul>
 									</div>
 								</li>
-                <li class="menu-item menu-item-submenu {% if menu_parent == "users" %}menu-item-open{%endif%}" aria-haspopup="true" data-menu-toggle="hover">
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'payment' %} menu-item-open {% endif %}" 
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+											<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
+											<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+											</svg>
+										</span>
+										<span class="menu-text">Payment</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<ul class="menu-subnav">
+											<li class="menu-item {% if menu_child == 'payment-create' %} menu-item-active {% endif %}" aria-haspopup="true">
+												<a href="{% url 'manager:payment-create' %}" class="menu-link">
+													<i class="menu-bullet menu-bullet-line"><span></span></i>
+													<span class="menu-text">Add Payment</span>
+												</a>
+											</li>
+											<li class="menu-item {% if menu_child == 'payment-list' %} menu-item-active {% endif %}" aria-haspopup="true">
+												<a href="{% url 'manager:payment-list' %}" class="menu-link">
+													<i class="menu-bullet menu-bullet-line"><span></span></i>
+													<span class="menu-text">All Payment</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'users' %} menu-item-open{% endif %}" 
+								aria-haspopup="true" data-menu-toggle="hover">
 									<a href="javascript:;" class="menu-link menu-toggle">
 										<span class="svg-icon menu-icon">
 											<!--begin::Svg Icon | path:/static/assets/media/svg/icons/Layout/Layout-4-blocks.svg-->
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M320 312C386.3 312 440 258.3 440 192C440 125.7 386.3 72 320 72C253.7 72 200 125.7 200 192C200 258.3 253.7 312 320 312zM290.3 368C191.8 368 112 447.8 112 546.3C112 562.7 125.3 576 141.7 576L498.3 576C514.7 576 528 562.7 528 546.3C528 447.8 448.2 368 349.7 368L290.3 368z"/></svg>
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
+											<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0"/>
+											</svg>
 											<!--end::Svg Icon-->
 										</span>
 										<span class="menu-text">Users</span>
@@ -215,26 +263,89 @@
 													<span class="menu-text">Users</span>
 												</span>
 											</li>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "user_list" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-                        <a href="{% url "manager:user-list" %}" class="menu-link menu-toggle">
-													<i class="menu-bullet menu-bullet-line">
-														<span></span>
-													</i>
-													<span class="menu-text">Users list</span>
-												</a>
-                      <li class="menu-item menu-item-submenu {% if menu_child == "user_create" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
-												<a href="{% url "manager:user-create" %}" class="menu-link menu-toggle">
+											<li class="menu-item menu-item-submenu {% if menu_child == 'user_create' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'manager:user-create' %}" class="menu-link menu-toggle">
 													<i class="menu-bullet menu-bullet-line">
 														<span></span>
 													</i>
 													<span class="menu-text">Create user</span>
 												</a>
 											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'user_list' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'manager:user-list' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Users list</span>
+												</a>
 											</li>
 										</ul>
 									</div>
 								</li>
-								
+								<li class="menu-item menu-item-submenu {% if menu_parent == 'archived-all' %} menu-item-open{% endif %}"
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+											<path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1M.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8z"/>
+											</svg>
+										</span>
+										<span class="menu-text">Archive</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Archive</span>
+												</span>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'teacher-create' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url 'manager:archive_list' %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Archive</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<!-- <li class="menu-item menu-item-submenu {% if menu_parent == 'Attendance-all' %} menu-item-open{% endif %}"
+								aria-haspopup="true" data-menu-toggle="hover">
+									<a href="javascript:;" class="menu-link menu-toggle">
+										<span class="svg-icon menu-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+											<path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1M.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8z"/>
+											</svg>
+										</span>
+										<span class="menu-text">Attendance</span>
+										<i class="menu-arrow"></i>
+									</a>
+									<div class="menu-submenu">
+										<i class="menu-arrow"></i>
+										<ul class="menu-subnav">
+											<li class="menu-item menu-item-parent" aria-haspopup="true">
+												<span class="menu-link">
+													<span class="menu-text">Archive</span>
+												</span>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_child == 'teacher-create' %} menu-item-active{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="#" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">All-Attendance</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li> -->
 							</ul>
 							<!--end::Menu Nav-->
 						</div>

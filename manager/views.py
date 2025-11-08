@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.utils.dateparse import parse_date
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -133,13 +133,13 @@ class GroupDeleteView(ManagerPassesTestMixin, DeleteView):
     model = models.Group
     success_url = "manager:group-list"
 
-class GroupDetailView(ListView):
+class GroupDetailView(DetailView):
     models = models.Group
     template_name = "manager/group/detail.html"
     context_object_name = "objects"
     
     def get_queryset(self):
-        queryset = Model.models.objects.all()
+        queryset = models.Group.objects.all()
 
         return queryset
 class StudentListView(ManagerPassesTestMixin, ListView):

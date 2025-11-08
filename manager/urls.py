@@ -32,7 +32,7 @@ urlpatterns = [
     path("group/create/", views.GroupCreateView.as_view(), name="group-create"),
     path("group/<int:pk>/update/", views.GroupUpdateView.as_view(), name="group-update"),
     path("group/<int:pk>/delete/", views.GroupDeleteView.as_view(), name="group-delete"),
-
+    path("group/<int:pk>/detail/", views.GroupDetailView.as_view(), name="group-detail"),
 
     path("student/list/", views.StudentListView.as_view(), name="student-list"),
     path("student/create/", views.StudentCreateView.as_view(), name="student-create"),

@@ -59,7 +59,7 @@
                             </thead>
                             <tbody>
                               {% for object in objects %}
-                              {% url 'manager:group-update' object.id as u %}
+                              {% url 'manager:group-detail' object.id as u %}
                               {% url 'manager:group-delete' object.id as d %}
                               <tr>
                                 <td class="pl-0 py-6">

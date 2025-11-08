@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title >Davomat Tizimi</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
@@ -138,12 +139,25 @@
                 </div>
             </div>
             <!--end::Subheader-->
+=======
+    <title>Davomat Tizimi</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="max-width">
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
             <!-- Header -->
             <div class="header">
                 <div class="header-content">
                     <div class="header-title">
+<<<<<<< HEAD
                         <h1>Attendance system</h1>
                         <p>{{ group.title }} - O'quvchilar davomatini boshqarish</p>
+=======
+                        <h1>Davomat Tizimi</h1>
+                        <p>{{ group.name }} - O'quvchilar davomatini boshqarish</p>
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
                     </div>
                     <div class="header-stats">
                         <div class="stat-item">
@@ -180,7 +194,10 @@
                                 <option value="11">Dekabr</option>
                             </select>
                             <select id="year-select"></select>
+<<<<<<< HEAD
                             
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
                         </div>
                     </div>
                 </div>
@@ -300,7 +317,10 @@
             document.getElementById('year-select').value = currentYear;
         }
 
+<<<<<<< HEAD
         // Event listeners
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
         document.getElementById('month-select').addEventListener('change', async function() {
             currentMonth = parseInt(this.value);
             updateLessonDates();
@@ -317,24 +337,35 @@
             updateStats();
         });
 
+<<<<<<< HEAD
         // Get lesson days for the group
         function getLessonDaysNumbers() {
             // Convert lesson_days string to day numbers
             // Monday = 1, Tuesday = 2, Wednesday = 3, Thursday = 4, Friday = 5, Saturday = 6
+=======
+        function getLessonDaysNumbers() {
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
             const dayMap = {
                 'mo': 1,
                 'tu': 2,
                 'we': 3,
                 'thu': 4,
                 'fri': 5,
+<<<<<<< HEAD
                 'sa': 6
+=======
+                'sa': 6,
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
             };
             
             const days = lessonDays.toLowerCase().split(' ');
             return days.map(day => dayMap[day]).filter(Boolean);
         }
 
+<<<<<<< HEAD
         // Get weekdays for a month based on group's lesson days
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
         function getWeekdays(month, year) {
             const dates = [];
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -346,7 +377,10 @@
                 const date = new Date(year, month, day);
                 const dayOfWeek = date.getDay();
                 
+<<<<<<< HEAD
                 // Check if this day is in the group's lesson days
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
                 if (allowedDays.includes(dayOfWeek)) {
                     dates.push({
                         date: date.toISOString().split('T')[0],
@@ -365,7 +399,10 @@
         function updateLessonDates() {
             lessonDates = getWeekdays(currentMonth, currentYear);
             
+<<<<<<< HEAD
             // Initialize attendance for new dates
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
             students.forEach(student => {
                 lessonDates.forEach(dateObj => {
                     const key = `${student.id}-${dateObj.date}`;
@@ -412,7 +449,11 @@
                 const result = await response.json();
                 
                 if (response.ok) {
+<<<<<<< HEAD
                     console.log(`✅ Saqlandi: Student ${studentId}, ${date}, ${status ? "Bor" : "Yo'q"}`);
+=======
+                    console.log(`✅ Saqlandi: Student ${studentId}, ${date}, ${status ? 'Bor' : 'Yo\'q'}`);
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
                 } else {
                     console.error("❌ Xatolik:", result);
                 }
@@ -420,7 +461,10 @@
                 console.error("❌ Serverga ulanishda xatolik:", error);
             }
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
         function getAttendanceStats(studentId) {
             const student = students.find(s => s.id === studentId);
             if (!student) return { present: 0, absent: 0, total: 0, percentage: 0 };
@@ -538,9 +582,13 @@
                                             <div class="percentage-badge ${stats.percentage >= 80 ? 'high' : stats.percentage >= 60 ? 'medium' : 'low'}">
                                                 ${stats.percentage}%
                                             </div>
+<<<<<<< HEAD
                                             <div class="percentage-details">
                                                 ${stats.present}/${stats.total}
                                             </div>
+=======
+                                            
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
                                         </td>
                                     </tr>
                                 `;
@@ -558,6 +606,7 @@
             document.getElementById('lesson-count').textContent = `${lessonDates.length} kun`;
         }
 
+<<<<<<< HEAD
         // Save attendance to backend
         // Save attendance to backend - YANGILANGAN VERSIYA
         async function saveAttendance() {
@@ -616,6 +665,8 @@
         }
 
 // Get CSRF token - YANGILANGAN
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -631,7 +682,10 @@
             return cookieValue;
         }
 
+<<<<<<< HEAD
         // Get CSRF token
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -647,7 +701,10 @@
             return cookieValue;
         }
 
+<<<<<<< HEAD
         // Mobile touch interactions
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
         let touchTimeout;
         
         function handleTouchStart(element) {

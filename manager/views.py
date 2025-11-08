@@ -1,12 +1,26 @@
+<<<<<<< HEAD
 from django.shortcuts import render ,get_object_or_404
 from django.views import View
 from django.views.generic import ListView , DeleteView
 from django.urls import reverse_lazy   
 from django.db.models import Q 
 from common import models
+=======
+from django.shortcuts import render, get_object_or_404
+from django.views import View
+from django.views.generic import ListView, DetailView
+from django.utils.dateparse import parse_date
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from common import models, serializers
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 from manager import forms
 from common.models import Group,Course,Teacher,Student
 from helpers.views import CreateView, UpdateView, DeleteView
+<<<<<<< HEAD
 from common import mixins
 from django.views.generic import TemplateView, ListView, View
 from datetime import date ,datetime
@@ -27,6 +41,15 @@ from common import serializers
 class ManagerHomeView(mixins.RoleRequiredMixin, TemplateView):
     template_name = "manager/base/index.html"
     allowed_roles = ['manager']
+=======
+from helpers.permissions import ManagerPassesTestMixin
+from django.db.models import Q
+
+class HomeView(ManagerPassesTestMixin,View):
+    def get(self, request):
+        print(request.user.role)
+        return render(request, "base/index.html")
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 
 
 class Settings(ListView):
@@ -228,7 +251,20 @@ class GroupDeleteView(DeleteView):
     model = models.Group
     success_url ="manager:group-list"
 
+<<<<<<< HEAD
 class StudentListView(ListView):
+=======
+class GroupDetailView(DetailView):
+    models = models.Group
+    template_name = "manager/group/detail.html"
+    context_object_name = "objects"
+    
+    def get_queryset(self):
+        queryset = models.Group.objects.all()
+
+        return queryset
+class StudentListView(ManagerPassesTestMixin, ListView):
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     model = models.Student
     template_name = "manager/student/list.html"
     context_object_name = "objects"
@@ -299,6 +335,7 @@ class UserUpdateView(UpdateView):
     success_url = "manager:user-list"
     success_update_url = "manager:user-update"
 
+<<<<<<< HEAD
 
 class UserDeleteView(DeleteView):
     model = models.User
@@ -448,6 +485,23 @@ class AttendanceView(View):
 class GroupStudentsAPIView(ListAPIView):
     serializer_class = serializers.StudentSerializer
     
+=======
+class BaseUserDeleteView(ManagerPassesTestMixin, DeleteView):
+    model = models.BaseUser
+    success_url = 'manager:user-list'
+
+
+
+class AttendanceView(View):
+    def get(self, request, group_id):
+        group = get_object_or_404(models.Group, id=group_id)
+        return render(request, "manager/attendance/attendance.html", {"group": group})
+
+
+class GroupStudentsAPIView(ListAPIView):
+    serializer_class = serializers.StudentSerializer
+    
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     def get_queryset(self):
         return models.Student.objects.filter(group_id=self.kwargs['group_id']).only('id', 'full_name', 'date_joined')
 
@@ -525,6 +579,7 @@ class SaveAttendanceAPIView(APIView):
             'created': created,
             'updated': updated
         })
+<<<<<<< HEAD
     
 
 class GradeView(View):
@@ -635,3 +690,5 @@ class SaveGradeAPIView(APIView):
             'created': created,
             'updated': updated
         })
+=======
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f

@@ -96,6 +96,7 @@
 													<span class="menu-text">Groups</span>
 												</span>
 											</li>
+<<<<<<< HEAD
 											<li class="menu-item menu-item-submenu {% if menu_child == 'group-create' %} menu-item-active{% endif %}"
 											aria-haspopup="true" data-menu-toggle="hover">
 												<a href="{% url 'manager:group-create' %}" class="menu-link menu-toggle">
@@ -103,6 +104,21 @@
 														<span></span>
 													</i>
 													<span class="menu-text">Create Group</span>
+=======
+                      <li class="menu-item menu-item-submenu {% if menu_child == "group-create" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
+                        <a href="{% url "manager:group-create" %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Group create</span>
+												</a>
+                      <li class="menu-item menu-item-submenu {% if menu_child == "group-list" %}menu-item-active{% endif %}" aria-haspopup="true" data-menu-toggle="hover">
+												<a href="{% url "manager:group-list" %}" class="menu-link menu-toggle">
+													<i class="menu-bullet menu-bullet-line">
+														<span></span>
+													</i>
+													<span class="menu-text">Group list</span>
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 												</a>
 											</li>
 											<li class="menu-item menu-item-submenu {% if menu_child == 'group-list' %} menu-item-active{% endif %}" 

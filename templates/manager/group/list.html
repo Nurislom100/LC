@@ -86,6 +86,11 @@
                             </thead>
                             <tbody>
                               {% for object in objects %}
+<<<<<<< HEAD
+=======
+                              {% url 'manager:group-detail' object.id as u %}
+                              {% url 'manager:group-delete' object.id as d %}
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
                               <tr>
                                 <td class="pl-0 py-6">
                                   <div class="d-flex align-items-center">

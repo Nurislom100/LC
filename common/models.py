@@ -66,11 +66,15 @@ class Group(BaseModel):
         ("Finished", "Finished"),
     ]
     title = models.CharField(_("title"), max_length=256)
-    course = models.ForeignKey("common.Course", on_delete=models.SET_NULL, verbose_name="course", related_name="groups", null=True)
-    teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True)
+    course = models.ForeignKey("common.Course", on_delete=models.SET_NULL, verbose_name="course", related_name="groups", null=True, blank=True)
+    teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True, blank=True)
     lesson_days = models.CharField(_("lesson days"), max_length=256, choices=day_choices)
+<<<<<<< HEAD
     time = models.CharField(_("time"), max_length=30)
     date_started = models.DateField()
+=======
+    date_started = models.DateField("date")
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     status = models.CharField(_("status"), max_length=256, choices=status_choices, default="ACTIVE") 
 
     class Meta:
@@ -84,12 +88,19 @@ class Group(BaseModel):
 
 class Student(BaseModel):
     status_choices = [
+<<<<<<< HEAD
         (_("Active"), _("Active")),
         (_("Archive"), _("Archive")),
         # (_("DEBTOR"), _("DEBTOR")),
+=======
+        ("active", "ACTIVE"),
+        ("frozen", "frozen"),
+        ("archived", "ARCHIVED"),
+
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
     ]
     full_name = models.CharField(_("full name"), max_length=256)
-    group = models.ForeignKey("common.Group", on_delete=models.CASCADE, verbose_name="group", related_name="students")
+    group = models.ForeignKey("common.Group", on_delete=models.CASCADE, null=True, blank=True, verbose_name="group", related_name="students")
     birth_date = models.DateField(_("birth date"))
     phone = models.CharField(_("phone"), max_length=256)
     address = models.CharField(_("address"), max_length=256)
@@ -115,6 +126,13 @@ class Attendance(models.Model):
     class Meta:
         unique_together = ("student", "date_time") 
         ordering = ["-date_time"]
+<<<<<<< HEAD
+=======
+
+    def __str__(self):
+        return f"{self.student.full_name} - {self.date_time} - {'Bor' if self.is_present else 'Yo‘q'}"
+
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 
     def str(self):
         return f"{self.student.full_name}"

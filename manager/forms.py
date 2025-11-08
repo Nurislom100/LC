@@ -8,6 +8,7 @@ class UserForm(UserCreationForm):
         model = models.User
         fields = ['username', 'email', 'role', 'first_name', 'last_name', 'password1', 'password2']
         widgets = {
+<<<<<<< HEAD
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
             'role': forms.Select(attrs={'class': 'form-control', 'id': 'kt_select2_1'}),
@@ -32,6 +33,22 @@ class UserForm(UserCreationForm):
                 (value, label) for value, label in self.fields['role'].choices
                 if label != 'Manager'
             ]
+=======
+            "full_name" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Full name"}),
+            "username" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Username"}),
+            "phone" : forms.TelInput(attrs={"class" : "form-control", "placeholder" : "Phone"}),
+            "role" : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_2"}),
+            "teacher_profile" : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_3"}),
+            "password" : forms.PasswordInput(attrs={"class" : "form-control", "placeholder" : "Password"})
+        }
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        user.is_active = True
+        if commit:
+            user.save()
+        return user
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
 
 
 class TeacherForm(forms.ModelForm):
@@ -78,7 +95,6 @@ class GroupForm(forms.ModelForm):
             "course",
             "teacher",
             "lesson_days",
-            "time",
             'date_started',
             'status'
 
@@ -88,7 +104,6 @@ class GroupForm(forms.ModelForm):
             "course" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
             "teacher" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
             "lesson_days" : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_2"}),
-            "time" : forms.TimeInput(attrs={"class" : "form-control", "placeholder" : "Time"}),
             "date_started" : widget.DateWidget(attrs={"class" : "form-control", "id": "kt_datetimepicker_3"}),
             "status" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"})
         }
@@ -102,6 +117,7 @@ class StudentForm(forms.ModelForm):
             "group",
             "phone",
             "address",
+            "group",
             "balance",
             "date_joined",
             "status",
@@ -112,9 +128,15 @@ class StudentForm(forms.ModelForm):
             "group": forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_2"}), 
             "phone" : forms.TelInput(attrs={"class" : "form-control", "placeholder" : "Phone"}),
             "address" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Address"}),
+            "group" : forms.Select(attrs={"class" : "form-control", "placeholder" : "group", "id": "kt_select2_2"}),
             "balance" : forms.TextInput(attrs={"class" : "form-control", "placeholder": "balance"}),
+<<<<<<< HEAD
             "date_joined": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
             "status" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
+=======
+            "date_joined" : widget.DateWidget(attrs={"class" : "form-control", "id": "kt_datetimepicker_2"}),
+            
+>>>>>>> 82e4ca92702e200abb25ae916d02cb5601e1fa5f
         }
 
 

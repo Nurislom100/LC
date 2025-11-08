@@ -37,15 +37,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'django.forms',
+    'drf_yasg',
+    "debug_toolbar",
     'common',
     'manager',
     'accountant',
     'reception',
     'teacher',
+
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
 
 MIDDLEWARE = [
+    "querycount.middleware.QueryCountMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",  # 👈 shu yerda bo‘lishi kerak
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

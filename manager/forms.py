@@ -29,29 +29,6 @@ class BaseUserForm(forms.ModelForm):
             user.save()
         return user
 
-class CustomUserInfoForm(forms.ModelForm):
-    class Meta:
-        model = models.BaseUser
-        fields = [
-            'full_name',
-            "username",
-            "phone",
-        ]
-        widgets = {
-            'full_name' : forms.TextInput(attrs={"class": "form-control"}),
-            "username": forms.TextInput(attrs={"class": "form-control", "autocomplete" : "off"}),
-            "phone": forms.TextInput(attrs={"class": "form-control"}),
-        }
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password"])
-        user.is_active = True
-        if commit:
-            user.save()
-        return user
-
-
 
 class TeacherForm(forms.ModelForm):
     class Meta:
@@ -97,7 +74,6 @@ class GroupForm(forms.ModelForm):
             "course",
             "teacher",
             "lesson_days",
-            "time",
             'date_started',
             'status'
 
@@ -107,7 +83,6 @@ class GroupForm(forms.ModelForm):
             "course" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
             "teacher" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"}),
             "lesson_days" : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_2"}),
-            "time" : forms.TimeInput(attrs={"class" : "form-control", "placeholder" : "Time"}),
             "date_started" : widget.DateWidget(attrs={"class" : "form-control", "id": "kt_datetimepicker_3"}),
             "status" : forms.Select(attrs={"class" : "form-control", "id": "kt_select2_2"})
         }
@@ -120,6 +95,7 @@ class StudentForm(forms.ModelForm):
             "birth_date",
             "phone",
             "address",
+            "group",
             "balance",
             "date_joined",
             "status",
@@ -129,9 +105,10 @@ class StudentForm(forms.ModelForm):
             "birth_date" : widget.DateWidget(attrs={"class" : "form-control", "id": "kt_datetimepicker_3"}),
             "phone" : forms.TelInput(attrs={"class" : "form-control", "placeholder" : "Phone"}),
             "address" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Address"}),
+            "group" : forms.Select(attrs={"class" : "form-control", "placeholder" : "group", "id": "kt_select2_2"}),
             "balance" : forms.TextInput(attrs={"class" : "form-control", "placeholder": "balance"}),
-            "date_joined" : widget.DateWidget(attrs={"class" : "form-control", "id": "kt_datetimepicker_3"}),
-
+            "date_joined" : widget.DateWidget(attrs={"class" : "form-control", "id": "kt_datetimepicker_2"}),
+            
         }
 
 

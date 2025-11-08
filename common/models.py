@@ -75,11 +75,10 @@ class Group(BaseModel):
         ("archived", "ARCHIVED"),
     ]
     title = models.CharField(_("title"), max_length=256)
-    course = models.ForeignKey("common.Course", on_delete=models.SET_NULL, verbose_name="course", related_name="groups", null=True)
-    teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True)
+    course = models.ForeignKey("common.Course", on_delete=models.SET_NULL, verbose_name="course", related_name="groups", null=True, blank=True)
+    teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True, blank=True)
     lesson_days = models.CharField(_("lesson days"), max_length=256, choices=day_choices)
-    time = models.TimeField(_("time"))
-    date_started = models.DateField()
+    date_started = models.DateField("date")
     status = models.CharField(_("status"), max_length=256, choices=status_choices, default="ACTIVE") 
 
     class Meta:
@@ -93,10 +92,13 @@ class Group(BaseModel):
 
 class Student(BaseModel):
     status_choices = [
+        ("active", "ACTIVE"),
+        ("frozen", "frozen"),
+        ("archived", "ARCHIVED"),
 
     ]
     full_name = models.CharField(_("full name"), max_length=256)
-    group = models.ForeignKey("common.Group", on_delete=models.CASCADE, verbose_name="group", related_name="students")
+    group = models.ForeignKey("common.Group", on_delete=models.CASCADE, null=True, blank=True, verbose_name="group", related_name="students")
     birth_date = models.DateField(_("birth date"))
     phone = models.CharField(_("phone"), max_length=256)
     address = models.CharField(_("address"), max_length=256)
@@ -113,20 +115,19 @@ class Student(BaseModel):
         return self.phone
 
 
-class Attendance(BaseModel):
-    student_group = models.ForeignKey("common.Group", on_delete=models.SET_NULL, verbose_name="student group", related_name="attendances", null=True)
-    student = models.ForeignKey("common.Student", on_delete=models.SET_NULL, verbose_name="student", related_name="student", null=True)
-    is_present = models.BooleanField(_("is present"))
-    grade = models.PositiveIntegerField(_("grade"), validators=[MinValueValidator(1), MaxValueValidator(10)])
-    date_time = models.DateTimeField(_("date time"))
+class Attendance(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="attendances", null=True, blank=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="attendances", null=True, blank=True)
+    date_time = models.DateField()
+    is_present = models.BooleanField(default=False)
 
     class Meta:
-        db_table = "attendances"
-        verbose_name = _("attendance")
-        verbose_name_plural = _("students")
+        unique_together = ("student", "date_time") 
+        ordering = ["-date_time"]
 
     def __str__(self):
-        return self.student.phone
+        return f"{self.student.full_name} - {self.date_time} - {'Bor' if self.is_present else 'Yo‘q'}"
+
 
 
 class Lead(BaseModel):

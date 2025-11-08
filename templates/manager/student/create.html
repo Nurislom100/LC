@@ -54,10 +54,14 @@
                                                 {% else %}
                                                 {{field.label}} 
                                                 {% endif %}
-                                            </label>
+                                           </label>
                                             <div class='col-lg-9 col-md-9 col-sm-12'>
                                                 <span style="color:red;">{{field.errors}}</span>
                                                 {{field}}
+        {% if field.name == "code" %}
+        <button type="button" class="btn btn-sm btn-info mt-2" id="generate-code">Kod yaratish</button>
+        {% endif %}
+ 
                                             </div>
                                         </div>
                                         {% endfor %}    
@@ -108,6 +112,24 @@
     <!--end::Demo Panel-->
     <!--end::Page Scripts-->
 </body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const button = document.getElementById("generate-code");
+    const codeInput = document.getElementById("id_code");
+
+    if (button && codeInput) {
+        button.addEventListener("click", function() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let code = "";
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            codeInput.value = code;
+        });
+    }
+});
+</script>
+
 <!--end::Body-->
 {% endblock %}
 

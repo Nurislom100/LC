@@ -1,13 +1,14 @@
-from django.urls import path
-
+from django.urls import path, include
 from manager import views
 
 app_name = "manager"
 
 urlpatterns = [
-    path("", views.HomeView.as_view(), name="home"),
-
-
+    path("api/attendance/", views.AttendanceListAPIView.as_view(), name="attendance-list"),
+    path("api/attendance/save/", views.SaveAttendanceAPIView.as_view(), name="save-attendance"),
+    path("attendance/<int:group_id>/", views.AttendanceView.as_view(), name="attendance-page"),
+    path("api/groups/<int:group_id>/students/", views.GroupStudentsAPIView.as_view(), name="group-students"),
+    path("", views.HomeView.as_view(), name='home'),
     path("user/list/", views.BaseUserListView.as_view(), name="user-list"),
     path("user/create/", views.BaseUserCreateView.as_view(), name="user-create"),
     path("user/<int:pk>/update/", views.BaseUserUpdateView.as_view(), name="user-update"),

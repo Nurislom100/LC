@@ -7,23 +7,22 @@ urlpatterns = [
     path("", views.HomeView.as_view(), name="home"),
     path("archive/", views.Archive_list_view, name="archive_list"),
     path("manager/settings/<int:pk>/", views.Settings.as_view(), name="group-settings"),
-    path('api/student-stats/<int:group_id>/', views.student_monthly_stats, name='student-stats'),
 
 
     path('manager/user/',views.UserListView.as_view(),name='user-list'),
     path('manager/user/create/',views.UserCreateView.as_view(),name='user-create'),
     path('manager/user/<int:pk>/update/',views.UserUpdateView.as_view(),name='user-update'),
     path('manager/user/<int:pk>/delete/',views.UserDeleteView.as_view(),name='user-delete'),
+
     path("api/attendance/", views.AttendanceListAPIView.as_view(), name="attendance-list"),
     path("api/attendance/save/", views.SaveAttendanceAPIView.as_view(), name="save-attendance"),
     path("attendance/<int:group_id>/", views.AttendanceView.as_view(), name="attendance-page"),
     path("api/groups/<int:group_id>/students/", views.GroupStudentsAPIView.as_view(), name="group-students"),
-    path("", views.HomeView.as_view(), name='home'),
+
     path("user/list/", views.UserListView.as_view(), name="user-list"),
     path("user/create/", views.UserCreateView.as_view(), name="user-create"),
     path("user/<int:pk>/update/", views.UserUpdateView.as_view(), name="user-update"),
     path("user/<int:pk>/delete/", views.UserDeleteView.as_view(), name="user-delete"),
-
 
     path("teacher/list/", views.TeacherListView.as_view(), name="teacher-list"),
     path("teacher/create/", views.TeacherCreateView.as_view(), name="teacher-create"),
@@ -37,7 +36,6 @@ urlpatterns = [
     path("course/<int:pk>/delete/", views.CourseDeleteView.as_view(), name="course-delete"),
 
     path("group/list/", views.GroupListView.as_view(), name="group-list"),
-    path("groups/", views.GroupfilterView.as_view(), name="group-filter-list"),
     path("group/create/", views.GroupCreateView.as_view(), name="group-create"),
     path("groups/<int:pk>/students/", views.group_students, name="group-students"),
     path("group/<int:pk>/update/", views.GroupUpdateView.as_view(), name="group-update"),
@@ -63,6 +61,7 @@ urlpatterns = [
     path("classroom/create/", views.ClassroomCreateView.as_view(), name="classroom-create"),
     path("classroom/<int:pk>/update/", views.ClassroomUpdateView.as_view(), name="classroom-update"),
     path("classroom/<int:pk>/delete/", views.ClassroomDeleteView.as_view(), name="classroom-delete"),
+    path("schedule/", views.schedule_view, name="schedule"),
 
     path("api/attendance/", views.AttendanceListAPIView.as_view(), name="attendance-page"),
     path("attendance/<int:group_id>/", views.AttendanceView.as_view(), name="attendance-list"),

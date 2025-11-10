@@ -243,7 +243,7 @@
 					<a class="nav-link {% if active_tab == 'attendance' %}active{% endif %}" href="{% url 'manager:attendance-list' object.pk %}">Davomat</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {% if active_tab == 'baholash' %}active{% endif %}" href="{% url 'manager:grade-view' object.id %}">Baholash</a>
+					<a class="nav-link {% if active_tab == 'baholash' %}active{% endif %}" href="#">Baholash</a>
 				</li>
 			</ul>
 		{% endfor %}
@@ -289,32 +289,6 @@
 
 		<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
           <div class="container-fluid">
-			  <div class="controls">
-				  <div class="controls-grid">
-					  <!-- Month and Year Selection -->
-					  <div class="control-group">
-						  <label>Oy va yil tanlash</label>
-						  <div class="input-group">
-							  <select id="month-select">
-								  <option value="0">Yanvar</option>
-								  <option value="1">Fevral</option>
-								  <option value="2">Mart</option>
-								  <option value="3">Aprel</option>
-								  <option value="4">May</option>
-								  <option value="5">Iyun</option>
-								  <option value="6">Iyul</option>
-								  <option value="7">Avgust</option>
-								  <option value="8">Sentabr</option>
-								  <option value="9">Oktabr</option>
-								  <option value="10">Noyabr</option>
-								  <option value="11">Dekabr</option>
-							  </select>
-							  <select id="year-select"></select>
-							  
-						  </div>
-					  </div>
-				  </div>
-			  </div>
             <div class="row">
 				<div class="about col-lg-5 col-md-7"> <!-- chap tomonda -->
 					{% for object in groups %}
@@ -359,11 +333,6 @@
 					</div>
 					{% endfor %}
 				</div>
-                <div class="container">
-                    <div style="width: 100%; max-width: 500px; margin: auto;">
-                        <canvas id="studentChart" style="height: 400px;"></canvas>
-                    </div>
-                </div>
             </div>
           </div>
         </div>
@@ -372,132 +341,6 @@
       </div>
     </div>
   </div>
-<!-- Chart.js kutubxonasini alohida ulagan bo'lsangiz, ikkita nusxa qo'ymang -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-(function(){
-    const groupId = '{{ group.id }}';
-    let students = [];
-    let chartInstance = null;
-
-    const monthSelect = document.getElementById('month-select');
-    const yearSelect = document.getElementById('year-select');
-    const canvas = document.getElementById('studentChart');
-    if (!monthSelect || !yearSelect || !canvas) return;
-    const ctx = canvas.getContext('2d');
-
-    function initializeYearSelect(from = 2020, to = 2030) {
-        yearSelect.innerHTML = '';
-        for (let y = from; y <= to; y++) {
-            const option = document.createElement('option');
-            option.value = y;
-            option.textContent = y;
-            yearSelect.appendChild(option);
-        }
-    }
-
-    function setCurrentDateToSelects() {
-        monthSelect.value = new Date().getMonth() + 1; // 0-11 -> 1-12
-        yearSelect.value = new Date().getFullYear();
-    }
-
-    async function fetchStudents() {
-        try {
-            const res = await fetch(`/manager/api/groups/${groupId}/students/`);
-            if (!res.ok) throw new Error(res.statusText);
-            const data = await res.json();
-            students = data.map(s => ({
-                id: s.id,
-                joinDate: s.date_joined ? new Date(s.date_joined) : new Date(),
-                isArchived: s.is_archived || false
-            }));
-        } catch (err) {
-            console.error("Students fetch xato:", err);
-            students = [];
-        }
-    }
-
-    function countJoinArchive(year, monthZeroBased) {
-        let joined = 0;
-        let archived = 0;
-        students.forEach(s => {
-            const joinMonth = s.joinDate.getMonth();
-            const joinYear = s.joinDate.getFullYear();
-
-            // Active qo'shilganlar
-            if (joinYear === year && joinMonth === monthZeroBased && !s.isArchived) {
-                joined++;
-            }
-
-            // Archive bo'lganlar shu oyda archived_date ga qarab
-            if (s.isArchived && s.archivedDate) {
-                const archMonth = new Date(s.archivedDate).getMonth();
-                const archYear = new Date(s.archivedDate).getFullYear();
-                if (archYear === year && archMonth === monthZeroBased) archived++;
-            }
-        });
-        return { joined, archived };
-    }
-
-    function renderDoughnut(joined, archived) {
-        const labels = ["Qo'shilganlar", "Archive"];
-        const values = [joined, archived];
-        const colors = ["#36A2EB", "#FF6384"];
-
-        if (chartInstance) {
-            chartInstance.data.labels = labels;
-            chartInstance.data.datasets[0].data = values;
-            chartInstance.update();
-            return;
-        }
-
-        chartInstance = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: "O'quvchilar",
-                    data: values,
-                    backgroundColor: colors,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    tooltip: { enabled: true }
-                }
-            }
-        });
-    }
-
-    async function updateChart() {
-        if (!students.length) await fetchStudents();
-        const year = parseInt(yearSelect.value, 10);
-        const month = parseInt(monthSelect.value, 10) - 1; // 1-12 -> 0-11
-        const { joined, archived } = countJoinArchive(year, month);
-        renderDoughnut(joined, archived);
-    }
-
-    monthSelect.addEventListener('change', updateChart);
-    yearSelect.addEventListener('change', updateChart);
-
-    (async function init(){
-        initializeYearSelect(2020, 2030);
-        setCurrentDateToSelects();
-        await fetchStudents();
-        await updateChart();
-    })();
-
-})();
-</script>
-
-
-
-
-
   {% include "parts/user-panel.html" %}
   {% include "parts/scrolltop.html" %}
 </body>

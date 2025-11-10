@@ -70,8 +70,8 @@ class Group(BaseModel):
     room = models.ForeignKey("common.Classroom", on_delete=models.SET_NULL, null=True, blank=False)
     teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True, blank=False)
     lesson_days = models.CharField(_("lesson days"), max_length=256, choices=day_choices)
-    time = models.CharField(_("time"), max_length=30)
-    date_started = models.DateField()
+    start_time = models.CharField(_("start_time"), max_length=30)
+    end_time = models.CharField(_("end_time"), max_length=30)
     date_started = models.DateField("date")
     status = models.CharField(_("status"), max_length=256, choices=status_choices, default="ACTIVE") 
 
@@ -192,6 +192,6 @@ class Classroom(models.Model):
     capacity = models.CharField(_("capacity"), max_length=100)
     
     def __str__(self):
-        return self.Name
+        return self.name
     
 

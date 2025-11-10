@@ -19,7 +19,7 @@ from common.models import Group,Course,Teacher,Student
 from helpers.views import CreateView, UpdateView, DeleteView
 from common import mixins
 from django.views.generic import TemplateView, ListView, View
-from datetime import date ,datetime
+from datetime import date ,datetime , timedelta
 import calendar
 from django.utils.timezone import now
 from django.http import JsonResponse
@@ -31,6 +31,8 @@ from django.utils.dateparse import parse_date
 from common.models import Attendance , Student ,Grade
 from common.serializers import AttendanceSerializer , StudentSerializer
 from common import serializers
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from helpers.permissions import ManagerPassesTestMixin
 from django.db.models import Q
 
@@ -57,33 +59,6 @@ class Settings(ListView):
         context['group'] = self.get_queryset().first()
         context['active_tab'] = 'all'  
         return context
-    
-def student_monthly_stats(request, group_id):
-    year = int(request.GET.get('year', now().year))
-    month = int(request.GET.get('month', now().month))
-
-    start_date = datetime.date(year, month, 1)
-    end_date = datetime.date(year, month, 28) + datetime.timedelta(days=4)
-    end_date = end_date - datetime.timedelta(days=end_date.day)
-
-    new_added = Student.objects.filter(
-        group_id=group_id,
-        date_joined__range=[start_date, end_date],
-        status="Active"
-    ).count()
-
-    archived = Student.objects.filter(
-        group_id=group_id,
-        date_joined__range=[start_date, end_date],
-        status="Archive"
-    ).count()
-
-    return JsonResponse({
-        "new_added": new_added,
-        "archived": archived,
-    })
-
-
 
 class TeacherListView(ListView):
     model = models.Teacher
@@ -197,26 +172,6 @@ def group_students(request, pk):
     }
     return render(request, "manager/group/group_students.html",context)
 
-class GroupfilterView(ListView):
-    model = Group
-    template_name = "manager/group/list.html"
-    context_object_name = "objects"
-
-    def get_queryset(self):
-        queryset = Group.objects.all()
-        filter_value = self.request.GET.get("filter", "all")
-
-        if filter_value == "mwf":
-            queryset = queryset.filter(lesson_days__icontains="Mon Wed Fri")
-        elif filter_value == "tts":
-            queryset = queryset.filter(lesson_days__icontains="Tu Thu Sat")
-        # else -> all
-
-        search = self.request.GET.get("search")
-        if search:
-            queryset = queryset.filter(title__icontains=search)
-
-        return queryset
 
 class GroupCreateView(CreateView):
     model = models.Group
@@ -248,6 +203,7 @@ class GroupDetailView(DetailView):
         queryset = models.Group.objects.all()
 
         return queryset
+    
 class StudentListView(ManagerPassesTestMixin, ListView):
     model = models.Student
     template_name = "manager/student/list.html"
@@ -448,6 +404,52 @@ class ClassroomDeleteView(DeleteView):
     
 
 
+def schedule_view(request):
+    rooms = models.Classroom.objects.all()
+
+    hours = []
+    start_time = datetime.strptime("08:00", "%H:%M")
+    end_time = datetime.strptime("18:00", "%H:%M")
+    current_time = start_time
+    while current_time <= end_time:
+        hours.append(current_time.strftime("%H:%M"))
+        current_time += timedelta(minutes=30)
+
+    filter_day = request.GET.get('day')
+    # Har bir xonaga tegishli guruhlarni olish
+    room_groups = {}
+    room_groups_json = {}
+
+    for room in rooms:
+        groups_in_room = Group.objects.filter(room=room).order_by('start_time').select_related('teacher')
+
+        if filter_day == 'odd':
+                # Toq kunlar = mo we fri
+                groups_in_room = groups_in_room.filter(lesson_days='mo we fri')
+        elif filter_day == 'even':
+                # Juft kunlar = tu thu sa
+                groups_in_room = groups_in_room.filter(lesson_days='tu thu sa')
+
+        room_groups[room] = groups_in_room
+
+        # JSON uchun formatlash
+        room_groups_json[room.name] = [
+            {
+                'name': group.title,
+                'teacher': str(group.teacher) if group.teacher else 'O\'qituvchi yo\'q',
+                'start_time': str(group.start_time) if hasattr(group, 'start_time') else '00:00',
+                'end_time': str(group.end_time) if hasattr(group, 'end_time') else None
+            }
+            for group in groups_in_room
+        ]
+
+    context = {
+        "hours": json.dumps(hours),
+        "room_groups": room_groups,
+        "room_groups_json": json.dumps(room_groups_json),
+    }
+
+    return render(request, "manager/classroom/schedule.html", context)
 
 def Archive_list_view(request):
     context = {

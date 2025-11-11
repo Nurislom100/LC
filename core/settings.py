@@ -91,10 +91,19 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-try:
-    from .local_settings import *
-except:
-    print("Create local_settings")
+ALLOWED_HOSTS = ['ahl-0kpu.onrender.com',]
+
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }       
+}
+
 
 
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"

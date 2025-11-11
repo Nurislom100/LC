@@ -1,6 +1,8 @@
 from django import forms
 from helpers import widgets as widget
 from common import models
+from common.models import Student
+from django.forms import DateInput
 from django.contrib.auth.forms import UserCreationForm
 
 class UserForm(UserCreationForm):
@@ -123,21 +125,33 @@ class StudentForm(forms.ModelForm):
         }
 
 
+
 class PaymentForm(forms.ModelForm):
     class Meta:
         model = models.Payment
-        fields = [
-            'student',
-            'group',
-            'amount',
-            'date',
-        ]
+        fields = ['group', 'student', 'amount', 'date']
         widgets = {
-            'student' : forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_2"}),
-            "group": forms.Select(attrs={"class" : "form-control", "id" : "kt_select2_2"}), 
-            'amount' : forms.NumberInput(attrs={"class" : "form-control", }),
-            'date' : forms.DateInput(attrs={"class" : "form-control", "type" : "date"})
+            'group': forms.Select(attrs={'class': 'form-control selectpicker','data-live-search': 'true','id': 'id_group'}),
+            'student': forms.Select(attrs={'class': 'form-control selectpicker','data-live-search': 'true','id': 'id_student'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control','placeholder': 'Enter amount'}),
+            'date': forms.DateInput(attrs={'class': 'form-control','type': 'date'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Boshlang'ichda student queryset bo‘sh bo‘lsin
+        self.fields['student'].queryset = Student.objects.none()
+
+        # POST so‘rov bo‘lsa yoki update
+        if 'group' in self.data:
+            try:
+                group_id = int(self.data.get('group'))
+                self.fields['student'].queryset = Student.objects.filter(group_id=group_id)
+            except (ValueError, TypeError):
+                self.fields['student'].queryset = Student.objects.none()
+        elif self.instance and self.instance.pk:
+            self.fields['student'].queryset = Student.objects.filter(group=self.instance.group)
 
 class LeadForm(forms.ModelForm):
     class Meta:

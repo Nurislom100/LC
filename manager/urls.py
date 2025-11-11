@@ -51,6 +51,7 @@ urlpatterns = [
     path('payment/create', views.PaymentCreateView.as_view(), name='payment-create'),
     path('payment/<int:pk>/delete', views.PaymentDeleteView.as_view(), name='payment-delete'),
     path('payment/<int:pk>/update', views.PaymentUpdateView.as_view(), name='payment-update'),
+    path('payment/ajax-data/', views.ajax_payment_data, name='ajax-payment-data'),
 
     path("lead/list/", views.LeadListView.as_view(), name="lead-list"),
     path("lead/create/", views.LeadCreateView.as_view(), name="lead-create"),

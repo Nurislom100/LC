@@ -1,10 +1,10 @@
 from django.shortcuts import render ,get_object_or_404
 from django.views import View
-from django.views.generic import ListView , DeleteView
+from django.contrib import messages
+from django.views.generic import ListView , DeleteView, TemplateView, ListView, View
 from django.urls import reverse_lazy   
 from django.db.models import Q 
 from common import models
-from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.utils.dateparse import parse_date
@@ -15,19 +15,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from common import models, serializers
 from manager import forms
+from django.db import transaction
 from common.models import Group,Course,Teacher,Student
 from helpers.views import CreateView, UpdateView, DeleteView
 from common import mixins
-from django.views.generic import TemplateView, ListView, View
 from datetime import date ,datetime , timedelta
 import calendar
 from django.utils.timezone import now
 from django.http import JsonResponse
-from rest_framework.generics import ListAPIView
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
-from django.utils.dateparse import parse_date
 from common.models import Attendance , Student ,Grade
 from common.serializers import AttendanceSerializer , StudentSerializer
 from common import serializers
@@ -295,38 +291,113 @@ class PaymentListView(ListView):
         
         if search:
             queryset = queryset.filter(
-                Q(id__icontains=search) 
+                Q(student__full_name__icontains=search) | Q(group__title__icontains=search)
             )
         return queryset
-
+    
 class PaymentCreateView(CreateView):
     model = models.Payment
-    template_name = "manager/payment/create.html"
-    context_object_name = 'object'
     form_class = forms.PaymentForm
+    template_name = "manager/payment/create.html"
     success_url = "manager:payment-list"
-    success_update_url = "manager:payment-update"
 
+    def form_valid(self, form):
+        with transaction.atomic():
+            student = form.cleaned_data['student']
+            group = form.cleaned_data['group']
+            amount = form.cleaned_data['amount'] or 0
+            group_price = group.price or 0
+
+            # To‘lov miqdorini group narxiga tenglashtiramiz (ixtiyoriy)
+            form.instance.amount = amount
+
+            # Balance va qarzni hisoblash
+            difference = group_price - amount  # yetmagan summa
+
+            # Studentning balansini yangilash
+            student.balance -= amount
+
+            # Agar yetmagan bo‘lsa — qarzga qo‘shamiz
+            if difference > 0:
+                student.debt += difference
+
+            student.save(update_fields=['balance', 'debt'])
+            messages.success(self.request, f"{student.full_name} to‘lovi muvaffaqiyatli qabul qilindi.")
+
+        return super().form_valid(form)
+    
 class PaymentUpdateView(UpdateView):
     model = models.Payment
-    template_name = "manager/payment/create.html"
-    context_object_name = 'object'
     form_class = forms.PaymentForm
+    template_name = "manager/payment/create.html"
     success_url = "manager:payment-list"
-    success_update_url = "manager:payment-update"
 
+    def form_valid(self, form):
+        with transaction.atomic():
+            old_payment = self.get_object()
+            student = form.cleaned_data['student']
+            group = form.cleaned_data['group']
+            new_amount = form.cleaned_data['amount'] or 0
+            group_price = group.price or 0
+
+            # Avvalgi balansni tiklab olamiz (eski to‘lovni qaytarish)
+            student.balance += old_payment.amount
+
+            # Yangi to‘lovni hisobga olamiz
+            student.balance -= new_amount
+
+            # Qarzni yangilash
+            difference = group_price - new_amount
+            if difference > 0:
+                student.debt += difference
+
+            student.save(update_fields=['balance', 'debt'])
+            form.instance.amount = new_amount
+
+            messages.success(self.request, f"{student.full_name} to‘lovi yangilandi.")
+
+        return super().form_valid(form)
+    
 class PaymentDeleteView(DeleteView):
     model = models.Payment
     success_url = "manager:payment-list"
 
-class PaymentDetailView(DeleteView):
-    model = models.Payment
-    template_name = "manager/payment-create.html"
+    def delete(self, request, *args, **kwargs):
+        payment = self.get_object()
+        student = payment.student
 
-    def get_queryset(self):
-        queryset = models.Payment.objects.all()
-        return queryset
-    
+        # To‘lovni o‘chirsak — balansni qaytaramiz
+        student.balance += payment.amount
+        student.save(update_fields=['balance'])
+
+        messages.success(request, f"{student.full_name} to‘lovi o‘chirildi.")
+        return super().delete(request, *args, **kwargs)
+
+def ajax_payment_data(request):
+    group_id = request.GET.get('group')
+    if not group_id:
+        return JsonResponse({'students': [], 'monthly_fee': 0})
+
+    try:
+        group = Group.objects.get(id=group_id)
+    except Group.DoesNotExist:
+        return JsonResponse({'students': [], 'monthly_fee': 0})
+
+    # Shu groupdagi studentlar
+    students = group.students.all()
+    student_list = []
+    for student in students:
+        student_list.append({
+            'id': student.id,
+            'name': student.full_name,
+            'balance': float(student.balance),
+            'debt': float(getattr(student, 'debt', 0))
+        })
+
+    return JsonResponse({
+        'students': student_list,
+        'monthly_fee': float(group.price)
+    })
 
 class LeadListView(ListView):
     model = models.Lead

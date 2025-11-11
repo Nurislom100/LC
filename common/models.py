@@ -70,8 +70,8 @@ class Group(BaseModel):
     room = models.ForeignKey("common.Classroom", on_delete=models.SET_NULL, null=True, blank=False)
     teacher = models.ForeignKey("common.Teacher", on_delete=models.SET_NULL, verbose_name="teacher", related_name="groups", null=True, blank=False)
     lesson_days = models.CharField(_("lesson days"), max_length=256, choices=day_choices)
-    start_time = models.CharField(_("start_time"), max_length=30)
-    end_time = models.CharField(_("end_time"), max_length=30)
+    start_time = models.TimeField(_("start_time"))
+    end_time = models.TimeField(_("end_time"))
     date_started = models.DateField("date")
     status = models.CharField(_("status"), max_length=256, choices=status_choices, default="ACTIVE") 
 
@@ -91,7 +91,7 @@ class Student(BaseModel):
 
     ]
     full_name = models.CharField(_("full name"), max_length=256)
-    group = models.ForeignKey("common.Group", on_delete=models.CASCADE, null=True, blank=True, verbose_name="group", related_name="students")
+    group = models.ForeignKey("common.Group", on_delete=models.CASCADE, verbose_name="group", related_name="students")
     birth_date = models.DateField(_("birth date"))
     phone = models.CharField(_("phone"), max_length=256)
     address = models.CharField(_("address"), max_length=256)
@@ -149,37 +149,66 @@ class Lead(BaseModel):
 
 
 class Payment(models.Model):
-    student = models.ForeignKey(Student, on_delete=CASCADE, related_name='payments')
+    student = models.ForeignKey(
+        "Student",
+        on_delete=models.CASCADE,
+        related_name='payments'
+    )
+    group = models.ForeignKey(
+        "Group",
+        on_delete=models.CASCADE,
+        related_name='payments',
+        null=True,
+        blank=True
+    )
     amount = models.PositiveIntegerField(_("amount"))
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="payment", null=True, blank=True)
-    date = models.DateField(_("date"), default=date.today)   
+    date = models.DateField(_("date"), default=date.today)
+    debt = models.PositiveIntegerField(_("debt"), default=0)
+
     class Meta:
         db_table = "payment"
         verbose_name = "payment"
-        verbose_name_plural = "payment"
+        verbose_name_plural = "payments"
 
     def save(self, *args, **kwargs):
-        if not self.pk:
-            if self.student.balance is None:
-                self.student.balance = 0
-            self.student.balance += self.amount
+        is_new = self.pk is None
+        student = self.student
+        group_fee = self.group.price if self.group else 0
+
+        if is_new:
+            # Amount avtomatik to'lovga teng bo'lishi mumkin
+            if not self.amount:
+                self.amount = group_fee
+
+            # Agar to'lov yetarli bo'lmasa, debt hisoblash
+            if self.amount < group_fee:
+                self.debt = group_fee - self.amount
+            else:
+                self.debt = 0
+
+            # Student balance kamayadi (faqat to'langan miqdor)
+            student.balance -= self.amount
+
         else:
+            # Payment update qilinsa
             old = Payment.objects.get(pk=self.pk)
-            if self.student.balance is None:
-                self.student.balance = 0
-            self.student.balance += self.amount - old.amount
-        self.student.save()
+            diff = self.amount - old.amount
+            student.balance -= diff
+
+        student.save()
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        if self.pk:
-            self.student.balance -= self.amount
-            self.student.save()
+        # Payment o‘chirilsa balansni qaytarish
+        student = self.student
+        student.balance += self.amount
+        if hasattr(student, 'debt'):
+            student.debt += self.amount
+        student.save()
         super().delete(*args, **kwargs)
 
     def __str__(self):
         return f"{self.student}"
-
 
 class Grade(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

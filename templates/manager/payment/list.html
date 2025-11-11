@@ -48,11 +48,11 @@
                                             <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
                                                 <thead>
                                                 <tr class="text-left text-uppercase">
-                                                    <th style="min-width: 100px">ID</th>
                                                     <th style="min-width: 100px">Student</th>
                                                     <th style="min-width: 100px">Group</th>
                                                     <th style="min-width: 100px">Amount</th>
                                                     <th style="min-width: 100px">Date</th>
+                                                    <th style="min-width: 100px">Debt</th>
                                                     <th style="min-width: 100px">Actions</th>
                                                 </tr>
                                                 </thead>
@@ -64,14 +64,10 @@
                                                     <td class="pl-0 py-6">
                                                     <div class="d-flex align-items-center">
                                                         <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                                        <span class="symbol-label">{{ object.full_name|slice:':1' }}</span>
+                                                        <span class="symbol-label">{{ object.student.full_name|slice:':1' }}</span>
                                                         </div>
-                                                        <span href="{% url 'manager:payment-create' %}" class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.id}}</span>      
+                                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.student.full_name}}</span>      
                                                     </div>
-                                                    </td>
-                                                    
-                                                    <td>
-                                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.student.full_name}}</span>
                                                     </td>
                                                     <td>
                                                     <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.group}}</span>
@@ -82,8 +78,11 @@
                                                     <td>
                                                     <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.date}}</span>
                                                     </td>
+                                                    <td>
+                                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.debt}}</span>
+                                                    </td>
                                                     <td nowrap="nowrap">
-                                                    {% include "parts/actions.html"  with update_url=u delete_url=d %}
+                                                    {% include "parts/actions.html" with update_url=u delete_url=d %}
                                                     </td>
                                                 </tr>
                                                 {% endfor %}

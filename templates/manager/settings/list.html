@@ -258,7 +258,7 @@
                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                   <ul class="navi flex-column navi-hover py-2">
                     <li class="navi-item">
-                      <a href="{{update_url}}" class="navi-link">
+                      <a href="{% url 'manager:group-update' group.id %}" class="navi-link">
                         <span class="navi-text">Tahrirlash</span>
 						<span class="svg-icon svg-icon-md">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
@@ -289,7 +289,6 @@
 
 		<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
           <div class="container-fluid">
-            <div class="row">
 				<div class="about col-lg-5 col-md-7"> <!-- chap tomonda -->
 					{% for object in groups %}
 					<div class="card card-custom shadow-sm mt-5">
@@ -321,7 +320,7 @@
 
                             <div class="timeline-item align-items-start">
                                 <div class="timeline-label font-weight-bolder text-dark-75">Time:</div>
-                                <div class="timeline-content text-muted pl-3">{{ object.time }}</div>
+                                <div class="timeline-content text-muted pl-3">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</div>
                             </div>
 
                             <div class="timeline-item align-items-start">
@@ -333,10 +332,11 @@
 					</div>
 					{% endfor %}
 				</div>
+
             </div>
+        </div>
           </div>
         </div>
-
         {% include "parts/footer.html" %}
       </div>
     </div>

@@ -179,8 +179,7 @@
 
 												<div class="menu-submenu">
 													<i class="menu-arrow"></i>
-													<ul class="menu-subnav">
-														
+													<ul class="menu-subnav">														
 														<!-- PAYMENT -->
 														<li class="menu-item menu-item-submenu {% if menu_parent == 'payment' %} menu-item-open {% endif %}" 
 															aria-haspopup="true" data-menu-toggle="hover">
@@ -209,6 +208,117 @@
 																		<a href="{% url 'manager:payment-list' %}" class="menu-link">
 																			<i class="menu-bullet menu-bullet-line"><span></span></i>
 																			<span class="menu-text">All Payment</span>
+																		</a>
+																	</li>
+																</ul>
+															</div>
+														</li>
+																												<!-- PAYMENT -->
+														<li class="menu-item menu-item-submenu {% if menu_parent == 'payment' %} menu-item-open {% endif %}" 
+															aria-haspopup="true" data-menu-toggle="hover">
+															<a href="javascript:;" class="menu-link menu-toggle">
+																<span class="svg-icon menu-icon">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+																		fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+																		<path
+																			d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+																		<path
+																			d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
+																	</svg>
+																</span>
+																<span class="menu-text">Wages</span>
+																<i class="menu-arrow"></i>
+															</a>
+															<div class="menu-submenu">
+																<ul class="menu-subnav">
+																	<li class="menu-item {% if menu_child == 'payment-create' %} menu-item-active {% endif %}" aria-haspopup="true">
+																		<a href="{% url 'manager:wages-create' %}" class="menu-link">
+																			<i class="menu-bullet menu-bullet-line"><span></span></i>
+																			<span class="menu-text">Add Wages</span>
+																		</a>
+																	</li>
+																	<li class="menu-item {% if menu_child == 'payment-list' %} menu-item-active {% endif %}" aria-haspopup="true">
+																		<a href="{% url 'manager:wages-list' %}" class="menu-link">
+																			<i class="menu-bullet menu-bullet-line"><span></span></i>
+																			<span class="menu-text">All Wages</span>
+																		</a>
+																	</li>
+																</ul>
+															</div>
+														</li>
+													</ul>
+												</div>
+											</li>
+											<li class="menu-item menu-item-submenu {% if menu_parent == 'settings-all' %} menu-item-open{% endif %}" 
+											aria-haspopup="true" data-menu-toggle="hover">
+												<a href="javascript:;" class="menu-link menu-toggle">
+													<span class="svg-icon menu-icon">
+														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+															fill="currentColor" class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
+															<path
+															d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0" />
+														</svg>
+													</span>
+													<span class="menu-text">Workers</span>
+													<i class="menu-arrow"></i>
+												</a>
+
+												<div class="menu-submenu">
+													<i class="menu-arrow"></i>
+													<ul class="menu-subnav">
+														<li class="menu-item menu-item-submenu {% if menu_parent == 'users' %} menu-item-open{% endif %}" 
+															aria-haspopup="true" data-menu-toggle="hover">
+															<a href="javascript:;" class="menu-link menu-toggle">
+																<span class="svg-icon menu-icon">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-bounding-box" viewBox="0 0 16 16">
+																		<path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
+																		<path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+																	</svg>
+																</span>
+																<span class="menu-text">Employee</span>
+																<i class="menu-arrow"></i>
+															</a>
+															<div class="menu-submenu">
+																<ul class="menu-subnav">
+																	<li class="menu-item {% if menu_child == 'user-create' %} menu-item-active{% endif %}" aria-haspopup="true">
+																		<a href="{% url 'manager:employee-create' %}" class="menu-link">
+																			<i class="menu-bullet menu-bullet-line"><span></span></i>
+																			<span class="menu-text">Create Employee</span>
+																		</a>
+																	</li>
+																	<li class="menu-item {% if menu_child == 'user-list' %} menu-item-active{% endif %}" aria-haspopup="true">
+																		<a href="{% url 'manager:employee-list' %}" class="menu-link">
+																			<i class="menu-bullet menu-bullet-line"><span></span></i>
+																			<span class="menu-text">Employee list</span>
+																		</a>
+																	</li>
+																</ul>
+															</div>
+														</li>
+														<!-- USERS -->
+														<li class="menu-item menu-item-submenu {% if menu_parent == 'users' %} menu-item-open{% endif %}" 
+															aria-haspopup="true" data-menu-toggle="hover">
+															<a href="javascript:;" class="menu-link menu-toggle">
+																<span class="svg-icon menu-icon">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+																		<path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+																	</svg>
+																</span>
+																<span class="menu-text">Users</span>
+																<i class="menu-arrow"></i>
+															</a>
+															<div class="menu-submenu">
+																<ul class="menu-subnav">
+																	<li class="menu-item {% if menu_child == 'user-create' %} menu-item-active{% endif %}" aria-haspopup="true">
+																		<a href="{% url 'manager:user-create' %}" class="menu-link">
+																			<i class="menu-bullet menu-bullet-line"><span></span></i>
+																			<span class="menu-text">Create user</span>
+																		</a>
+																	</li>
+																	<li class="menu-item {% if menu_child == 'user-list' %} menu-item-active{% endif %}" aria-haspopup="true">
+																		<a href="{% url 'manager:user-list' %}" class="menu-link">
+																			<i class="menu-bullet menu-bullet-line"><span></span></i>
+																			<span class="menu-text">Users list</span>
 																		</a>
 																	</li>
 																</ul>
@@ -250,39 +360,6 @@
 													</ul>
 												</div>
 											</li>
-
-											<!-- USERS -->
-											<li class="menu-item menu-item-submenu {% if menu_parent == 'users' %} menu-item-open{% endif %}" 
-												aria-haspopup="true" data-menu-toggle="hover">
-												<a href="javascript:;" class="menu-link menu-toggle">
-													<span class="svg-icon menu-icon">
-														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-															fill="currentColor" class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
-															<path
-																d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0" />
-														</svg>
-													</span>
-													<span class="menu-text">Users</span>
-													<i class="menu-arrow"></i>
-												</a>
-												<div class="menu-submenu">
-													<ul class="menu-subnav">
-														<li class="menu-item {% if menu_child == 'user-create' %} menu-item-active{% endif %}" aria-haspopup="true">
-															<a href="{% url 'manager:user-create' %}" class="menu-link">
-																<i class="menu-bullet menu-bullet-line"><span></span></i>
-																<span class="menu-text">Create user</span>
-															</a>
-														</li>
-														<li class="menu-item {% if menu_child == 'user-list' %} menu-item-active{% endif %}" aria-haspopup="true">
-															<a href="{% url 'manager:user-list' %}" class="menu-link">
-																<i class="menu-bullet menu-bullet-line"><span></span></i>
-																<span class="menu-text">Users list</span>
-															</a>
-														</li>
-													</ul>
-												</div>
-											</li>
-
 											<!-- ARCHIVE -->
 											<li class="menu-item menu-item-submenu {% if menu_parent == 'archived-all' %} menu-item-open{% endif %}"
 												aria-haspopup="true" data-menu-toggle="hover">

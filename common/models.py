@@ -149,18 +149,8 @@ class Lead(BaseModel):
 
 
 class Payment(models.Model):
-    student = models.ForeignKey(
-        "Student",
-        on_delete=models.CASCADE,
-        related_name='payments'
-    )
-    group = models.ForeignKey(
-        "Group",
-        on_delete=models.CASCADE,
-        related_name='payments',
-        null=True,
-        blank=True
-    )
+    student = models.ForeignKey("Student",on_delete=models.CASCADE,related_name='payments')
+    group = models.ForeignKey("Group",on_delete=models.CASCADE,related_name='payments',null=True,blank=True)
     amount = models.PositiveIntegerField(_("amount"))
     date = models.DateField(_("date"), default=date.today)
     debt = models.PositiveIntegerField(_("debt"), default=0)
@@ -224,3 +214,35 @@ class Classroom(models.Model):
         return self.name
     
 
+class Employee(BaseModel):
+    ROLE_CHOICES = [
+        ('administrator', 'Administrator'),
+        ('accountant', 'Accountant'),
+        ('support', 'Support'),
+        ('receptionist', 'Receptionist'),
+    ]
+    full_name = models.CharField(_("full name"), max_length=256)
+    birth_date = models.DateField(_("birth date"), null=True, blank=True)
+    phone = models.CharField(_("phone"), max_length=256)
+    date_joined = models.DateField(_("joined"), null=True, blank=True,  default=date.today)
+    salary = models.PositiveIntegerField(_("Monthly Salary"))
+    role = models.CharField(_("status"), max_length=256, choices=ROLE_CHOICES)
+
+    class Meta:
+        db_table = "Employee"
+        verbose_name = _("Employee")
+        verbose_name_plural = _("Employee")
+
+    def __str__(self):
+        return self.full_name
+    
+class Wages(models.Model):
+    ROLE_CHOICES = Employee.ROLE_CHOICES 
+
+    role = models.CharField(max_length=256, choices=ROLE_CHOICES)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='payments')
+    amount = models.PositiveIntegerField()
+    date = models.DateField(_("date"), null=True, blank=True, default=date.today)
+
+    def __str__(self):
+        return f"{self.employee.full_name} - {self.amount} so'm ({self.date})"

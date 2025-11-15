@@ -52,8 +52,18 @@ class Settings(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['group'] = self.get_queryset().first()
-        context['active_tab'] = 'all'  
+        group = self.get_queryset().first()
+        
+        context['group'] = group
+        context['active_tab'] = 'all'
+        
+        if group:
+            context['students'] = group.students.all()  # Agar related_name="students" bo‘lsa
+            context['has_students'] = group.students.exists()
+        else:
+            context['students'] = None
+            context['has_students'] = False
+        
         return context
 
 class TeacherListView(ListView):
@@ -160,13 +170,7 @@ class GroupListView(ListView):
         return queryset
 
 def group_students(request, pk):
-    group = get_object_or_404(Group, pk=pk)
-    students = group.students.filter() 
-    context = {
-        "group":group,
-        "students":students,
-    }
-    return render(request, "manager/group/group_students.html",context)
+    return render(request, "manager/settings/list.html",context)
 
 
 class GroupCreateView(CreateView):
@@ -635,4 +639,87 @@ class SaveAttendanceAPIView(APIView):
         })
     
 
+class EmployeeListView(ListView):
+    model = models.Employee
+    template_name = "manager/employee/list.html"
+    context_object_name = "objects"
+    paginate_by = 10
+    def get_queryset(self):
+        queryset = models.Employee.objects.all().order_by("id")
+        search = self.request.GET.get("search", None)
+        
+        if search:
+            queryset = queryset.filter(
+                Q(full_name__icontains=search)
+            )
+        return queryset
 
+class EmployeeCreateView(CreateView):
+    model = models.Employee
+    form_class = forms.EmployeeForm
+    template_name = "manager/employee/create.html"
+    context_object_name = "object"
+    success_url = "manager:employee-list"
+    success_create_url = 'manager:employee-create'
+    
+    
+class EmployeeUpdateView(UpdateView):
+    model = models.Employee
+    form_class = forms.EmployeeForm
+    template_name = "manager/employee/update.html"
+    context_object_name = "object"
+    success_url ="manager:employee-list"
+    success_create_url = 'manager:employee-update'
+    
+
+class EmployeeDeleteView(DeleteView):
+    model = models.Employee
+    success_url ='manager:employee-list'
+
+
+
+class WagesListView(ListView):
+    model = models.Wages
+    template_name = "manager/Wages/list.html"
+    context_object_name = "objects"
+    paginate_by = 10
+    def get_queryset(self):
+        queryset = models.Wages.objects.filter().order_by("id")
+        search = self.request.GET.get("search", None)
+        
+        if search:
+            queryset = queryset.filter(
+                Q(full_name__icontains=search)
+            )
+        return queryset
+    
+class WagesCreateView(CreateView):
+    model = models.Wages
+    form_class = forms.WagesForm
+    template_name = "manager/Wages/create.html"
+    success_url = "manager:wages-list"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["roles"] = models.Employee.ROLE_CHOICES
+        return context
+    
+class WagesUpdateView(UpdateView):
+    model = models.Wages
+    form_class = forms.WagesForm
+    template_name = "manager/Wages/update.html"
+    context_object_name = "object"
+    success_url = "manager:wages-list"
+    success_create_url = 'manager:wages-update'
+    
+
+class WagesDeleteView(DeleteView):
+    model = models.Wages
+    success_url = 'manager:wages-list'
+    
+def get_employees_by_role(request):
+    role_name = request.GET.get('role', '')
+    employees = []
+    if role_name:
+        employees = models.Employee.objects.filter(role__iexact=role_name).values('id', 'full_name', 'salary')
+    return JsonResponse({"employees": list(employees)})

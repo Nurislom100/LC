@@ -1,48 +1,81 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block content %}
-
 <style>
+/* ------------------------------ */
+/* MAIN PAGE LAYOUT (NEW FIXES)  */
+/* ------------------------------ */
 
-    /* Container markazlashgan va max kenglik */
+/* Group section wrapper: left + right */
+.group-section {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+/* Left: Group Details card */
+.group-details-card {
+    max-width: 360px !important;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+/* Right: Courses container */
+.courses-container {
+    flex: 1;
+    width: 100%;
+}
+
+/* Responsive — tablet & phone */
+@media (max-width: 992px) {
+    .group-section {
+        flex-wrap: wrap;
+    }
+    .group-details-card {
+        max-width: 100%;
+    }
+}
+
+/* ------------------------------ */
+/* YOUR ORIGINAL CSS (KEPT SAME)  */
+/* ------------------------------ */
+
 .container {
     max-width: 900px;
     margin: auto;
     padding: 20px;
 }
 
-/* Flex qator: chap panel + chart */
+/* Flex qator */
 .flex-row {
     display: flex;
     align-items: flex-start;
     gap: 20px;
-    flex-wrap: wrap; /* kichik ekranlarda pastga tushish */
+    flex-wrap: wrap;
 }
 
-/* Chap panel (selectlar + group details) */
 .left-panel {
-    flex: 0 0 250px; /* qat’iy kenglik */
+    flex: 0 0 250px;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* Select elementlar */
 .left-panel select {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
 }
 
-/* Group details box */
 #groupDetails {
     border: 1px solid #ddd;
     padding: 10px;
     box-sizing: border-box;
-    height: 100%; /* chap panelga balandlikni to‘ldiradi */
+    height: 100%;
 }
 
-/* Chart qismi */
 .chart-container {
     flex: 1;
     min-width: 300px;
@@ -50,13 +83,13 @@
 }
 
 .controls {
-	margin-top: 3%;
+    margin-top: 3%;
     background: #ffffff;
     border-radius: 12px;
     padding: 24px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     margin-bottom: 20px;
-    max-width: 350px; /* Group Details bilan bir xil kenglik */
+    max-width: 350px;
 }
 
 .controls-grid {
@@ -78,7 +111,7 @@
 
 .input-group {
     display: flex;
-    flex-direction: column; /* Vertikal joylashish */
+    flex-direction: column;
     gap: 12px;
 }
 
@@ -117,16 +150,6 @@
     color: #333;
 }
 
-/* Yil va Oy uchun alohida tartib */
-#year-select {
-    order: 1; /* Birinchi yil */
-}
-
-#month-select {
-    order: 2; /* Ikkinchi oy */
-}
-
-/* Responsive */
 @media (max-width: 768px) {
     .controls {
         max-width: 100%;
@@ -134,29 +157,25 @@
     }
 }
 
-.about{
-    max-width: 375px; /* Group Details bilan bir xil kenglik */
+.about {
+    max-width: 375px;
 }
 
-
-/* Subheader container */
 .subheader {
-    background-color: white; /* engil gray */
+    background-color: white;
     padding: 0.75rem 1rem;
     border-bottom: 1px solid #e5e7eb;
     margin-bottom: 15px;
 }
 
-/* Fluid container */
 .subheader .container-fluid {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: flex-start; /* chapdan boshlanadi */
+    justify-content: flex-start;
     gap: 1rem;
 }
 
-/* Nav tabs */
 .subheader .nav-tabs {
     display: flex;
     gap: 0.5rem;
@@ -165,30 +184,25 @@
     margin: 0;
 }
 
-/* Nav item links */
 .subheader .nav-tabs .nav-link {
-    color: #6b7280; /* gray */
+    color: #6b7280;
     border-radius: 6px;
     text-decoration: none;
     transition: all 0.2s;
-    background-color: #e5e7eb20; /* yengil hover fon */
+    background-color: #e5e7eb20;
 }
 
-/* Hover effect */
 .subheader .nav-tabs .nav-link:hover {
     background-color: #e5e7eb;
-    color: #3b82f6; /* dark gray */
+    color: #3b82f6;
 }
 
-/* Active tab */
 .subheader .nav-tabs .active {
-    background-color: #3b82f6; /* primary blue */
+    background-color: #3b82f6;
     color: white;
     font-weight: 600;
 }
 
-
-/* Responsive: kichik ekranlarda vertical bo‘lsin */
 @media (max-width: 576px) {
     .subheader .nav-tabs {
         flex-direction: column;
@@ -200,21 +214,19 @@
     }
 }
 
-
-/* Responsive */
 @media (max-width: 768px) {
     .subheader .container-fluid {
         flex-direction: column;
         gap: 12px;
         padding: 12px 16px;
     }
-    
+
     .nav-tabs {
         width: 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     .nav-tabs .nav-link {
         white-space: nowrap;
         padding: 12px 16px;
@@ -222,125 +234,223 @@
 }
 </style>
 
+
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   {% include "parts/header-mobile.html" %}
-  <div class="d-flex flex-column flex-root">
-    <div class="d-flex flex-row flex-column-fluid page">
-      {% include "parts/aside.html" with menu_parent='group-all' menu_child='group-list' %}
-      <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
-        {% include "parts/header.html" %}
+    <div class="d-flex flex-column flex-root">
+        <div class="d-flex flex-row flex-column-fluid page">
+        {% include "parts/aside.html" with menu_parent='group-all' menu_child='group-list' %}
+            <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+            {% include "parts/header.html" %}
+                <!--begin::Subheader-->
+                <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
+                    <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+                    {% for object in groups %}
+                        <!--begin::Info-->
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link {% if active_tab == 'all' %}active{% endif %}" href="{% url 'manager:group-settings' object.pk %}">All</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if active_tab == 'attendance' %}active{% endif %}" href="{% url 'manager:attendance-list' object.pk %}">Davomat</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if active_tab == 'baholash' %}active{% endif %}" href="#">Baholash</a>
+                            </li>
+                        </ul>
+                    {% endfor %}
+                        <!--end::Info-->
 
-        <!--begin::Subheader-->
-        <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
-          <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-		{% for object in groups %}
-            <!--begin::Info-->
-			<ul class="nav nav-tabs">
-				<li class="nav-item">
-					<a class="nav-link {% if active_tab == 'all' %}active{% endif %}" href="{% url 'manager:group-settings' object.pk %}">All</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if active_tab == 'attendance' %}active{% endif %}" href="{% url 'manager:attendance-list' object.pk %}">Davomat</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if active_tab == 'baholash' %}active{% endif %}" href="#">Baholash</a>
-				</li>
-			</ul>
-		{% endfor %}
-            <!--end::Info-->
-
-            <!--begin::Actions-->
-            <div class="d-flex align-items-center">
-              <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Options">
-                <a href="#" class="btn btn-light-primary font-weight-bold dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Options
-                </a>
-                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                  <ul class="navi flex-column navi-hover py-2">
-                    <li class="navi-item">
-                      <a href="{% url 'manager:group-update' group.id %}" class="navi-link">
-                        <span class="navi-text">Tahrirlash</span>
-						<span class="svg-icon svg-icon-md">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-							<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-							</svg>
-						</span>
-                      </a>
-                    </li>
-					<li class="navi-item">
-                      <a href="{% url 'manager:group-list' %}" class="navi-link">
-                        <span class="navi-text">Exit</span>
-						<span class="svg-icon svg-icon-md">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-							<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
-							<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
-							</svg>
-						</span>
-                      </a>
-                    </li>
-                  </ul>
+                        <!--begin::Actions-->
+                        <div class="d-flex align-items-center">
+                        <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Options">
+                            <a href="#" class="btn btn-light-primary font-weight-bold dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Options
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                            <ul class="navi flex-column navi-hover py-2">
+                                <li class="navi-item">
+                                <a href="{% url 'manager:group-update' group.id %}" class="navi-link">
+                                    <span class="navi-text">Tahrirlash</span>
+                                    <span class="svg-icon svg-icon-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                                </li>
+                                <li class="navi-item">
+                                <a href="{% url 'manager:group-list' %}" class="navi-link">
+                                    <span class="navi-text">Exit</span>
+                                    <span class="svg-icon svg-icon-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                                        </svg>
+                                    </span>
+                                </a>
+                                </li>
+                            </ul>
+                            </div>
+                        </div>
+                        </div>
+                        <!--end::Actions-->
+                    </div>
                 </div>
-              </div>
+                <!--end::Subheader-->
+
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                    <div class="container-fluid">
+
+                        <!-- Yangi: Left + Right wrapper -->
+                        <div class="group-section">
+
+                            <!-- CHAP TOMON: Group Details -->
+                            <div class="group-details-card">
+                                {% for object in groups %}
+                                <div class="card card-custom shadow-sm mt-5">
+                                    <div class="card-header border-0">
+                                        <h3 class="card-title font-weight-bolder text-dark">Group Details</h3>
+                                    </div>
+
+                                    <div class="card-body pt-4 pb-4">
+                                        <div class="timeline timeline-2">
+
+                                            <div class="timeline-item align-items-start">
+                                                <div class="timeline-label font-weight-bolder text-dark-75">Course:</div>
+                                                <div class="timeline-content text-muted pl-3">{{ object.course }}</div>
+                                            </div>
+
+                                            <div class="timeline-item align-items-start">
+                                                <div class="timeline-label font-weight-bolder text-dark-75">Group:</div>
+                                                <div class="timeline-content text-muted pl-3">{{ object.title }}</div>
+                                            </div>
+
+                                            <div class="timeline-item align-items-start">
+                                                <div class="timeline-label font-weight-bolder text-dark-75">Teacher:</div>
+                                                <div class="timeline-content text-muted pl-3">{{ object.teacher }}</div>
+                                            </div>
+
+                                            <div class="timeline-item align-items-start">
+                                                <div class="timeline-label font-weight-bolder text-dark-75">Lesson Day:</div>
+                                                <div class="timeline-content text-muted pl-3">{{ object.lesson_days }}</div>
+                                            </div>
+
+                                            <div class="timeline-item align-items-start">
+                                                <div class="timeline-label font-weight-bolder text-dark-75">Time:</div>
+                                                <div class="timeline-content text-muted pl-3">
+                                                    {{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}
+                                                </div>
+                                            </div>
+
+                                            <div class="timeline-item align-items-start">
+                                                <div class="timeline-label font-weight-bolder text-dark-75">Date Started:</div>
+                                                <div class="timeline-content text-muted pl-3">{{ object.date_started }}</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- O‘NG TOMON: Courses -->
+                            <div class="courses-container">
+
+                                <div class="card card-custom card-stretch gutter-b mt-5">
+
+                                    <div class="card-header border-0 py-5">
+                                        <h3 class="card-title align-items-start flex-column">
+                                            <span class="card-label font-weight-bolder text-dark">{{group.title}}'s students</span>
+                                            <small class='mt-2'>Total: {{ objects|length }}</small>
+                                        </h3>
+                                    </div>
+
+                                    <form method="get" class="px-4">
+                                        <div class="form-group row align-items-center">
+                                            <div class="col-lg-6 mb-3">
+                                                <input type="text" class="form-control" placeholder="Search"
+                                                    value="{{ request.GET.search }}" name="search" />
+                                            </div>
+
+                                            <div class="col-lg-3 mb-3">
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    <i class="fas fa-search mr-1"></i> Search
+                                                </button>
+                                            </div>
+
+                                            <div class="col-lg-3 mb-3 text-right">
+                                                <a href="{% url 'manager:student-create' %}" class="btn btn-success w-100">
+                                                    Add new student
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="card-body pt-0 pb-3">
+                                        {% if has_students %}
+                                        <div class="table-responsive">
+                                            <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                                                <thead>
+                                                    <tr class="text-left text-uppercase">
+                                                        <th style="min-width: 100px">Full name</th>
+                                                        <th style="min-width: 100px">Phone number</th>
+                                                        <th style="min-width: 100px">Balance</th>
+                                                        <th style="min-width: 100px">Date_Joined</th>
+                                                        <th style="min-width: 100px">Status</th>
+                                                        <th style="min-width: 100px">Actions</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    {% for object in students %}
+                                                    <tr>
+                                                        <td class="pl-0 py-6">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="mr-4 symbol symbol-40 symbol-light-success">
+                                                                    <span class="symbol-label">{{ object.full_name|slice:':1' }}</span>
+                                                                </div>
+                                                                <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                                                    {{ object.full_name }}
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ object.phone }}</span></td>
+                                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ object.balance }}</span></td>
+                                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ object.date_joined }}</span></td>
+                                                        <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ object.status }}</span></td>
+
+                                                        <td nowrap="nowrap">
+                                                            {% url 'manager:student-update' object.id as u %}
+                                                            {% url 'manager:student-delete' object.id as d %}
+                                                            {% include "parts/actions.html" with update_url=u delete_url=d %}
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+
+                                        {% else %}
+                                            {% include "parts/nothing-found.html" %}
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div> <!-- /group-section -->
+
+                    </div>
+                </div>
+
+
             </div>
-            <!--end::Actions-->
-          </div>
         </div>
-        <!--end::Subheader-->
-
-		<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-          <div class="container-fluid">
-				<div class="about col-lg-5 col-md-7"> <!-- chap tomonda -->
-					{% for object in groups %}
-					<div class="card card-custom shadow-sm mt-5">
-                        <div class="card-header border-0">
-                            <h3 class="card-title font-weight-bolder text-dark">Group Details</h3>
-                        </div>
-
-                        <div class="card-body pt-4 pb-4">
-                            <div class="timeline timeline-2">
-                            <div class="timeline-item align-items-start">
-                                <div class="timeline-label font-weight-bolder text-dark-75">Course:</div>
-                                <div class="timeline-content text-muted pl-3">{{ object.course }}</div>
-                            </div>
-
-                            <div class="timeline-item align-items-start">
-                                <div class="timeline-label font-weight-bolder text-dark-75">Group:</div>
-                                <div class="timeline-content text-muted pl-3">{{ object.title }}</div>
-                            </div>
-
-                            <div class="timeline-item align-items-start">
-                                <div class="timeline-label font-weight-bolder text-dark-75">Teacher:</div>
-                                <div class="timeline-content text-muted pl-3">{{ object.teacher }}</div>
-                            </div>
-
-                            <div class="timeline-item align-items-start">
-                                <div class="timeline-label font-weight-bolder text-dark-75">Lesson Day:</div>
-                                <div class="timeline-content text-muted pl-3">{{ object.lesson_days }}</div>
-                            </div>
-
-                            <div class="timeline-item align-items-start">
-                                <div class="timeline-label font-weight-bolder text-dark-75">Time:</div>
-                                <div class="timeline-content text-muted pl-3">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</div>
-                            </div>
-
-                            <div class="timeline-item align-items-start">
-                                <div class="timeline-label font-weight-bolder text-dark-75">Date Started:</div>
-                                <div class="timeline-content text-muted pl-3">{{ object.date_started }}</div>
-                            </div>
-                            </div>
-                        </div>
-					</div>
-					{% endfor %}
-				</div>
-
-            </div>
-        </div>
-          </div>
-        </div>
-        {% include "parts/footer.html" %}
-      </div>
+            {% include "parts/footer.html" %}
     </div>
-  </div>
   {% include "parts/user-panel.html" %}
   {% include "parts/scrolltop.html" %}
 </body>

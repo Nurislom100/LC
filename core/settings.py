@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-ALLOWED_HOSTS = ['ahl-0kpu.onrender.com',]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ahl-0kpu.onrender.com',]
 
 
 

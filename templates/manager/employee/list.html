@@ -2,13 +2,16 @@
 {% load static %}
 {% block content %}
 {% load humanize %}
+<!--begin::Head-->
 <!--end::Head-->
 <!--begin::Body-->
 <style>
 .card-toolbar{
   padding-left: 10px;
+
 }
 </style>
+
 
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <!--begin::Main-->
@@ -19,7 +22,7 @@
     <!--begin::Page-->
     <div class="d-flex flex-row flex-column-fluid page">
       <!--begin::Aside-->
-      {% include "parts/aside.html" with menu_parent='course-all' menu_child='course-list' %}
+      {% include "parts/aside.html" with menu_parent='employee-all' menu_child='employee-list' %}
       <!--end::Aside-->
       <!--begin::Wrapper-->
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
@@ -40,7 +43,7 @@
                     <div class="card-header border-0 py-5">
 
                       <h3 class="card-title align-items-start flex-column">
-                        <span class="card-label font-weight-bolder text-dark">Courses</span>
+                        <span class="card-label font-weight-bolder text-dark">Employee</span>
                         <small class='mt-2'>Total: {{objects | length}}</small>
                       </h3>
                     </div>
@@ -57,7 +60,7 @@
                               <span class="nav-text">Search</span>
                           </button>
                           <div class="card-toolbar">
-                          <a href="{% url 'manager:group-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">Add new group</a>
+                          <a href="{% url 'manager:employee-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">Create new employee</a>
                           </div>
                       </div>
                     </form>
@@ -71,60 +74,41 @@
                           <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
                             <thead>
                               <tr class="text-left text-uppercase">
-                                <th style="min-width: 100px">Title</th>
-                                <th style="min-width: 100px">Teacher</th>
-                                <th style="min-width: 100px">course</th>
-                                <th style="min-width: 100px">Room</th>
-                                <th style="min-width: 100px">time</th>
-                                <th style="min-width: 100px">price</th>
+                                <th style="min-width: 100px">Full name</th>
+                                <th style="min-width: 100px">Role</th>
+                                <th style="min-width: 100px">Phone</th>
+                                <th style="min-width: 100px">Salary</th>
+                                <th style="min-width: 100px">Date Joined</th>
                                 <th style="min-width: 100px">Actions</th>
                               </tr>
                             </thead>
                             <tbody>
                               {% for object in objects %}
-                              {% url 'manager:group-delete' object.id as d %}
+                              {% url 'manager:employee-update' object.id as u %}
+                              {% url 'manager:employee-delete' object.id as d %}
                               <tr>
                                 <td class="pl-0 py-6">
                                   <div class="d-flex align-items-center">
                                     <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                      <span class="symbol-label">{{ object.title|slice:':1' }}</span>
+                                      <span class="symbol-label">{{ object.employee.full_name|slice:':1' }}</span>
                                     </div>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span>      
-
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.full_name}}</span>      
                                   </div>
                                 </td>
-                                
                                 <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.teacher}}</span>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.role}}</span>
                                 </td>
                                 <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.course}}</span>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.phone}}</span>
                                 </td>
                                 <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.room}}</span>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.salary| intcomma}} UZS</span>
                                 </td>
                                 <td>
-                                  <span class="t/ext-dark-75 font-weight-bolder d-block font-size-lg">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.price| intcomma}} UZS</span>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.date_joined}}</span>
                                 </td>
                                 <td nowrap="nowrap">
-                                  <a href="{% url 'manager:group-settings' object.pk %}">
-                                      <span class="svg-icon svg-icon-md">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-                                          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
-                                          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
-                                          </svg>
-                                      </span>
-                                  </a>
-                                  <a href="{% url 'manager:group-delete' object.id %}" data-toggle="modal" data-target="#deleteModal" class="btn btn-sm btn-clean btn-icon removeButton" title="Delete">
-                                      <span class="svg-icon svg-icon-md">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                          <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
-                                          </svg>
-                                      </span>
-                                  </a>
+                                  {% include "parts/actions.html" with update_url=u delete_url=d %}
                                 </td>
                               </tr>
                               {% endfor %}

@@ -64,6 +64,17 @@ urlpatterns = [
     path("classroom/<int:pk>/delete/", views.ClassroomDeleteView.as_view(), name="classroom-delete"),
     path("schedule/", views.schedule_view, name="schedule"),
 
+    path("employee/list/", views.EmployeeListView.as_view(), name="employee-list"),
+    path("employee/create/", views.EmployeeCreateView.as_view(), name="employee-create"),
+    path("employee/<int:pk>/update/", views.EmployeeUpdateView.as_view(), name="employee-update"),
+    path("employee/<int:pk>/delete/", views.EmployeeDeleteView.as_view(), name="employee-delete"),
+
+    path("wages/list/", views.WagesListView.as_view(), name="wages-list"),
+    path("wages/create/", views.WagesCreateView.as_view(), name="wages-create"),
+    path("wages/<int:pk>/update/", views.WagesUpdateView.as_view(), name="wages-update"),
+    path("wages/<int:pk>/delete/", views.WagesDeleteView.as_view(), name="wages-delete"),
+    path('ajax/load-employees/', views.get_employees_by_role, name='get-employees-by-role'),
+
     path("api/attendance/", views.AttendanceListAPIView.as_view(), name="attendance-page"),
     path("attendance/<int:group_id>/", views.AttendanceView.as_view(), name="attendance-list"),
     path("api/attendance/save/", views.SaveAttendanceAPIView.as_view(), name="attendance-save"),

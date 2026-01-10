@@ -1,0 +1,427 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+{% load humanize %}
+
+<style>
+.card-toolbar{
+  padding-left: 10px;
+}
+/* Select styling */
+select.form-select {
+    min-width: 180px;
+    max-width: 250px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+select.form-select:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-color: #0d6efd;
+}
+
+select.form-select:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 5px rgba(13,110,253,0.5);
+}
+
+/* ⭐ Attendance Date Input - Selectlarga o'xshash style */
+.attendance-date-input {
+    min-width: 180px;
+    max-width: 250px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.attendance-date-input:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-color: #0d6efd;
+}
+
+.attendance-date-input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 5px rgba(13,110,253,0.5);
+}
+
+/* ⭐ Flatpickr Calendar Custom Style */
+.flatpickr-calendar {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    border: 1px solid #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.flatpickr-months {
+    background: #5a67d8;
+    border-radius: 12px 12px 0 0;
+    padding: 15px 10px;
+}
+
+.flatpickr-month {
+    color: white;
+    fill: white;
+}
+
+.flatpickr-current-month {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+}
+
+.flatpickr-prev-month svg,
+.flatpickr-next-month svg {
+    fill: white;
+}
+
+.flatpickr-prev-month:hover svg,
+.flatpickr-next-month:hover svg {
+    fill: #ffffff;
+}
+
+.flatpickr-weekdays {
+    background: #f7f8fc;
+    padding: 12px 0;
+}
+
+.flatpickr-weekday {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.flatpickr-days {
+    padding: 5px;
+}
+
+.flatpickr-day {
+    border-radius: 8px;
+    font-weight: 500;
+    color: #374151;
+    margin: 2px;
+}
+
+.flatpickr-day:hover {
+    background: #e0e7ff;
+    border-color: #c7d2fe;
+}
+
+.flatpickr-day.selected {
+    background: #5a67d8;
+    border-color: #5a67d8;
+    color: white;
+    font-weight: 600;
+}
+
+.flatpickr-day.today {
+    border: 2px solid #5a67d8;
+    font-weight: 600;
+}
+
+.flatpickr-day.today:hover {
+    background: #e0e7ff;
+}
+
+/* Reset button styling */
+.reset-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #dc3545;
+    background-color: #dc3545;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.reset-btn:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-1px);
+}
+
+.reset-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 992px) {
+    .filter-row {
+        justify-content: flex-start !important;
+    }
+    
+    select.form-select, .attendance-date-input {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    select.form-select, .attendance-date-input {
+        width: 100% !important;
+        max-width: 100%;
+    }
+    
+    .reset-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+
+<!-- ⭐ Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+  <div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-row flex-column-fluid page">
+      {% include "reception/parts/aside.html" with menu_parent='course-all' menu_child='course-list' %}
+      <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        {% include "reception/parts/header.html" %}
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+          <div class="d-flex flex-column-fluid">
+            <div class="container">
+
+              <!-- ⭐ YANGI: Top Filter Container -->
+              <div class="card" style="margin-bottom: 20px; border: 1px solid #e4e6ef; border-radius: 8px;">
+                <div class="card-body" style="padding: 20px;">
+                  <form method="get" id="filterForm">
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;">
+                      
+                      <!-- Left side: Filters -->
+                      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; flex: 1;">
+                        
+                        <!-- Attendance Date Filter -->
+                        <input 
+                            type="text" 
+                            id="attendanceDateFilter"
+                            name="attendance_date" 
+                            class="attendance-date-input" 
+                            value="{{ request.GET.attendance_date }}"
+                            placeholder="{% trans 'Attendance Date' %}"
+                            readonly
+                            style="flex: 0 0 auto;"> 
+                        
+                        <!-- Lesson Days Filter -->
+                        <select id="dayFilter" name="day" class="form-select selectpicker" onchange="this.form.submit()" style="flex: 0 0 auto;">
+                            <option value="">{% trans "Lesson Days" %}</option>
+                            <option value="odd" {% if request.GET.day == 'odd' %}selected{% endif %}>{% trans "Mo We Fri" %}</option>
+                            <option value="even" {% if request.GET.day == 'even' %}selected{% endif %}>{% trans "Tu Thu Sat" %}</option>
+                        </select>
+
+                        <!-- Teacher Filter -->
+                        <select id="teacherFilter" name="teacher" class="form-select selectpicker" onchange="this.form.submit()" style="flex: 0 0 auto;">
+                            <option value="">{% trans "All Teachers" %}</option>
+                            {% for teacher in teachers %}
+                                <option value="{{ teacher.id }}" {% if request.GET.teacher == teacher.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ teacher }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <!-- Course Filter -->
+                        <select id="courseFilter" name="course" class="form-select selectpicker" onchange="this.form.submit()" style="flex: 0 0 auto;">
+                            <option value="">{% trans "All Courses" %}</option>
+                            {% for course in courses %}
+                                <option value="{{ course.id }}" {% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ course.title }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        {% if request.GET.search %}
+                            <input type="hidden" name="search" value="{{ request.GET.search }}">
+                        {% endif %}
+                        
+                        <!-- Reset button -->
+                        {% if request.GET.day or request.GET.teacher or request.GET.course or request.GET.attendance_date %}
+                            <button type="button" class="reset-btn" onclick="window.location.href='{% url 'reception:group-list' %}'" style="flex: 0 0 auto;">
+                                <i class="fas fa-redo"></i> {% trans "Reset All" %}
+                            </button>
+                        {% endif %}
+                      </div>
+
+                      <!-- Right side: Add New Group Button -->
+                      <div style="flex: 0 0 auto;">
+                        <a href="{% url 'reception:group-create' %}" class="btn btn-primary font-weight-bolder font-size-sm" style="white-space: nowrap;">
+                          {% trans "Add new group" %}
+                        </a>
+                      </div>
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card card-custom card-stretch gutter-b">
+
+                    <!-- ⭐ Pastdagi Container: Groups Table -->
+                    <div class="card-header border-0 py-5">
+                      <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label font-weight-bolder text-dark">{% trans "groups" %}</span>
+                        <small class='mt-2'>{% trans "Total" %}: {{objects | length}}</small>
+                      </h3>
+                    </div>
+                    
+                    <form method="get">
+                      <div class="form-group row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                              <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                          </div>
+
+                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
+                              <span class="nav-icon">
+                                  <i class="fas fa-search"></i>
+                              </span>
+                              <span class="nav-text">{% trans "Search" %}</span>
+                          </button>
+                      </div>
+                    </form>
+                    
+                    <div class="card-body pt-0 pb-3">
+                      <div class="tab-content">
+                        <div class="table-responsive">
+                          {% if objects %}
+                          <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                            <thead>
+                              <tr class="text-left text-uppercase">
+                                <th style="min-width: 100px">{% trans "title" %}</th>
+                                <th style="min-width: 100px">{% trans "teacher" %}</th>
+                                <th style="min-width: 100px">{% trans "Course" %}</th>
+                                <th style="min-width: 100px">{% trans "Xona" %}</th>
+                                <th style="min-width: 100px">{% trans "lesson days" %}</th>
+                                <th style="min-width: 100px">{% trans "Time" %}</th>
+                                <th style="min-width: 100px">{% trans "price" %}</th>
+                                <th style="min-width: 100px">{% trans "Actions" %}</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for object in objects %}
+                              {% url 'reception:group-update' object.id as u %}
+                              {% url 'reception:group-delete' object.id as d %}
+                              <tr>
+                                <td class="pl-0 py-6">
+                                  <div class="d-flex align-items-center">
+                                    <div class="mr-4 symbol symbol-40 symbol-light-success">
+                                      <span class="symbol-label">{{ object.title|slice:':1' }}</span>
+                                    </div>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span>      
+                                  </div>
+                                </td>
+                                <td>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.teacher}}</span>
+                                </td>
+                                <td>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.course}}</span>
+                                </td>
+                                <td>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.room}}</span>
+                                </td>
+                                <td>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.lesson_days}}</span>
+                                </td>
+                                <td>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</span>
+                                </td>
+                                <td>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.price| intcomma}} UZS</span>
+                                </td>
+                                <td nowrap="nowrap">
+                                  <a href="{% url 'reception:group-settings' object.pk %}">
+                                      <span class="svg-icon svg-icon-md">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                                          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
+                                          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+                                          </svg>
+                                      </span>
+                                  </a>
+                                  {% include "parts/actions.html" with update_url=u delete_url=d %}
+                                </td>
+                              </tr>
+                              {% endfor %}
+                          </table>
+                        </div>
+                        {% else %}
+                        {% include "parts/nothing-found.html" %}
+                        {% endif %}
+                      </div>
+                      {% if page_obj.paginator.num_pages > 1 %}
+                      {%include 'parts/pagination.html' %}
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        {% include "parts/footer.html" %}
+      </div>
+    </div>
+  </div>
+  {% include "parts/user-panel.html" %}
+  {% include "parts/scrolltop.html" %}
+
+  <!-- ⭐ Flatpickr JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  
+  <script>
+    // ⭐ Flatpickr Calendar Initialization
+    flatpickr("#attendanceDateFilter", {
+        dateFormat: "Y-m-d",  // Backend uchun format
+        altInput: true,
+        altFormat: "F j, Y",  // Foydalanuvchi uchun chiroyli format
+        
+        // Agar URL'da sana bo'lsa, uni ko'rsatish
+        defaultDate: "{{ request.GET.attendance_date }}",
+        
+        // Sana tanlaganda formani submit qilish
+        onChange: function(selectedDates, dateStr, instance) {
+            if (dateStr) {
+                document.getElementById("filterForm").submit();
+            }
+        },
+        
+        // Locale settings
+        locale: {
+            firstDayOfWeek: 1, // Dushanba bilan boshlash
+            weekdays: {
+                shorthand: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                longhand: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+            },
+            months: {
+                shorthand: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                longhand: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+            }
+        }
+    });
+  </script>
+
+</body>
+{% endblock %}

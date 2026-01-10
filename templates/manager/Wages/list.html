@@ -1,225 +1,192 @@
-{% extends 'base/base.html' %}
+{% extends "base/base.html" %}
 {% load static %}
 {% block content %}
-{% load humanize %}
+{% load humanize i18n %}
+
 <style>
     .card-toolbar{
-        padding-left: 15px;
+      padding-left: 10px;
+    }
+    .filter-select {
+        border-radius: 8px;
+        height: 42px;
+        margin-left: 8px;
+        padding: 5px 12px;
+        border: 1px solid #cbd3e1;
+        font-size: 14px;
+    }
+
+    .reset-btn {
+        display: none;
+        background: #f14646;
+        color: #fff;
+        border: none;
+        margin-left: 8px;
+        padding: 8px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.25s;
+    }
+    .reset-btn:hover {
+        background: #d93636;
     }
 </style>
+
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
-    {% include 'parts/header-mobile.html' %}
+  {% include "parts/header-mobile.html" %}
 
-    <div class="d-flex flex-column flex-root">
-        <div class="d-flex flex-row flex-column-fluid page">
-            {% include 'parts/aside.html' %}
-            <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+  <div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-row flex-column-fluid page">
+      {% include "parts/aside.html" with menu_parent='finance-all' menu_child='teacher-list' %}
+      <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        {% include "parts/header.html" %}
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+          <div class="d-flex flex-column-fluid">
+            <div class="container">
 
-                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                    <div class="d-flex flex-column-fluid">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card card-custom card-stretch gutter-b">
-                                        <div class="card-header border-0 py-5">
-                                            <h3 class="card-title align-items-start flex-column">
-                                                <span class="card-label font-weight-bolder text-dark">Salaries</span>
-                                                <small class='mt-2'>Total: <span id="total-count">{{objects | length}}</span></small>   
-                                            </h3>
-                                            <div class="controls">
-                                                <div class="controls-grid">
-                                                    <div class="mb-3">
-                                                        <div class="input-group" style="gap:10px; flex-wrap: wrap;">
-                                                            <!-- Month select -->
-                                                            <select id="month-select" name="month" class="form-select form-control">
-                                                                <option value="">Barcha oylar</option>
-                                                                <option value="0">Yanvar</option>
-                                                                <option value="1">Fevral</option>
-                                                                <option value="2">Mart</option>
-                                                                <option value="3">Aprel</option>
-                                                                <option value="4">May</option>
-                                                                <option value="5">Iyun</option>
-                                                                <option value="6">Iyul</option>
-                                                                <option value="7">Avgust</option>
-                                                                <option value="8">Sentabr</option>
-                                                                <option value="9">Oktabr</option>
-                                                                <option value="10">Noyabr</option>
-                                                                <option value="11">Dekabr</option>
-                                                            </select>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card card-custom card-stretch gutter-b">
+                    <div class="card-header border-0 py-5">
+                      <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label font-weight-bolder text-dark">{% trans "Salary" %}</span>
+                      </h3>
+                      <form method="get" id="filterForm">
+                          <div class="filter-container">
 
-                                                            <!-- Year select -->
-                                                            <select id="year-select" name="year" class="form-select form-control">
-                                                                <option value="">Barcha yillar</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                              <!-- MONTH -->
+                              <select id="month-select" name="month" class="form-select selectpicker">
+                                  <option value="1"  {% if selected_month == 1 %}selected{% endif %}>{% trans "January" %}</option>
+                                  <option value="2"  {% if selected_month == 2 %}selected{% endif %}>{% trans "February" %}</option>
+                                  <option value="3"  {% if selected_month == 3 %}selected{% endif %}>{% trans "March" %}</option>
+                                  <option value="4"  {% if selected_month == 4 %}selected{% endif %}>{% trans "April" %}</option>
+                                  <option value="5"  {% if selected_month == 5 %}selected{% endif %}>{% trans "May" %}</option>
+                                  <option value="6"  {% if selected_month == 6 %}selected{% endif %}>{% trans "June" %}</option>
+                                  <option value="7"  {% if selected_month == 7 %}selected{% endif %}>{% trans "July" %}</option>
+                                  <option value="8"  {% if selected_month == 8 %}selected{% endif %}>{% trans "August" %}</option>
+                                  <option value="9"  {% if selected_month == 9 %}selected{% endif %}>{% trans "September" %}</option>
+                                  <option value="10" {% if selected_month == 10 %}selected{% endif %}>{% trans "October" %}</option>
+                                  <option value="11" {% if selected_month == 11 %}selected{% endif %}>{% trans "November" %}</option>
+                                  <option value="12" {% if selected_month == 12 %}selected{% endif %}>{% trans "December" %}</option>
+                              </select>
 
-                                        </div>
-                                        
-                                        <form method="get" id="search-form">
-                                            <div class="form-group row">
-                                                <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 ml-10">
-                                                    <input type="text" class="form-control datatable-input" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary font-weight-bolder ml-7 mb-1">
-                                                    <span class="nav-icon">
-                                                        <i class="fas fa-search"></i>
-                                                    </span>
-                                                    <span class="nav-text">Search</span>
-                                                </button>
-                                                <div class="card-toolbar">
-                                                    <a href="{% url 'manager:wages-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">Create new salary</a>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <div class="card-body pt-0 pb-3">
-                                            <div class="tab-content">
-                                                <div class="table-responsive">
-                                                    
-                                                    <table class="table table-head-custom table-head-bg table-borderless table-vertical-center" id="payments-table">
-                                                        <thead>
-                                                            <tr class="text-left text-uppercase">
-                                                                <th style="min-width: 100px">Role</th>
-                                                                <th style="min-width: 100px">Employee</th>
-                                                                <th style="min-width: 100px">method</th>
-                                                                <th style="min-width: 100px">Amount</th>
-                                                                <th style="min-width: 100px">Date</th>
-                                                                <th style="min-width: 100px">Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="wages-table-body">
-                                                            {% url 'manager:wages-update' object.id as u %}
-                                                            {% url 'manager:wages-delete' object.id as d %}                                                   
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                
-                                                {% if page_obj.paginator.num_pages > 1 %}
-                                                {%include 'parts/pagination.html' %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                              <!-- YEAR -->
+                              <select id="year-select" name="year" class="form-select selectpicker ml-2"></select>
+
+                              <!-- RESET BUTTON -->
+                              <button type="button" id="resetBtn" class="reset-btn">{% trans "Reset" %}</button>
+
+                          </div>
+                      </form>
                     </div>
-                </div>
+                    
+                    <form method="get">
+                      <div class="form-group row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                              <input type="text" class="form-control datatable-input" placeholder="{% trans "Search" %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                          </div>
 
-                {% include 'parts/footer.html' %}
-            </div>
-        </div>
-    </div>
+                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
+                              <span class="nav-icon"><i class="fas fa-search"></i></span>
+                              <span class="nav-text">{% trans "Search" %}</span>
+                          </button>
+                          <div class="card-toolbar">
+                          <a href="{% url 'manager:wages-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new wages" %}</a>
+                          </div>
+                      </div>
+                    </form>
 
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script>
-    let currentMonth = new Date().getMonth();
-    let currentYear = new Date().getFullYear();
-
-    document.addEventListener('DOMContentLoaded', function() {
-        initializeYearSelect();
-        setCurrentDate();
-        loadWages(); // sahifa ochilganda yuklanadi
-    });
-
-    function initializeYearSelect() {
-        const yearSelect = document.getElementById('year-select');
-        for (let year = 2020; year <= 2030; year++) {
-            const option = document.createElement('option');
-            option.value = year;
-            option.textContent = year;
-            yearSelect.appendChild(option);
-        }
-    }
-
-    function setCurrentDate() {
-        document.getElementById('month-select').value = currentMonth;
-        document.getElementById('year-select').value = currentYear;
-    }
-
-    // 🔥 AJAX filter
-    function loadWages() {
-        $.ajax({
-            url: "{% url 'manager:wages_list' %}",
-            method: "GET",
-            data: {
-                month: currentMonth + 1,
-                year: currentYear
-            },
-            success: function(response) {
-
-                const tbody = $("#wages-table-body");
-                tbody.empty();
-
-                // ❗ wages bo'sh bo'lsa
-                if (!response.wages || response.wages.length === 0) {
-                    tbody.append(`
-                        <tr>
-                            <td colspan="6" class="text-center">
-                                {% include "parts/nothing-found.html" %}
-                            </td>
-                        </tr>
-                    `);
-                    return;
-                }
-
-                // ❗ wages bor bo'lsa
-                response.wages.forEach(function(w) {
-                    tbody.append(`
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
+                    <div class="card-body pt-0 pb-3">
+                      <div class="tab-content">
+                        <div class="table-responsive">
+                          {% if objects %}
+                          <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                            <thead>
+                              <tr class="text-left text-uppercase">
+                                <th style="min-width: 100px">{% trans "role" %}</th>
+                                <th style="min-width: 100px">{% trans "employee" %}</th>
+                                <th style="min-width: 100px">{% trans "method" %}</th>
+                                <th style="min-width: 100px">{% trans "amount" %}</th>
+                                <th style="min-width: 100px">{% trans "date" %}</th>
+                                <th style="min-width: 100px">{% trans "Actions" %}</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for object in objects %}
+                              {% url 'manager:wages-update' object.id as u %}
+                              {% url 'manager:wages-delete' object.id as d %}
+                              <tr>
+                                <td class="pl-0 py-6">
+                                  <div class="d-flex align-items-center">
                                     <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                        <span class="symbol-label">${w.employee_initial}</span>
+                                      <span class="symbol-label">{{ object.Employee.full_name|slice:':1' }}</span>
                                     </div>
-                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">${w.role}</span>
-                                </div>
-                            </td>
-                            <td>${w.employee_name}</td>
-                            <td>${w.method}</td>
-                            <td>${w.amount} UZS</td>
-                            <td>${w.date}</td>
-                            <td nowrap="nowrap">
-                                <a href="${w.update_url}" class="btn btn-sm btn-light btn-text-primary btn-icon mr-2" title="Edit details">
-                                    <span class="svg-icon svg-icon-md">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                                        </svg>
-                                    </span>
-                                </a>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.role}}</span>      
+                                  </div>
+                                </td>
+                                <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.employee}}</span></td>
+                                <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.method}}</span></td>
+                                <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.amount| intcomma}} UZS</span></td>
+                                <td><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.date}}</span></td>
+                                <td nowrap="nowrap">{% include "parts/actions.html" with update_url=u delete_url=d %}</td>
+                              </tr>
+                              {% endfor %}
+                          </table>
+                          {% else %}
+                          {% include "parts/nothing-found.html" %}
+                          {% endif %}
+                        </div>
+                        {% if page_obj.paginator.num_pages > 1 %}
+                        {% include 'parts/pagination.html' %}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                                <a href="${w.delete_url}" data-toggle="modal" data-target="#deleteModal" class="btn btn-sm btn-clean btn-icon removeButton" title="Delete">
-                                    <span class="svg-icon svg-icon-md">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
-                                        </svg>
-                                    </span>
-                                </a>
-                            </td>
-                        </tr>
-                    `);
-                });
+            </div>
+          </div>
+        </div>
+        {% include "parts/footer.html" %}
+      </div>
+    </div>
+  </div>
+  {% include "parts/user-panel.html" %}
+  {% include "parts/scrolltop.html" %}
 
-                $("#total-count").text(response.total);
-            }
-        });
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const filterForm  = document.getElementById("filterForm");
+    const monthSelect = document.getElementById("month-select");
+    const yearSelect  = document.getElementById("year-select");
+    const resetBtn    = document.getElementById("resetBtn");
+
+    const selectedMonth = {{ selected_month }};
+    const selectedYear  = {{ selected_year }};
+    const currentMonth  = new Date().getMonth() + 1;
+    const currentYear   = new Date().getFullYear();
+
+    for (let y = 2023; y <= 2030; y++) {
+        let opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        if (selectedYear === y) opt.selected = true;
+        yearSelect.appendChild(opt);
     }
 
-    // Oyni o'zgartirish
-    document.getElementById('month-select').addEventListener('change', function() {
-        currentMonth = parseInt(this.value);
-        loadWages();
-    });
+    monthSelect.addEventListener("change", () => filterForm.submit());
+    yearSelect.addEventListener("change", () => filterForm.submit());
 
-    // Yilni o'zgartirish
-    document.getElementById('year-select').addEventListener('change', function() {
-        currentYear = parseInt(this.value);
-        loadWages();
+    if (selectedMonth !== currentMonth || selectedYear !== currentYear) {
+        resetBtn.style.display = "inline-block";
+    }
+
+    resetBtn.addEventListener("click", function () {
+        window.location.href = "{% url 'manager:wages-list' %}";
     });
+});
 </script>
-
-
 </body>
 {% endblock %}

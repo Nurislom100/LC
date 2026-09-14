@@ -4,8 +4,8 @@
 {% load humanize i18n %}
 
 <style>
-    .card-toolbar{
-      padding-left: 10px;
+    .card-toolbar {
+        padding-left: 10px;
     }
     .filter-select {
         border-radius: 8px;
@@ -31,10 +31,51 @@
     .reset-btn:hover {
         background: #d93636;
     }
+
+    /* FAQAT MOBIL UCHUN MOSLASHTIRISH (767px dan kichik ekranlarda) */
+    @media (max-width: 767.98px) {
+        .card-header-mobile-wrapper {
+            flex-direction: column !important;
+            align-items: center !important;
+        }
+        .mobile-search-section {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 auto;
+        }
+        .mobile-filter-container {
+            width: 100% !important;
+            justify-content: center !important;
+            margin-bottom: 15px !important;
+        }
+        .mobile-search-form {
+            width: 100% !important;
+        }
+        .mobile-search-form .form-group {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+        .mobile-search-form input {
+            width: 100% !important;
+        }
+        .mobile-buttons-row {
+            display: flex !important;
+            width: 100% !important;
+            gap: 10px !important;
+            margin-left: 0 !important;
+        }
+        .mobile-buttons-row .btn {
+            flex: 1 !important;
+            margin: 0 !important;
+            justify-content: center !important;
+            text-align: center !important;
+        }
+    }
 </style>
 
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <div class="d-flex flex-column flex-root">
+    {% include 'accountant/parts/header-mobile.html' %}
     <div class="d-flex flex-row flex-column-fluid page">
       {% include "accountant/parts/aside.html" with menu_parent='finance-all' menu_child='teacher-list' %}
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
@@ -46,12 +87,16 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="card card-custom card-stretch gutter-b">
-                    <div class="card-header border-0 py-5">
-                      <h3 class="card-title align-items-start flex-column">
+                    
+                    <!-- Card Header (Komp format dastlabki holiga qaytarildi) -->
+                    <div class="card-header border-0 py-5 card-header-mobile-wrapper">
+                      <h3 class="card-title align-items-start flex-column mb-3 mb-md-0">
                         <span class="card-label font-weight-bolder text-dark">{% trans "Salary" %}</span>
                       </h3>
-                      <form method="get" id="filterForm">
-                          <div class="filter-container">
+                      
+                      <div class="mobile-search-section">
+                        <form method="get" id="filterForm">
+                          <div class="filter-container d-flex align-items-center mobile-filter-container">
 
                               <!-- MONTH -->
                               <select id="month-select" name="month" class="form-select selectpicker">
@@ -76,21 +121,26 @@
                               <button type="button" id="resetBtn" class="reset-btn">{% trans "Reset" %}</button>
 
                           </div>
-                      </form>
+                        </form>
+                      </div>
                     </div>
                     
-                    <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                    <!-- Search and Actions Form (Original Bootstrap grid) -->
+                    <form method="get" class="mobile-search-form">
+                      <div class="form-group row align-items-center">
+                          <div class="col-lg-3 col-md-4 col-sm-12 mb-lg-0 mb-3 ml-lg-10">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans "Search" %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon"><i class="fas fa-search"></i></span>
-                              <span class="nav-text">{% trans "Search" %}</span>
-                          </button>
-                          <div class="card-toolbar">
-                          <a href="{% url 'accountant:wages-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new wages" %}</a>
+                          <div class="d-flex align-items-center mobile-buttons-row ml-lg-7">
+                              <button type="submit" class="btn btn-primary font-weight-bolder mr-2">
+                                  <span class="nav-icon"><i class="fas fa-search"></i></span>
+                                  <span class="nav-text">{% trans "Search" %}</span>
+                              </button>
+                              
+                              <div class="card-toolbar">
+                                  <a href="{% url 'accountant:wages-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new wages" %}</a>
+                              </div>
                           </div>
                       </div>
                     </form>
@@ -130,6 +180,7 @@
                                 <td nowrap="nowrap">{% include "parts/actions.html" with update_url=u delete_url=d %}</td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                           {% else %}
                           {% include "parts/nothing-found.html" %}

@@ -1,4 +1,3 @@
-
 {% extends "base/base.html" %} {% load static %} {% block content %}
 <!--begin::Head-->
 <!--end::Head-->
@@ -6,7 +5,7 @@
 
 <body
     id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading"
 >
     <!--begin::Main-->
     <!--begin::Header Mobile-->
@@ -63,11 +62,10 @@
                                         {% endfor %}    
                                         <div class="card-footer">
                                             <div class="row">
-                                                <div class="col-lg-3"></div>
-                                                <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
+                                                <div class="col-lg-3 col-2"></div>
+                                                <div class="col-lg-9 col-10 action-buttons">
                                                     <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
-                                                    <a href="{% url 'manager:wages-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
+                                                    <a href="{% url 'manager:wages-list' %}" class="btn btn-secondary btn-cancel"><span>Cancel</span></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -93,21 +91,51 @@
     <!--end::Main-->
     <!-- begin::User Panel-->
     {% include "parts/user-panel.html" %}
-    <!--begin::Quick Cart-->
-    <!--end::Quick Cart-->
-    <!--begin::Quick Panel-->
-    <!--end::Quick Panel-->
-    <!--begin::Chat Panel-->
-    <!--end::Chat Panel-->
     <!--begin::Scrolltop-->
     {% include "parts/scrolltop.html" %}
     <!--end::Scrolltop-->
-    <!--begin::Sticky Toolbar-->
-    <!--end::Sticky Toolbar-->
-    <!--begin::Demo Panel-->
-    <!--end::Demo Panel-->
-    <!--end::Page Scripts-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- STYLE -->
+<style>
+/* ==========================================================
+   FAKAT MOBIL FORMAT UCHUN SOZLAMALAR (KOMPUTERGA TEGMAYDI)
+   ========================================================== */
+@media (max-width: 768px) {
+    /* Label larni mobil ekranda chapga surish */
+    .form-group.row label {
+        text-align: left !important;
+    }
+
+    /* "Save and add new" tugmasini mobilda yashirish */
+    .btn-save-add {
+        display: none !important;
+    }
+
+    /* Footer qismidagi bo'sh joyni va tugmalarni moslash */
+    .card-footer .col-2 {
+        display: none !important;
+    }
+    .card-footer .col-10 {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Save va Cancel tugmalarini mobilda yonma-yon teng qilish */
+    .action-buttons {
+        display: flex !important;
+        gap: 10px !important;
+    }
+    .action-buttons button, 
+    .action-buttons a {
+        flex: 1 !important;
+        text-align: center !important;
+        margin-right: 0 !important;
+    }
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -172,4 +200,3 @@ $(document).ready(function() {
 </body>
 <!--end::Body-->
 {% endblock %}
-

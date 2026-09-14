@@ -409,6 +409,21 @@ def information_view(request):
 
     return render(request, "reception/information/informations.html", {"form": form})
 
+def center_information_view(request):
+    # Birinchi obyektni olamiz, agar yo'q bo'lsa None bo'ladi
+    info = Informations.objects.first()
+
+    if request.method == 'POST':
+        # MUHIM: instance=info berilmasa, Django har safar yangi yozuv yaratib yuboradi!
+        form = Informations(request.POST, request.FILES, instance=info)
+        if form.is_valid():
+            form.save()
+            return redirect('reception:center-info') # Sahifa nomingiz
+    else:
+        form = Informations(instance=info)
+
+    return render(request, 'reception/information/informations.html', {'form': form, 'center_info': info})
+
 
 class TeacherListView(ListView):
     model = models.Teacher
@@ -691,7 +706,7 @@ class ClassroomListView(ListView):
         
         if search:
             queryset = queryset.filter(
-                Q(Name__icontains=search)
+                Q(name__icontains=search)
             )
         return queryset
 

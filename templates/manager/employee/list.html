@@ -2,17 +2,80 @@
 {% load static %}
 {% block content %}
 {% load humanize i18n %}
+
 <style>
-.card-toolbar{
-  padding-left: 10px;
+.card-toolbar {
+    padding-left: 10px;
+}
+
+/* FAQAT MOBIL EKRANLAR UCHUN STYLLAR (768px va undan kichik) */
+@media (max-width: 768px) {
+    .staff-search-form {
+        width: 100% !important;
+        margin: 0 auto 25px auto !important; /* Tugmalar ostidan 25px joy ochildi */
+        padding: 0 15px !important;
+    }
+
+    .staff-search-container {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .staff-input-wrapper {
+        width: 100% !important;
+        padding: 0 !important;
+        margin-bottom: 10px !important;
+    }
+
+    .staff-search-input {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    /* Tugmalarni izchil va bir qatorda yonma-yon joylashtirish */
+    .staff-btn-group {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 8px !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .staff-btn-group .btn-search-action,
+    .staff-btn-group .card-toolbar {
+        flex: 1 !important;
+        width: 50% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .staff-btn-group .btn {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
+        height: 42px !important;
+        padding: 0 8px !important;
+    }
+
+    /* Mobil ekranda jadval sig'may qolsa horizontal scroll chiqarish */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 </style>
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   <!--begin::Main-->
   <!--begin::Header Mobile-->
   {% include "parts/header-mobile.html" %}
-  <!--end::Header Mobile-->
+  <!--end::Header Mobile--> 
   <div class="d-flex flex-column flex-root">
     <!--begin::Page-->
     <div class="d-flex flex-row flex-column-fluid page">
@@ -40,20 +103,25 @@
                         <small class='mt-2'>{% trans "Total" %}: {{objects | length}}</small>
                       </h3>
                     </div>
-                    <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
-                              <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                    
+                    <form method="get" class="staff-search-form">
+                      <div class="form-group row staff-search-container">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-3 ml-lg-10 staff-input-wrapper">
+                              <input type="text" class="form-control datatable-input staff-search-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
-                                  <i class="fas fa-search"></i>
-                              </span>
-                              <span class="nav-text">{% trans "Search" %}</span>
-                          </button>
-                          <div class="card-toolbar">
-                          <a href="{% url 'manager:employee-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new staff" %}</a>
+                          <div class="staff-btn-group d-flex align-items-center">
+                              <div class="btn-search-action">
+                                  <button type="submit" class="btn btn-primary font-weight-bolder ml-lg-7 mb-1">
+                                      <span class="nav-icon">
+                                          <i class="fas fa-search"></i>
+                                      </span>
+                                      <span class="nav-text">{% trans "Search" %}</span>
+                                  </button>
+                              </div>
+                              <div class="card-toolbar">
+                                  <a href="{% url 'manager:employee-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new staff" %}</a>
+                              </div>
                           </div>
                       </div>
                     </form>
@@ -105,12 +173,13 @@
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
+                          {% else %}
+                          {% include "parts/nothing-found.html" %}
+                          {% endif %}
                         </div>
                         <!--end::Table-->
-                        {% else %}
-                        {% include "parts/nothing-found.html" %}
-                        {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
                       {% include 'parts/pagination.html' %}

@@ -3,7 +3,7 @@
 {% block content %}
 {% load humanize %}
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
 
 <style>
     body, #kt_body {
@@ -25,6 +25,24 @@
     .container {
         padding-top: 20px !important;
         max-width: 1400px;
+    }
+
+    /* ============================================================
+       ASIDE OCHILISH/YOPILISH ANIMATSIYASI — override
+       Metronic standart animatsiyasi o'rniga yumshoqroq, biroz
+       sekinroq (0.35s) va custom easing bilan almashtirildi.
+       Diqqat: agar sizda boshqa nom bilan animatsiya kerak bo'lsa,
+       shu joydagi duration/easing qiymatlarini o'zgartirsangiz bo'ladi.
+       ============================================================ */
+    #kt_aside,
+    #kt_aside .aside-menu,
+    #kt_wrapper,
+    #kt_header,
+    .header,
+    .content {
+        transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                    margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                    left 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
     /* Filters */

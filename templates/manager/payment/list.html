@@ -4,9 +4,18 @@
 {% load humanize i18n %}
 
 <style>
-    .card-toolbar{
-      padding-left: 10px;
+    /* -------------------------------------------------------------
+       1. KOMPYUTER VA UMUMIY TIZIM UCHUN STYLLAR (O'zgarishsiz)
+    ------------------------------------------------------------- */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100% !important;
     }
+
+    .card-toolbar {
+        padding-left: 10px;
+    }
+
     .filter-select {
         border-radius: 8px;
         height: 42px;
@@ -28,15 +37,102 @@
         font-size: 14px;
         transition: 0.25s;
     }
+
     .reset-btn:hover {
         background: #d93636;
+    }
+
+    /* Table uchun ichki scroll (butun ekran buzilmasligi uchun) */
+    .table-responsive {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* -------------------------------------------------------------
+       2. FAQAT MOBIL EKRANLAR UCHUN STYLLAR (max-width: 767.98px)
+    ------------------------------------------------------------- */
+    @media (max-width: 767.98px) {
+        #kt_quick_user, 
+        .offcanvas {
+            max-width: 100vw !important;
+        }
+
+        .card-header {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+
+        .filter-container {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            margin-top: 15px !important;
+        }
+
+        .filter-container select, 
+        .filter-container .bootstrap-select {
+            width: 100% !important;
+            margin-left: 0 !important;
+            margin-bottom: 10px !important;
+        }
+
+        .reset-btn {
+            margin-left: 0 !important;
+            width: 100% !important;
+            margin-bottom: 10px !important;
+        }
+
+        /* Mobil qidiruv qatori */
+        .mobile-search-row {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            width: 100% !important;
+        }
+
+        .mobile-search-col {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        /* Mobilda tugmalarni 100% kenglikda chiqarish */
+        .mobile-btn-group {
+            display: flex !important;
+            flex-direction: row !important;
+            width: 100% !important;
+            gap: 10px !important;
+            margin-left: 0 !important;
+            margin-top: 10px !important;
+        }
+
+        .mobile-btn-group button,
+        .mobile-btn-group .card-toolbar,
+        .mobile-btn-group a {
+            flex: 1 !important;
+            width: 50% !important;
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            text-align: center !important;
+            justify-content: center !important;
+            display: flex !important;
+            align-items: center !important;
+            font-size: 12px !important;
+            white-space: nowrap !important;
+        }
     }
 </style>
 
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
-  {% include "parts/header-mobile.html" %}
-
   <div class="d-flex flex-column flex-root">
+    {% include 'parts/header-mobile.html' %}
     <div class="d-flex flex-row flex-column-fluid page">
       {% include "parts/aside.html" with menu_parent='finance-all' menu_child='teacher-list' %}
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
@@ -52,7 +148,7 @@
                       <h3 class="card-title align-items-start flex-column">
                         <span class="card-label font-weight-bolder text-dark">{% trans "Payments" %}</span>
                       </h3>
-                      <form method="get" id="filterForm">
+                      <form method="get" id="filterForm" class="w-100-mobile">
                           <div class="filter-container">
 
                               <!-- MONTH -->
@@ -92,17 +188,19 @@
                     </div>
                     
                     <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
-                              <input type="text" class="form-control datatable-input" placeholder="{% trans "Search" %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                      <div class="form-group row mobile-search-row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-3 ml-lg-10 mobile-search-col">
+                              <input type="text" class="form-control datatable-input" placeholder="{% trans "Search" %}" value="{{request.GET.search|default:''}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon"><i class="fas fa-search"></i></span>
-                              <span class="nav-text">{% trans "Search" %}</span>
-                          </button>
-                          <div class="card-toolbar">
-                          <a href="{% url 'manager:payment-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new payment" %}</a>
+                          <div class="d-flex align-items-center mobile-btn-group">
+                              <button type="submit" class="btn btn-primary font-weight-bolder mb-1">
+                                  <span class="nav-icon"><i class="fas fa-search"></i></span>
+                                  <span class="nav-text ml-1">{% trans "Search" %}</span>
+                              </button>
+                              <div class="card-toolbar mb-1">
+                                  <a href="{% url 'manager:payment-create' %}" class="btn btn-primary font-weight-bolder font-size-sm w-100">{% trans "Create new payment" %}</a>
+                              </div>
                           </div>
                       </div>
                     </form>
@@ -142,6 +240,7 @@
                                 <td nowrap="nowrap">{% include "parts/actions.html" with update_url=u delete_url=d %}</td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                           {% else %}
                           {% include "parts/nothing-found.html" %}
@@ -171,11 +270,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const filterForm  = document.getElementById("filterForm");
     const monthSelect = document.getElementById("month-select");
     const yearSelect  = document.getElementById("year-select");
-    const groupSelect = document.getElementById("groupFilter");  // ⭐ Group select qo'shildi
+    const groupSelect = document.getElementById("groupFilter");
     const resetBtn    = document.getElementById("resetBtn");
 
-    const selectedMonth = {{ selected_month }};
-    const selectedYear  = {{ selected_year }};
+    const selectedMonth = {{ selected_month|default:1 }};
+    const selectedYear  = {{ selected_year|default:2026 }};
     const currentMonth  = new Date().getMonth() + 1;
     const currentYear   = new Date().getFullYear();
 
@@ -188,9 +287,9 @@ document.addEventListener("DOMContentLoaded", function () {
         yearSelect.appendChild(opt);
     }
 
-    // ⭐ Reset tugmasini ko'rsatish/yashirish funksiyasi
+    // Reset tugmasini ko'rsatish/yashirish funksiyasi
     function checkResetButton() {
-        const isGroupSelected = groupSelect.value !== "";  // Group tanlangan?
+        const isGroupSelected = groupSelect.value !== "";
         const isMonthChanged = selectedMonth !== currentMonth;
         const isYearChanged = selectedYear !== currentYear;
 
@@ -207,11 +306,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Form submit qilish
     monthSelect.addEventListener("change", () => filterForm.submit());
     yearSelect.addEventListener("change", () => filterForm.submit());
-    groupSelect.addEventListener("change", () => filterForm.submit());  // ⭐ Group uchun ham
+    groupSelect.addEventListener("change", () => filterForm.submit());
 
     // Reset tugmasini bosish
     resetBtn.addEventListener("click", function () {
-        window.location.href = "{% url 'manager:payment-list' %}";
+        window.location.href = "{% url 'accountant:payment-list' %}";
     });
 });
 </script>

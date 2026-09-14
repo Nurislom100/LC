@@ -4,7 +4,74 @@
 {% load humanize %}
 {% block content %}
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<style>
+/* Mobil versiya uchun maxsus CSS */
+@media (max-width: 768px) {
+  /* Kompyuter jadvalini mobilda yashirish */
+  .desktop-table-view {
+    display: none !important;
+  }
+  
+  /* Mobil kard ko'rinishi */
+  .mobile-cards-view {
+    display: block !important;
+  }
+
+  .group-mobile-card {
+    background: #ffffff;
+    border: 1px solid #ebedf2;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
+  }
+
+  .group-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f3f5f9;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  .group-card-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+
+  .group-card-label {
+    color: #b5b5c3;
+    font-weight: 500;
+  }
+
+  .group-card-value {
+    color: #464e5f;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .group-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #f3f5f9;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+}
+
+/* Kompyuterda mobil kardlarni yashirish */
+@media (min-width: 769px) {
+  .mobile-cards-view {
+    display: none !important;
+  }
+}
+</style>
+
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
 
   {% include "parts/header-mobile.html" %}
 
@@ -34,8 +101,9 @@
 
                     <div class="card-body pt-0 pb-3">
                       <div class="tab-content">
-                        <div class="table-responsive">
-                          {% if groups %}
+                        {% if groups %}
+                        
+                        <div class="table-responsive desktop-table-view">
                           <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
                             <thead>
                               <tr class="text-left text-uppercase">
@@ -50,13 +118,11 @@
                             </thead>
                             <tbody>
                               {% for object in groups %}
-                              {% url 'manager:group-update' object.id as u %}
-                              {% url 'manager:group-delete' object.id as d %}
                               <tr>
                                 <td class="pl-0 py-6">
                                   <div class="d-flex align-items-center">
                                     <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                      <span class="symbol-label">{{ object.full_name|slice:':1' }}</span>
+                                      <span class="symbol-label">{{ object.title|slice:':1' }}</span>
                                     </div>
                                     <a href="#"><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span></a>
                                   </div>
@@ -77,15 +143,15 @@
                                   <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.date_started}}</span>
                                 </td>
                                 <td nowrap="nowrap">
-                                  <a href="{% url 'manager:group-settings' object.pk %}">
+                                  <a href="{% url 'manager:group-settings' object.pk %}" class="btn btn-sm btn-clean btn-icon" title="Settings">
                                       <span class="svg-icon svg-icon-md">
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                                           <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
-                                          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+                                          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
                                           </svg>
                                       </span>
                                   </a>
-                                  <a href="{% url 'manager:group-delete' object.id %}" data-toggle="modal" data-target="#deleteModal" class="btn btn-sm btn-clean btn-icon removeButton" title="Delete">
+                                  <a href="{% url 'manager:group-delete' object.id %}" class="btn btn-sm btn-clean btn-icon" title="Delete">
                                       <span class="svg-icon svg-icon-md">
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                           <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
@@ -97,14 +163,69 @@
                               {% endfor %}
                             </tbody>
                           </table>
-                          {% else %}
-                            {% include "parts/nothing-found.html" %}
-                          {% endif %}
                         </div>
+
+                        <div class="mobile-cards-view">
+                          {% for object in groups %}
+                          <div class="group-mobile-card">
+                            <div class="group-card-header">
+                              <div class="d-flex align-items-center">
+                                <div class="mr-3 symbol symbol-35 symbol-light-success">
+                                  <span class="symbol-label font-weight-bold">{{ object.title|slice:':1' }}</span>
+                                </div>
+                                <span class="font-weight-bolder text-dark font-size-h6">{{ object.title }}</span>
+                              </div>
+                            </div>
+                            
+                            <div class="group-card-row">
+                              <span class="group-card-label">{% trans "Teacher" %}:</span>
+                              <span class="group-card-value">{{ object.teacher }}</span>
+                            </div>
+
+                            <div class="group-card-row">
+                              <span class="group-card-label">{% trans "Lesson Days" %}:</span>
+                              <span class="group-card-value">{{ object.lesson_days }}</span>
+                            </div>
+
+                            <div class="group-card-row">
+                              <span class="group-card-label">{% trans "Time" %}:</span>
+                              <span class="group-card-value">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</span>
+                            </div>
+
+                            <div class="group-card-row">
+                              <span class="group-card-label">{% trans "Price" %}:</span>
+                              <span class="group-card-value text-success">{{ object.price|intcomma }} UZS</span>
+                            </div>
+
+                            <div class="group-card-row">
+                              <span class="group-card-label">{% trans "Date started" %}:</span>
+                              <span class="group-card-value">{{ object.date_started }}</span>
+                            </div>
+
+                            <div class="group-card-actions">
+                              <a href="{% url 'manager:group-settings' object.pk %}" class="btn btn-light-primary btn-sm font-weight-bold">
+                                <i class="fas fa-cog"></i> {% trans "Settings" %}
+                              </a>
+                              <a href="{% url 'manager:group-delete' object.id %}" class="btn btn-light-danger btn-sm font-weight-bold">
+                                <i class="fas fa-trash"></i> {% trans "Delete" %}
+                              </a>
+                            </div>
+                          </div>
+                          {% endfor %}
+                        </div>
+
+                        {% else %}
+                          {% include "parts/nothing-found.html" %}
+                        {% endif %}
 
                         {% if page_obj.paginator.num_pages > 1 %}
                           {% include 'parts/pagination.html' %}
                         {% endif %}
+
+                        <div class="mt-5 text-right">
+                          <a href="{% url 'manager:course-list' %}" class="btn btn-secondary font-weight-bold px-6">{% trans "Exit" %}</a>
+                        </div>
+
                       </div>
                     </div>
 

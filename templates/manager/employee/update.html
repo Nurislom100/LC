@@ -1,11 +1,56 @@
 {% extends "base/base.html" %} {% load static %} {% block content %}
 <!--begin::Head-->
 <!--end::Head-->
-<!--begin::Body-->
 
+<style>
+/* FAQAT MOBIL EKRANLAR UCHUN STYLLAR (768px va undan kichik) */
+@media (max-width: 768px) {
+    /* Label textlarini chap tomonga tekislash */
+    .form-group.row label.col-form-label {
+        text-align: left !important;
+        padding-bottom: 5px;
+    }
+
+    /* Card footer qismini to'g'rilash */
+    .card-footer .row {
+        margin: 0 !important;
+    }
+
+    .card-footer .col-lg-3 {
+        display: none !important; /* Mobil ko'rinishda bo'sh joyni yashirish */
+    }
+
+    .card-footer .col-lg-9 {
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Save va Cancel tugmalarini yonma-yon teng 50% qilish */
+    .mobile-btn-container {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    .mobile-btn-container .btn,
+    .mobile-btn-container a {
+        flex: 1 !important;
+        width: 50% !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 42px !important;
+        text-align: center;
+    }
+}
+</style>
+
+<!--begin::Body-->
 <body
     id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading"
 >
     <!--begin::Main-->
     <!--begin::Header Mobile-->
@@ -64,9 +109,10 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
-                                                    <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
-                                                    <a href="{% url 'manager:employee-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
+                                                    <div class="mobile-btn-container">
+                                                        <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
+                                                        <a href="{% url 'manager:employee-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -92,21 +138,9 @@
     <!--end::Main-->
     <!-- begin::User Panel-->
     {% include "parts/user-panel.html" %}
-    <!--begin::Quick Cart-->
-    <!--end::Quick Cart-->
-    <!--begin::Quick Panel-->
-    <!--end::Quick Panel-->
-    <!--begin::Chat Panel-->
-    <!--end::Chat Panel-->
     <!--begin::Scrolltop-->
     {% include "parts/scrolltop.html" %}
     <!--end::Scrolltop-->
-    <!--begin::Sticky Toolbar-->
-    <!--end::Sticky Toolbar-->
-    <!--begin::Demo Panel-->
-    <!--end::Demo Panel-->
-    <!--end::Page Scripts-->
 </body>
 <!--end::Body-->
 {% endblock %}
-

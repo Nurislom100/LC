@@ -1,12 +1,41 @@
-
 {% extends "base/base.html" %} {% load static %} {% block content %}
 <!--begin::Head-->
 <!--end::Head-->
 <!--begin::Body-->
 
+<style>
+/* FAQAT MOBIL UCHUN (Desktop versiyasiga umuman ta'sir qilmaydi) */
+@media (max-width: 768px) {
+    /* Nomlarni (label) chap tomonga surish */
+    .card-body .form-group.row label {
+        text-align: left !important;
+        margin-bottom: 5px;
+    }
+
+    /* Card footer va tugmalarni mobilda tekislash */
+    .card-footer .row .col-lg-9 {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    .card-footer .row .col-lg-3 {
+        display: none !important; /* Mobilda ortiqcha bo'sh joyni yashirish */
+    }
+
+    .card-footer button, 
+    .card-footer a {
+        margin-right: 0 !important;
+    }
+}
+</style>
+
 <body
     id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading"
 >
     <!--begin::Main-->
     <!--begin::Header Mobile-->
@@ -65,7 +94,6 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
                                                     <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
                                                     <a href="{% url 'manager:classroom-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
                                                 </div>
@@ -110,4 +138,3 @@
 </body>
 <!--end::Body-->
 {% endblock %}
-

@@ -1,0 +1,257 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .badmin-wrap { padding: 32px; max-width: 900px; margin: 0 auto; }
+
+    .badmin-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        padding: 28px;
+        margin-bottom: 24px;
+    }
+
+    .badmin-title { font-size: 20px; font-weight: 800; color: #111827; margin-bottom: 18px; }
+
+    .badmin-field { margin-bottom: 16px; }
+    .badmin-field label { display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:6px; }
+    .badmin-field input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    .badmin-readonly-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 14px;
+    }
+
+    .badmin-save-btn {
+        border: none;
+        border-radius: 8px;
+        padding: 11px 24px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        background: #4f46e5;
+        cursor: pointer;
+    }
+
+    .receipt-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .receipt-row img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
+    .receipt-row .meta { flex: 1; font-size: 13px; color: #6b7280; }
+
+    .badge-status {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 10px;
+    }
+    .badge-status.pending { background:#fef9c3; color:#a16207; }
+    .badge-status.approved { background:#d1fae5; color:#059669; }
+    .badge-status.rejected { background:#fee2e2; color:#dc2626; }
+
+    .btn-approve, .btn-reject {
+        border: none; border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .btn-approve { background: #059669; color: #fff; }
+    .btn-reject { background: #ef4444; color: #fff; margin-left: 6px; }
+
+    /* Yoq/o'chir toggle */
+    .toggle-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0 22px;
+        margin-bottom: 6px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .toggle-card .toggle-text .title { font-size: 15px; font-weight: 700; color: #111827; }
+    .toggle-card .toggle-text .desc { font-size: 12.5px; color: #6b7280; margin-top: 2px; max-width: 420px; }
+
+    .billing-switch { position: relative; display: inline-block; width: 48px; height: 26px; flex-shrink: 0; }
+    .billing-switch input { opacity: 0; width: 0; height: 0; }
+    .billing-switch .billing-toggle-slider {
+        position: absolute; cursor: pointer; inset: 0;
+        background-color: #e5e7eb; transition: .2s; border-radius: 26px;
+    }
+    .billing-switch .billing-toggle-slider:before {
+        position: absolute; content: "";
+        height: 20px; width: 20px; left: 3px; top: 3px;
+        background-color: #fff; transition: .2s; border-radius: 50%;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .billing-switch input:checked + .billing-toggle-slider { background-color: #059669; }
+    .billing-switch input:checked + .billing-toggle-slider:before { transform: translateX(22px); }
+
+    .subscription-fields.disabled-look {
+        opacity: 0.4;
+        pointer-events: none;
+        filter: grayscale(0.3);
+    }
+
+    .disabled-banner {
+        display: none;
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #047857;
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 13px;
+        margin-bottom: 16px;
+    }
+    .disabled-banner.show { display: block; }
+    .text-nowrap{
+        margin-left: 10px;
+    }
+</style>
+
+<div class="badmin-wrap">
+
+    <div class="badmin-card">
+        <div class="badmin-title">Obuna sozlamalari</div>
+
+        <form method="post" id="subscriptionForm">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div style="background:#fee2e2; border:1px solid #fecaca; color:#dc2626; border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:16px;">
+                Xatolik: {{ form.errors }}
+            </div>
+            {% endif %}
+
+            <div class="toggle-card">
+                <div class="toggle-text">
+                    <div class="title">Oylik to'lov tizimi</div>
+                    <div class="desc">
+                        Yoqilgan bo'lsa — markaz har oy belgilangan sanada to'lov qilishi shart, aks holda bloklanadi.
+                        O'chirilgan bo'lsa — markaz platformani to'liq sotib olgan hisoblanadi, hech qachon bloklanmaydi.
+                    </div>
+                </div>
+                <label class="billing-switch">
+                    <input type="checkbox" id="billingEnabledCheckbox" {% if subscription.billing_enabled %}checked{% endif %}>
+                    <span class="billing-toggle-slider"></span>
+                </label>
+            </div>
+
+            <div class="disabled-banner {% if not subscription.billing_enabled %}show{% endif %}" id="disabledBanner">
+                ✅ Bu markaz uchun oylik to'lov o'chirilgan — platforma cheksiz muddat, bloklanishsiz ishlaydi.
+            </div>
+
+            <div class="subscription-fields {% if not subscription.billing_enabled %}disabled-look{% endif %}" id="subscriptionFields">
+
+                <div class="badmin-readonly-row">
+                    <span>O'quvchilar soni (avtomatik)</span>
+                    <strong>{{ student_count }} ta</strong>
+                </div>
+                <div class="badmin-readonly-row">
+                    <span>Jami summa</span>
+                    <strong>{{ total_amount }} so'm</strong>
+                </div>
+
+                <div style="margin-top:20px;">
+                    <div class="badmin-field">
+                        <label>1 o'quvchidan olinadigan summa</label>
+                        {{ form.price_per_student }}
+                    </div>
+                    <div class="badmin-field">
+                        <label>Karta raqami</label>
+                        {{ form.card_number }}
+                    </div>
+                    <div class="badmin-field">
+                        <label>Karta egasi (ixtiyoriy)</label>
+                        {{ form.card_holder_name }}
+                    </div>
+                    <div class="badmin-field">
+                        <label>Har oyning nechanchi kuni to'lov qilinishi kerak</label>
+                        {{ form.payment_day }}
+                    </div>
+                </div>
+
+            </div>
+
+            {{ form.billing_enabled }}
+
+            <button type="submit" class="badmin-save-btn">Saqlash</button>
+            <a href="{% url 'manager:home' %}" class="btn btn-secondary text-nowrap" id="exitBtn">
+                <i class="fas fa-sign-out-alt"></i> Exit
+            </a>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var visibleToggle = document.getElementById('billingEnabledCheckbox');
+            var hiddenFormInput = document.querySelector('#subscriptionForm input[name="billing_enabled"]');
+            var fieldsBlock = document.getElementById('subscriptionFields');
+            var banner = document.getElementById('disabledBanner');
+
+            if (hiddenFormInput) {
+                hiddenFormInput.style.display = 'none';
+            }
+
+            function syncUI() {
+                if (hiddenFormInput) hiddenFormInput.checked = visibleToggle.checked;
+                fieldsBlock.classList.toggle('disabled-look', !visibleToggle.checked);
+                banner.classList.toggle('show', !visibleToggle.checked);
+            }
+
+            visibleToggle.addEventListener('change', syncUI);
+            syncUI();
+        });
+    </script>
+
+    <div class="badmin-card">
+        <div class="badmin-title">Kutilayotgan cheklar ({{ pending_receipts|length }})</div>
+
+        {% for receipt in pending_receipts %}
+        <div class="receipt-row">
+            <img src="{{ receipt.receipt_image.url }}" alt="">
+            <div class="meta">
+                {{ receipt.uploaded_by }} — {{ receipt.uploaded_at|date:"d.m.Y H:i" }}
+            </div>
+            <form method="post" action="{% url 'billing:admin-approve' receipt.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-approve">Tasdiqlash</button>
+            </form>
+            <form method="post" action="{% url 'billing:admin-reject' receipt.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-reject">Rad etish</button>
+            </form>
+        </div>
+        {% empty %}
+        <p style="color:#9ca3af; font-size:13px;">Hozircha kutilayotgan chek yo'q.</p>
+        {% endfor %}
+    </div>
+
+    <div class="badmin-card">
+        <div class="badmin-title">Tarix</div>
+        {% for receipt in history_receipts %}
+        <div class="receipt-row">
+            <img src="{{ receipt.receipt_image.url }}" alt="">
+            <div class="meta">{{ receipt.uploaded_by }} — {{ receipt.uploaded_at|date:"d.m.Y H:i" }}</div>
+            <span class="badge-status {{ receipt.status }}">{{ receipt.get_status_display }}</span>
+        </div>
+        {% empty %}
+        <p style="color:#9ca3af; font-size:13px;">Tarix bo'sh.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

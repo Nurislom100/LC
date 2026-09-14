@@ -53,6 +53,64 @@
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     transform: scale(1.02);
 }
+
+/* FAQAT MOBIL EKRANLAR UCHUN STYLLAR */
+@media (max-width: 768px) {
+    .custom-tabs {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        padding: 6px !important;
+    }
+
+    /* Request, Trial, In Group tablarini bitta qatorga 3 ta teng bo'lib joylash */
+    .custom-tabs .nav-item:nth-child(1),
+    .custom-tabs .nav-item:nth-child(2),
+    .custom-tabs .nav-item:nth-child(3) {
+        flex: 1 1 calc(33.333% - 6px) !important;
+        min-width: 0 !important;
+    }
+
+    /* "Add a new Lead" tugmasini pastga alohida qatorda to'liq eni bo'ylab tushirish */
+    .custom-tabs .nav-item:nth-child(4) {
+        flex: 1 1 100% !important;
+        margin-top: 4px;
+    }
+
+    .custom-tabs .nav-link {
+        padding: 8px 4px !important;
+        font-size: 12px !important;
+        white-space: nowrap;
+    }
+
+    /* Add a new lead tugmasi dizayni */
+    .custom-tabs .nav-item:nth-child(4) .nav-link {
+        background-color: #f3f6f9;
+        color: #3f4254;
+        border: 1px dashed #3699ff;
+    }
+
+    /* Container sig'imi va footer bilan muammoni hal qilish */
+    .archive-tabs-container {
+        padding: 0 !important;
+    }
+
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .card-body, .container.py-5 {
+        padding: 10px !important;
+    }
+
+    /* Jadval sig'may qolganda ichida scroll bo'lishi uchun */
+    .table-responsive-custom {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
 </style>
 
 <body id="kt_body" class="header-fixed header-mobile-fixed aside-enabled aside-fixed">
@@ -85,7 +143,7 @@
                     <a class="nav-link" data-bs-toggle="tab" href="#ingroup">In Group</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'manager:lead-create' %}">Add a new Lead</a>
+                    <a class="nav-link" href="{% url 'manager:lead-create' %}">+ Add new Lead</a>
                   </li>
                 </ul>
               </div>
@@ -102,171 +160,177 @@
                         <div class="tab-pane fade show active mt-2" id="request">
                           <h5 class="text mb-3">Request Leads</h5>
 
-                          <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
-                            <thead>
-                              <tr class="text-left text-uppercase">
-                                <th style="min-width: 100px">Full name</th>
-                                <th style="min-width: 100px">Birth day</th>
-                                <th style="min-width: 100px">Phone</th>
-                                <th style="min-width: 100px">Intersted Course</th>
-                                <th style="min-width: 100px">Address</th>
-                                <th style="min-width: 100px">Status</th>
-                                <th style="min-width: 100px">Actions</th>
-                              </tr>
-                            </thead>
+                          <div class="table-responsive-custom">
+                            <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
+                              <thead>
+                                <tr class="text-left text-uppercase">
+                                  <th style="min-width: 150px">Full name</th>
+                                  <th style="min-width: 110px">Birth day</th>
+                                  <th style="min-width: 120px">Phone</th>
+                                  <th style="min-width: 130px">Intersted Course</th>
+                                  <th style="min-width: 120px">Address</th>
+                                  <th style="min-width: 100px">Status</th>
+                                  <th style="min-width: 100px">Actions</th>
+                                </tr>
+                              </thead>
 
-                            <tbody>
-                              {% for r in Request %}
-                              {% url 'manager:lead-update' r.id as u %}
-                              {% url 'manager:lead-delete' r.id as d %}
-                              <tr>
-                                <td class="pl-0 py-6">
-                                  <div class="d-flex align-items-center">
-                                    <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                      <span class="symbol-label">{{ r.full_name|slice:':1' }}</span>
+                              <tbody>
+                                {% for r in Request %}
+                                {% url 'manager:lead-update' r.id as u %}
+                                {% url 'manager:lead-delete' r.id as d %}
+                                <tr>
+                                  <td class="pl-0 py-6">
+                                    <div class="d-flex align-items-center">
+                                      <div class="mr-4 symbol symbol-40 symbol-light-success">
+                                        <span class="symbol-label">{{ r.full_name|slice:':1' }}</span>
+                                      </div>
+                                      <span href="{% url 'manager:group-create' %}" class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.full_name}}</span>      
                                     </div>
-                                    <span href="{% url 'manager:group-create' %}" class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.full_name}}</span>      
-                                  </div>
-                                </td>
-                                
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.birth_date}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.phone}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.interested_course}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.address}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.status}}</span>
-                                </td>
-                                <td nowrap="nowrap">
-                                  {% include "parts/actions.html" with update_url=u delete_url=d %}
-                                </td>
-                              </tr> 
-                              {% empty %}
-                              <tr><td colspan="8">{% include "parts/nothing-found.html" %}</td></tr>
-                              {% endfor %}
-                            </tbody>
-                          </table>
+                                  </td>
+                                  
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.birth_date}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.phone}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.interested_course}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.address}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{r.status}}</span>
+                                  </td>
+                                  <td nowrap="nowrap">
+                                    {% include "parts/actions.html" with update_url=u delete_url=d %}
+                                  </td>
+                                </tr> 
+                                {% empty %}
+                                <tr><td colspan="8">{% include "parts/nothing-found.html" %}</td></tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
 
                         <!-- TRIAL -->
                         <div class="tab-pane fade mt-2" id="trial">
                           <h5 class="text mb-3">Trial Leads</h5>
 
-                          <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
-                            <thead>
-                              <tr class="text-left text-uppercase">
-                                <th style="min-width: 100px">Full name</th>
-                                <th style="min-width: 100px">Birth day</th>
-                                <th style="min-width: 100px">Phone</th>
-                                <th style="min-width: 100px">Intersted Course</th>
-                                <th style="min-width: 100px">Address</th>
-                                <th style="min-width: 100px">Status</th>
-                                <th style="min-width: 100px">Actions</th>
-                              </tr>
-                            </thead>
+                          <div class="table-responsive-custom">
+                            <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
+                              <thead>
+                                <tr class="text-left text-uppercase">
+                                  <th style="min-width: 150px">Full name</th>
+                                  <th style="min-width: 110px">Birth day</th>
+                                  <th style="min-width: 120px">Phone</th>
+                                  <th style="min-width: 130px">Intersted Course</th>
+                                  <th style="min-width: 120px">Address</th>
+                                  <th style="min-width: 100px">Status</th>
+                                  <th style="min-width: 100px">Actions</th>
+                                </tr>
+                              </thead>
 
-                            <tbody>
-                              {% for t in Trial %}
-                              {% url 'manager:lead-update' t.id as u %}
-                              {% url 'manager:lead-delete' t.id as d %}
-                              <tr>
-                                <td class="pl-0 py-6">
-                                  <div class="d-flex align-items-center">
-                                    <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                      <span class="symbol-label">{{ t.full_name|slice:':1' }}</span>
+                              <tbody>
+                                {% for t in Trial %}
+                                {% url 'manager:lead-update' t.id as u %}
+                                {% url 'manager:lead-delete' t.id as d %}
+                                <tr>
+                                  <td class="pl-0 py-6">
+                                    <div class="d-flex align-items-center">
+                                      <div class="mr-4 symbol symbol-40 symbol-light-success">
+                                        <span class="symbol-label">{{ t.full_name|slice:':1' }}</span>
+                                      </div>
+                                      <span href="{% url 'manager:group-create' %}" class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.full_name}}</span>      
                                     </div>
-                                    <span href="{% url 'manager:group-create' %}" class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.full_name}}</span>      
-                                  </div>
-                                </td>
-                                
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.birth_date}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.phone}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.interested_course}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.address}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.status}}</span>
-                                </td>
-                                <td nowrap="nowrap">
-                                  {% include "parts/actions.html" with update_url=u delete_url=d %}
-                                </td>
-                              </tr> 
-                              {% empty %}
-                              <tr><td colspan="8">{% include "parts/nothing-found.html" %}</td></tr>
-                              {% endfor %}
-                            </tbody>
-                          </table>
+                                  </td>
+                                  
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.birth_date}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.phone}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.interested_course}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.address}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{t.status}}</span>
+                                  </td>
+                                  <td nowrap="nowrap">
+                                    {% include "parts/actions.html" with update_url=u delete_url=d %}
+                                  </td>
+                                </tr> 
+                                {% empty %}
+                                <tr><td colspan="8">{% include "parts/nothing-found.html" %}</td></tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
 
                         <!-- IN GROUP -->
                         <div class="tab-pane fade mt-2" id="ingroup">
                           <h5 class="text mb-3">In Group Leads</h5>
 
-                          <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
-                            <thead>
-                              <tr class="text-left text-uppercase">
-                                <th style="min-width: 100px">Full name</th>
-                                <th style="min-width: 100px">Birth day</th>
-                                <th style="min-width: 100px">Phone</th>
-                                <th style="min-width: 100px">Intersted Course</th>
-                                <th style="min-width: 100px">Address</th>
-                                <th style="min-width: 100px">Status</th>
-                                <th style="min-width: 100px">Actions</th>
-                              </tr>
-                            </thead>
+                          <div class="table-responsive-custom">
+                            <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
+                              <thead>
+                                <tr class="text-left text-uppercase">
+                                  <th style="min-width: 150px">Full name</th>
+                                  <th style="min-width: 110px">Birth day</th>
+                                  <th style="min-width: 120px">Phone</th>
+                                  <th style="min-width: 130px">Intersted Course</th>
+                                  <th style="min-width: 120px">Address</th>
+                                  <th style="min-width: 100px">Status</th>
+                                  <th style="min-width: 100px">Actions</th>
+                                </tr>
+                              </thead>
 
-                            <tbody>
-                              {% for in in Ingroup %}
-                              {% url 'manager:lead-update' in.id as u %}
-                              {% url 'manager:lead-delete' in.id as d %}
-                              <tr>
-                                <td class="pl-0 py-6">
-                                  <div class="d-flex align-items-center">
-                                    <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                      <span class="symbol-label">{{ in.full_name|slice:':1' }}</span>
+                              <tbody>
+                                {% for in in Ingroup %}
+                                {% url 'manager:lead-update' in.id as u %}
+                                {% url 'manager:lead-delete' in.id as d %}
+                                <tr>
+                                  <td class="pl-0 py-6">
+                                    <div class="d-flex align-items-center">
+                                      <div class="mr-4 symbol symbol-40 symbol-light-success">
+                                        <span class="symbol-label">{{ in.full_name|slice:':1' }}</span>
+                                      </div>
+                                      <span href="{% url 'manager:group-create' %}" class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.full_name}}</span>      
                                     </div>
-                                    <span href="{% url 'manager:group-create' %}" class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.full_name}}</span>      
-                                  </div>
-                                </td>
-                                
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.birth_date}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.phone}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.interested_course}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.address}}</span>
-                                </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.status}}</span>
-                                </td>
-                                <td nowrap="nowrap">
-                                  {% include "parts/actions.html" with update_url=u delete_url=d %}
-                                </td>
-                              </tr> 
-                              {% empty %}
-                              <tr><td colspan="8">{% include "parts/nothing-found.html" %}</td></tr>
-                              {% endfor %}
-                            </tbody>
-                          </table>
+                                  </td>
+                                  
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.birth_date}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.phone}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.interested_course}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.address}}</span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{in.status}}</span>
+                                  </td>
+                                  <td nowrap="nowrap">
+                                    {% include "parts/actions.html" with update_url=u delete_url=d %}
+                                  </td>
+                                </tr> 
+                                {% empty %}
+                                <tr><td colspan="8">{% include "parts/nothing-found.html" %}</td></tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
 
                       </div>
@@ -288,4 +352,4 @@
   </div>
 
 </body>
-{% endblock %}   
+{% endblock %}

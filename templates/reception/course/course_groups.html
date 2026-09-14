@@ -4,8 +4,89 @@
 {% load humanize %}
 {% block content %}
 
+<style>
+/* Mobil uchun mo'ljallangan Cancel / Exit tugmasi (Standartda yashiriladi) */
+.mobile-exit-btn {
+    display: none;
+}
+
+/* MOBIL EKRANLAR UCHUN STILLAR (max-width: 768px) */
+@media (max-width: 768px) {
+    /* Jadval sarlavhasini yashirish */
+    .mobile-smart-table thead {
+        display: none !important;
+    }
+
+    /* Har bir qatorni alohida karta shakliga keltirish */
+    .mobile-smart-table tbody tr {
+        display: block !important;
+        background: #f8f9fa;
+        border: 1px solid #ebedf2;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        padding: 12px 15px;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.03);
+    }
+
+    .mobile-smart-table tbody td {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        border: none !important;
+        padding: 6px 0 !important;
+        text-align: right !important;
+    }
+
+    /* Ustun nomlarini chap tomondan chiqarish */
+    .mobile-smart-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #80808f;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        text-align: left;
+        padding-right: 10px;
+    }
+
+    /* Birinchi ustun (Sarlavha) ko'rinishini moslash */
+    .mobile-smart-table tbody td:first-child {
+        border-bottom: 1px dashed #e4e6ef !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 5px;
+    }
+
+    /* Amallar tugmalarini o'ngga tekislash */
+    .mobile-smart-table tbody td:last-child {
+        justify-content: flex-end !important;
+        gap: 10px;
+        border-top: 1px dashed #e4e6ef !important;
+        padding-top: 10px !important;
+        margin-top: 5px;
+    }
+
+    .mobile-smart-table tbody td:last-child::before {
+        content: "";
+    }
+
+    /* Mobilda tepadagi Exit tugmasini yashirish */
+    .desktop-exit-btn {
+        display: none !important;
+    }
+
+    /* Mobilda pastki Exit tugmasini ko'rsatish va uzun (ingichka) shaklga keltirish */
+    .mobile-exit-btn {
+        display: block !important;
+        width: 100%;
+        margin-top: 15px;
+        padding: 8px 0;
+        text-align: center;
+    }
+}
+</style>
+
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <div class="d-flex flex-column flex-root">
+    {% include 'reception/parts/header-mobile.html' %}
     <div class="d-flex flex-row flex-column-fluid page">
       {% include "reception/parts/aside.html" with menu_parent='course-all' menu_child='group-list' %}
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
@@ -18,18 +99,23 @@
 
                   <div class="card card-custom card-stretch gutter-b">
 
-                    <div class="card-header border-0 py-5">
-                      <h3 class="card-title align-items-start flex-column">
+                    <!-- Header bo'limi: Kompyuterda ro'parasiga Exit tugmasi o'rnatildi -->
+                    <div class="card-header border-0 py-5 d-flex align-items-center justify-content-between">
+                      <h3 class="card-title align-items-start flex-column mb-0">
                         <span class="card-label font-weight-bolder text-dark">{% trans "Groups" %}</span>
                         <small class='mt-2'>{% trans "Total" %}: {{groups | length}}</small>
                       </h3>
+                      <!-- Kompyuter versiyasi uchun Exit tugmasi -->
+                      <a href="{% url 'reception:course-list' %}" class="btn btn-secondary font-weight-bold desktop-exit-btn">
+                        {% trans "Exit" %}
+                      </a>
                     </div>
 
                     <div class="card-body pt-0 pb-3">
                       <div class="tab-content">
                         <div class="table-responsive">
                           {% if groups %}
-                          <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                          <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mobile-smart-table">
                             <thead>
                               <tr class="text-left text-uppercase">
                                 <th style="min-width: 100px">{% trans "Title" %}</th>
@@ -46,35 +132,35 @@
                               {% url 'manager:group-update' object.id as u %}
                               {% url 'manager:group-delete' object.id as d %}
                               <tr>
-                                <td class="pl-0 py-6">
+                                <td data-label="{% trans 'Title' %}" class="pl-0 py-2">
                                   <div class="d-flex align-items-center">
-                                    <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                      <span class="symbol-label">{{ object.full_name|slice:':1' }}</span>
+                                    <div class="mr-3 symbol symbol-35 symbol-light-success">
+                                      <span class="symbol-label font-weight-bold">{{ object.title|slice:':1' }}</span>
                                     </div>
-                                    <a href="#"><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span></a>
+                                    <a href="#"><span class="text-dark-75 font-weight-bolder font-size-lg">{{object.title}}</span></a>
                                   </div>
                                 </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.teacher}}</span>
+                                <td data-label="{% trans 'Teacher' %}">
+                                  <span class="text-dark-75 font-weight-bolder font-size-base">{{object.teacher}}</span>
                                 </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.lesson_days}}</span>
+                                <td data-label="{% trans 'Lesson Days' %}">
+                                  <span class="text-dark-75 font-weight-bolder font-size-base">{{object.lesson_days}}</span>
                                 </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</span>
+                                <td data-label="{% trans 'Time' %}">
+                                  <span class="text-dark-75 font-weight-bolder font-size-base">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</span>
                                 </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.price|intcomma}} UZS</span>
+                                <td data-label="{% trans 'Price' %}">
+                                  <span class="text-dark-75 font-weight-bolder font-size-base">{{object.price|intcomma}} UZS</span>
                                 </td>
-                                <td>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.date_started}}</span>
+                                <td data-label="{% trans 'Date started' %}">
+                                  <span class="text-dark-75 font-weight-bolder font-size-base">{{object.date_started}}</span>
                                 </td>
-                                <td nowrap="nowrap">
-                                  <a href="{% url 'manager:group-settings' object.pk %}">
+                                <td data-label="{% trans 'Actions' %}" nowrap="nowrap">
+                                  <a href="{% url 'manager:group-settings' object.pk %}" class="btn btn-sm btn-clean btn-icon" title="Settings">
                                       <span class="svg-icon svg-icon-md">
                                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                                           <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
-                                          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+                                          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a1.873 1.873 0 0 0 1.116-2.692l.318-.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
                                           </svg>
                                       </span>
                                   </a>
@@ -94,6 +180,11 @@
                             {% include "parts/nothing-found.html" %}
                           {% endif %}
                         </div>
+
+                        <!-- Mobil versiyasi uchun kartalar tagidagi uzun Exit tugmasi -->
+                        <a href="{% url 'reception:course-list' %}" class="btn btn-secondary font-weight-bold mobile-exit-btn">
+                          {% trans "Exit" %}
+                        </a>
 
                         {% if page_obj.paginator.num_pages > 1 %}
                           {% include 'parts/pagination.html' %}

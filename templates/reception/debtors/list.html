@@ -83,6 +83,7 @@
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <!--begin::Main-->
   <div class="d-flex flex-column flex-root">
+    {% include 'reception/parts/header-mobile.html' %}
     <!--begin::Page-->
     <div class="d-flex flex-row flex-column-fluid page">
       <!--begin::Aside-->
@@ -132,18 +133,19 @@
                         <small class='mt-2'>Total: {{objects | length}}</small>
                       </h3>
                     </div>
-                    <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
-                              <input type="text" class="form-control datatable-input" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                    <form method="get" class="px-8 pb-4">
+                      <div class="row">
+                          <div class="col-lg-4 col-md-6 col-sm-12">
+                              <div class="form-group mb-3">
+                                  <input type="text" class="form-control datatable-input w-100" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                              </div>
+                              <button type="submit" class="btn btn-primary font-weight-bolder w-100">
+                                  <span class="nav-icon">
+                                      <i class="fas fa-search"></i>
+                                  </span>
+                                  <span class="nav-text">Search</span>
+                              </button>
                           </div>
-
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
-                                  <i class="fas fa-search"></i>
-                              </span>
-                              <span class="nav-text">Search</span>
-                          </button>
                       </div>
                     </form>
                     <!--end::Header-->
@@ -235,4 +237,3 @@
 </body>
 <!--end::Body-->
 {% endblock %}
-

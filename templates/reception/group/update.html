@@ -1,8 +1,35 @@
-
 {% extends "base/base.html" %} {% load static %} {% block content %}
-<!--begin::Head-->
-<!--end::Head-->
-<!--begin::Body-->
+
+<style>
+@media (max-width: 768px) {
+    /* Label'larni chap tomonga va to'liq kenglikka o'tkazish */
+    .form-group label {
+        text-align: left !important;
+        padding-bottom: 5px;
+    }
+    
+    /* Tugmalarni yonma-yon va teng kenglikda qilish */
+    .mobile-btn-container {
+        display: flex !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+    
+    .mobile-btn-container .btn {
+        flex: 1 1 50% !important;
+        text-align: center !important;
+        justify-content: center !important;
+        margin-right: 0 !important;
+    }
+
+    /* Form ichidagi select va inputlarni mobilga moslash */
+    .form-group select,
+    .form-group input,
+    .form-group .bootstrap-select {
+        width: 100% !important;
+    }
+}
+</style>
 
 <body
     id="kt_body"
@@ -10,15 +37,16 @@
 >
     <!--begin::Main-->
     <div class="d-flex flex-column flex-root">
+        {% include 'reception/parts/header-mobile.html' %}
         <!--begin::Page-->
         <div class="d-flex flex-row flex-column-fluid page">
             <!--begin::Aside-->
-            {% "recepton/parts/aside.html" with menu_parent="group-all" menu_child="group-create" %}
+            {% include "reception/parts/aside.html" with menu_parent="group-all" menu_child="group-create" %}
             <!--end::Aside-->
             <!--begin::Wrapper-->
             <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
                 <!--begin::Header-->
-                {% "recepton/parts/header.html" %}
+                {% include "reception/parts/header.html" %}
                 <!--end::Header-->
                 <!--begin::Content-->
                 <div
@@ -34,7 +62,7 @@
                                 <div class="card-header">
                                     <div class="card-title">
                                         <h3 class="card-label">
-                                           Edit group <i class="mr-2"></i>
+                                            Edit group <i class="mr-2"></i>
                                         </h3>
                                     </div>
                                 </div>
@@ -45,7 +73,7 @@
                                         {% for field in form %}
 
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12" for="{{field.auto_id}}">
+                                            <label class="col-form-label text-left text-lg-right col-lg-3 col-sm-12" for="{{field.auto_id}}">
                                                 {% if field.field.required %}
                                                 <b>{{field.label}}</b>
                                                 {% else %}
@@ -62,9 +90,10 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
-                                                    <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
-                                                    <a href="{% url 'recepton:group-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
+                                                    <div class="mobile-btn-container d-flex">
+                                                        <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
+                                                        <a href="{% url 'reception:group-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -88,23 +117,8 @@
         <!--end::Page-->
     </div>
     <!--end::Main-->
-    <!-- begin::User Panel-->
     {% include "parts/user-panel.html" %}
-    <!--begin::Quick Cart-->
-    <!--end::Quick Cart-->
-    <!--begin::Quick Panel-->
-    <!--end::Quick Panel-->
-    <!--begin::Chat Panel-->
-    <!--end::Chat Panel-->
-    <!--begin::Scrolltop-->
     {% include "parts/scrolltop.html" %}
-    <!--end::Scrolltop-->
-    <!--begin::Sticky Toolbar-->
-    <!--end::Sticky Toolbar-->
-    <!--begin::Demo Panel-->
-    <!--end::Demo Panel-->
-    <!--end::Page Scripts-->
 </body>
 <!--end::Body-->
 {% endblock %}
-

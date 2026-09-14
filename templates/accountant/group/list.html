@@ -5,62 +5,53 @@
 {% load humanize %}
 
 <style>
-.card-toolbar{
-  padding-left: 10px;
+/* Gorizontal scroll oldini olish */
+html, body {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
 }
-/* Select styling */
+
+.card-toolbar {
+    padding-left: 10px;
+}
+
+/* Base input & select elementlar */
+select.form-select, 
+.attendance-date-input,
+.search-input-custom {
+    width: 100%;
+    min-width: 180px;
+    max-width: 250px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
 select.form-select {
-    min-width: 180px;
-    max-width: 250px;
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    font-size: 14px;
-    color: #333;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
     cursor: pointer;
 }
 
-select.form-select:hover {
+select.form-select:hover, 
+.attendance-date-input:hover,
+.search-input-custom:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     border-color: #0d6efd;
 }
 
-select.form-select:focus {
+select.form-select:focus, 
+.attendance-date-input:focus,
+.search-input-custom:focus {
     outline: none;
     border-color: #0d6efd;
     box-shadow: 0 0 5px rgba(13,110,253,0.5);
 }
 
-/* ⭐ Attendance Date Input - Selectlarga o'xshash style */
-.attendance-date-input {
-    min-width: 180px;
-    max-width: 250px;
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    font-size: 14px;
-    color: #333;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.attendance-date-input:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    border-color: #0d6efd;
-}
-
-.attendance-date-input:focus {
-    outline: none;
-    border-color: #0d6efd;
-    box-shadow: 0 0 5px rgba(13,110,253,0.5);
-}
-
-/* ⭐ Flatpickr Calendar Custom Style */
+/* Flatpickr Calendar Style */
 .flatpickr-calendar {
     background: white;
     border-radius: 12px;
@@ -89,11 +80,6 @@ select.form-select:focus {
 .flatpickr-prev-month svg,
 .flatpickr-next-month svg {
     fill: white;
-}
-
-.flatpickr-prev-month:hover svg,
-.flatpickr-next-month:hover svg {
-    fill: #ffffff;
 }
 
 .flatpickr-weekdays {
@@ -135,11 +121,7 @@ select.form-select:focus {
     font-weight: 600;
 }
 
-.flatpickr-day.today:hover {
-    background: #e0e7ff;
-}
-
-/* Reset button styling */
+/* Action buttonlar */
 .reset-btn {
     padding: 10px 20px;
     border-radius: 8px;
@@ -151,7 +133,7 @@ select.form-select:focus {
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     white-space: nowrap;
@@ -164,40 +146,55 @@ select.form-select:focus {
     transform: translateY(-1px);
 }
 
-.reset-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.submit-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
 }
 
-/* Responsive for smaller screens */
+/* Responsivlik moslashuvchanligi */
 @media (max-width: 992px) {
-    .filter-row {
-        justify-content: flex-start !important;
-    }
-    
-    select.form-select, .attendance-date-input {
+    select.form-select, 
+    .attendance-date-input,
+    .search-input-custom {
         min-width: 150px;
     }
 }
 
 @media (max-width: 768px) {
-    select.form-select, .attendance-date-input {
-        width: 100% !important;
-        max-width: 100%;
+    .filter-wrapper {
+        flex-direction: column !important;
+        align-items: stretch !important;
     }
-    
-    .reset-btn {
-        width: 100%;
+
+    /* Bootstrap Select wrapper va tugmasining mobil o'lchamini 100% qilish */
+    .filter-wrapper .bootstrap-select,
+    .filter-wrapper .bootstrap-select > .dropdown-toggle,
+    .filter-wrapper select.form-select, 
+    .filter-wrapper .attendance-date-input,
+    .filter-wrapper .search-input-custom,
+    .filter-wrapper .reset-btn,
+    .filter-wrapper .submit-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        box-sizing: border-box !important;
         justify-content: center;
     }
 }
 </style>
 
-<!-- ⭐ Flatpickr CSS -->
+<!-- Flatpickr CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <div class="d-flex flex-column flex-root">
+    {% include 'accountant/parts/header-mobile.html' %}
     <div class="d-flex flex-row flex-column-fluid page">
       {% include "accountant/parts/aside.html" with menu_parent='course-all' menu_child='course-list' %}
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
@@ -206,95 +203,86 @@ select.form-select:focus {
           <div class="d-flex flex-column-fluid">
             <div class="container">
 
-              <!-- ⭐ YANGI: Top Filter Container -->
+              <!-- Top Filter Container -->
               <div class="card" style="margin-bottom: 20px; border: 1px solid #e4e6ef; border-radius: 8px;">
                 <div class="card-body" style="padding: 20px;">
                   <form method="get" id="filterForm">
-                    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;">
+                    <div class="filter-wrapper" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
                       
-                      <!-- Left side: Filters -->
-                      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; flex: 1;">
-                        
-                        <!-- Attendance Date Filter -->
-                        <input 
-                            type="text" 
-                            id="attendanceDateFilter"
-                            name="attendance_date" 
-                            class="attendance-date-input" 
-                            value="{{ request.GET.attendance_date }}"
-                            placeholder="{% trans 'Attendance Date' %}"
-                            readonly
-                            style="flex: 0 0 auto;"> 
-                        
-                        <!-- Lesson Days Filter -->
-                        <select id="dayFilter" name="day" class="form-select selectpicker" onchange="this.form.submit()" style="flex: 0 0 auto;">
-                            <option value="">{% trans "Lesson Days" %}</option>
-                            <option value="odd" {% if request.GET.day == 'odd' %}selected{% endif %}>{% trans "Mo We Fri" %}</option>
-                            <option value="even" {% if request.GET.day == 'even' %}selected{% endif %}>{% trans "Tu Thu Sat" %}</option>
-                        </select>
+                      <!-- Attendance Date Filter -->
+                      <input 
+                          type="text" 
+                          id="attendanceDateFilter"
+                          name="attendance_date" 
+                          class="attendance-date-input" 
+                          value="{{ request.GET.attendance_date }}"
+                          placeholder="{% trans 'Attendance Date' %}"
+                          readonly> 
+                      
+                      <!-- Lesson Days Filter -->
+                      <select id="dayFilter" name="day" class="form-select selectpicker" onchange="this.form.submit()">
+                          <option value="">{% trans "Lesson Days" %}</option>
+                          <option value="odd" {% if request.GET.day == 'odd' %}selected{% endif %}>{% trans "Mo We Fri" %}</option>
+                          <option value="even" {% if request.GET.day == 'even' %}selected{% endif %}>{% trans "Tu Thu Sat" %}</option>
+                      </select>
 
-                        <!-- Teacher Filter -->
-                        <select id="teacherFilter" name="teacher" class="form-select selectpicker" onchange="this.form.submit()" style="flex: 0 0 auto;">
-                            <option value="">{% trans "All Teachers" %}</option>
-                            {% for teacher in teachers %}
-                                <option value="{{ teacher.id }}" {% if request.GET.teacher == teacher.id|stringformat:"s" %}selected{% endif %}>
-                                    {{ teacher }}
-                                </option>
-                            {% endfor %}
-                        </select>
+                      <!-- Teacher Filter -->
+                      <select id="teacherFilter" name="teacher" class="form-select selectpicker" onchange="this.form.submit()">
+                          <option value="">{% trans "All Teachers" %}</option>
+                          {% for teacher in teachers %}
+                              <option value="{{ teacher.id }}" {% if request.GET.teacher == teacher.id|stringformat:"s" %}selected{% endif %}>
+                                  {{ teacher }}
+                              </option>
+                          {% endfor %}
+                      </select>
 
-                        <!-- Course Filter -->
-                        <select id="courseFilter" name="course" class="form-select selectpicker" onchange="this.form.submit()" style="flex: 0 0 auto;">
-                            <option value="">{% trans "All Courses" %}</option>
-                            {% for course in courses %}
-                                <option value="{{ course.id }}" {% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
-                                    {{ course.title }}
-                                </option>
-                            {% endfor %}
-                        </select>
+                      <!-- Course Filter -->
+                      <select id="courseFilter" name="course" class="form-select selectpicker" onchange="this.form.submit()">
+                          <option value="">{% trans "All Courses" %}</option>
+                          {% for course in courses %}
+                              <option value="{{ course.id }}" {% if request.GET.course == course.id|stringformat:"s" %}selected{% endif %}>
+                                  {{ course.title }}
+                              </option>
+                          {% endfor %}
+                      </select>
 
-                        {% if request.GET.search %}
-                            <input type="hidden" name="search" value="{{ request.GET.search }}">
-                        {% endif %}
-                        
-                        <!-- Reset button -->
-                        {% if request.GET.day or request.GET.teacher or request.GET.course or request.GET.attendance_date %}
-                            <button type="button" class="reset-btn" onclick="window.location.href='{% url 'accountant:group-list' %}'" style="flex: 0 0 auto;">
-                                <i class="fas fa-redo"></i> {% trans "Reset All" %}
-                            </button>
-                        {% endif %}
-                      </div>
+                      <!-- Search Input -->
+                      <input 
+                          type="text" 
+                          class="form-control search-input-custom" 
+                          placeholder="{% trans 'Search' %}" 
+                          value="{{ request.GET.search|default:'' }}" 
+                          name="search" />
+
+                      <!-- Search Button -->
+                      <button type="submit" class="btn btn-primary submit-btn">
+                          <i class="fas fa-search"></i>
+                          <span>{% trans "Search" %}</span>
+                      </button>
+
+                      <!-- Reset button -->
+                      {% if request.GET.day or request.GET.teacher or request.GET.course or request.GET.attendance_date or request.GET.search %}
+                          <button type="button" class="reset-btn" onclick="window.location.href='{% url 'accountant:group-list' %}'">
+                              <i class="fas fa-redo"></i> {% trans "Reset All" %}
+                          </button>
+                      {% endif %}
 
                     </div>
                   </form>
                 </div>
               </div>
+
+              <!-- Groups Table Container -->
               <div class="row">
                 <div class="col-md-12">
                   <div class="card card-custom card-stretch gutter-b">
 
-                    <!-- ⭐ Pastdagi Container: Groups Table -->
                     <div class="card-header border-0 py-5">
                       <h3 class="card-title align-items-start flex-column">
                         <span class="card-label font-weight-bolder text-dark">{% trans "groups" %}</span>
                         <small class='mt-2'>{% trans "Total" %}: {{objects | length}}</small>
                       </h3>
                     </div>
-                    
-                    <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
-                              <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
-                          </div>
-
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
-                                  <i class="fas fa-search"></i>
-                              </span>
-                              <span class="nav-text">{% trans "Search" %}</span>
-                          </button>
-                      </div>
-                    </form>
                     
                     <div class="card-body pt-0 pb-3">
                       <div class="tab-content">
@@ -321,7 +309,7 @@ select.form-select:focus {
                                     <div class="mr-4 symbol symbol-40 symbol-light-success">
                                       <span class="symbol-label">{{ object.title|slice:':1' }}</span>
                                     </div>
-                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span>      
+                                    <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span>      
                                   </div>
                                 </td>
                                 <td>
@@ -354,6 +342,7 @@ select.form-select:focus {
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                         </div>
                         {% else %}
@@ -361,7 +350,7 @@ select.form-select:focus {
                         {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
-                      {%include 'parts/pagination.html' %}
+                      {% include 'parts/pagination.html' %}
                       {% endif %}
                     </div>
                   </div>
@@ -378,29 +367,22 @@ select.form-select:focus {
   {% include "parts/user-panel.html" %}
   {% include "parts/scrolltop.html" %}
 
-  <!-- ⭐ Flatpickr JS -->
+  <!-- Flatpickr JS -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   
   <script>
-    // ⭐ Flatpickr Calendar Initialization
     flatpickr("#attendanceDateFilter", {
-        dateFormat: "Y-m-d",  // Backend uchun format
+        dateFormat: "Y-m-d",
         altInput: true,
-        altFormat: "F j, Y",  // Foydalanuvchi uchun chiroyli format
-        
-        // Agar URL'da sana bo'lsa, uni ko'rsatish
+        altFormat: "F j, Y",
         defaultDate: "{{ request.GET.attendance_date }}",
-        
-        // Sana tanlaganda formani submit qilish
         onChange: function(selectedDates, dateStr, instance) {
             if (dateStr) {
                 document.getElementById("filterForm").submit();
             }
         },
-        
-        // Locale settings
         locale: {
-            firstDayOfWeek: 1, // Dushanba bilan boshlash
+            firstDayOfWeek: 1,
             weekdays: {
                 shorthand: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                 longhand: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']

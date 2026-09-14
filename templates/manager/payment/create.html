@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
 
 {% include 'parts/header-mobile.html' %}
 
@@ -84,10 +84,10 @@
                     <div class="card-footer">
                       <div class="row">
                         <div class="col-2"></div>
-                        <div class="col-10">
+                        <div class="col-10 action-buttons">
                           <button type="submit" class="btn btn-success mr-2" name="saved">Save</button>
-                          <button type="submit" class="btn btn-success mr-2" name="save-create">Save and add new</button>
-                          <a href="{% url 'manager:payment-list' %}" class="btn btn-secondary">Cancel</a>
+                          <button type="submit" class="btn btn-success mr-2 btn-save-add" name="save-create">Save and add new</button>
+                          <a href="{% url 'manager:payment-list' %}" class="btn btn-secondary btn-cancel">Cancel</a>
                         </div>
                       </div>
                     </div>
@@ -120,6 +120,43 @@
 .debt-text {
   color: red;
   font-weight: bold;
+}
+
+/* ==========================================================
+   FAKAT MOBIL FORMAT UCHUN SOZLAMALAR (KOMPUTERGA TEGMAYDI)
+   ========================================================== */
+@media (max-width: 768px) {
+    /* Label larni mobil ekranda chapga surish */
+    .form-group.row label {
+        text-align: left !important;
+    }
+
+    /* "Save and add new" tugmasini mobilda yashirish */
+    .btn-save-add {
+        display: none !important;
+    }
+
+    /* Footer qismidagi bo'sh joyni va tugmalarni moslash */
+    .card-footer .col-2 {
+        display: none !important;
+    }
+    .card-footer .col-10 {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Save va Cancel tugmalarini mobilda yonma-yon teng qilish */
+    .action-buttons {
+        display: flex !important;
+        gap: 10px !important;
+    }
+    .action-buttons button, 
+    .action-buttons a {
+        flex: 1 !important;
+        text-align: center !important;
+        margin-right: 0 !important;
+    }
 }
 </style>
 

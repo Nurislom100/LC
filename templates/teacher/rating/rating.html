@@ -32,6 +32,18 @@
             border-bottom: 1px solid #e5e7eb;
             border-radius: 15px;
             margin-bottom: 20px;
+            overflow-x: auto; /* Gorizontal scroll imkoniyati */
+            -webkit-overflow-scrolling: touch; /* iOS va mobil qurilmalarda silliq scroll */
+        }
+
+        /* Scrollbarni chiroyli qilish va yashirish qoidalari */
+        .subheader::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .subheader::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
 
         .subheader .nav-tabs {
@@ -40,6 +52,8 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            width: max-content; /* Tablar sig'may qolganda bitta qatorda saqlanishi uchun */
+            min-width: 100%;
         }
 
         .subheader .nav-tabs .nav-link {
@@ -52,6 +66,7 @@
             text-decoration: none;
             transition: all 0.2s;
             background-color: #e5e7eb20;
+            white-space: nowrap; /* Matnlar pastki qatorga tushib ketmasligi uchun */
         }
 
         .subheader .nav-tabs .nav-link:hover {
@@ -440,7 +455,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Subheader Navigation -->
         <div class="subheader">
             <ul class="nav-tabs">
                 <li class="nav-item">
@@ -461,8 +475,6 @@
             </ul>
         </div>
 
-        <!-- Header -->
-
         <div class="header">
             <div class="header-content">
                 <div class="header-title">
@@ -472,14 +484,11 @@
             </div>
         </div>
 
-        <!-- Loading State -->
         <div id="loading" class="loading">
             <p>⏳ Ma'lumotlar yuklanmoqda...</p>
         </div>
 
-        <!-- Main Content -->
         <div id="main-content" style="display: none;">
-            <!-- Controls Row: Month/Year Filter -->
             <div class="controls-row">
                 <div class="filter-container">
                     <div class="filter-group">
@@ -506,10 +515,8 @@
                 </div>
             </div>
 
-            <!-- Top 3 Cards Row -->
             <div class="top-three-row" id="top-three-container"></div>
 
-            <!-- Leaderboard Dropdown -->
             <div class="leaderboard-dropdown">
                 <div class="dropdown-header" onclick="toggleDropdown()">
                     <div class="dropdown-title">
@@ -523,7 +530,6 @@
             </div>
         </div>
 
-        <!-- Empty State -->
         <div id="empty-state" class="empty-state" style="display: none;">
             <h3>📭 Ma'lumotlar topilmadi</h3>
             <p>Tanlangan oyda hech qanday baho qo'yilmagan</p>

@@ -2,9 +2,20 @@
 {% load static %}
 {% block content %}
 
+<style>
+    /* FAQAT MOBIL EKRANLAR UCHUN NOM (LABEL)LARNI CHAPGA SURISH */
+    @media (max-width: 767.98px) {
+        .form-group.row label.col-form-label {
+            text-align: left !important;
+            padding-bottom: 5px;
+        }
+    }
+</style>
+
 <body id="kt_body"
       class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
 <div class="d-flex flex-column flex-root">
+    {% include 'accountant/parts/header-mobile.html' %}
     <div class="d-flex flex-row flex-column-fluid page">
         {% include "accountant/parts/aside.html" with menu_parent="teacher-salary" menu_child="teacher-salary-create" %}
         <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">

@@ -1,0 +1,245 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .billing-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+        padding: 24px;
+    }
+
+    .billing-card {
+        width: 100%;
+        max-width: 520px;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+        padding: 40px;
+    }
+
+    .billing-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+
+    .billing-badge.overdue { background: #fee2e2; color: #dc2626; }
+    .billing-badge.ok { background: #d1fae5; color: #059669; }
+
+    .billing-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 6px;
+    }
+
+    .billing-subtitle {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 26px;
+    }
+
+    .billing-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 14px;
+    }
+
+    .billing-row .label { color: #6b7280; }
+    .billing-row .value { font-weight: 700; color: #111827; }
+
+    .billing-total {
+        margin-top: 16px;
+        padding: 16px;
+        background: #f8fafc;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .billing-total .formula {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 4px;
+    }
+
+    .billing-total .amount {
+        font-size: 26px;
+        font-weight: 800;
+        color: #059669;
+    }
+
+    .billing-card-box {
+        margin-top: 20px;
+        background: #111827;
+        border-radius: 14px;
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .billing-card-box .card-number {
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .billing-card-box .card-holder {
+        color: #9ca3af;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .copy-btn {
+        background: #fff;
+        color: #111827;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .copy-btn:hover { background: #e5e7eb; }
+
+    .upload-section {
+        margin-top: 26px;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .upload-section label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .upload-section input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1.5px dashed #cbd5e1;
+        border-radius: 10px;
+        font-size: 13px;
+    }
+
+    .upload-submit-btn {
+        width: 100%;
+        margin-top: 14px;
+        border: none;
+        border-radius: 10px;
+        padding: 13px;
+        font-size: 14.5px;
+        font-weight: 700;
+        color: #fff;
+        background: #4f46e5;
+        cursor: pointer;
+    }
+
+    .upload-submit-btn:hover { background: #4338ca; }
+
+    .pending-note {
+        margin-top: 16px;
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 13px;
+        color: #92400e;
+    }
+</style>
+
+<div class="billing-wrap">
+    <div class="billing-card">
+
+        {% if not subscription.billing_enabled %}
+
+        <span class="billing-badge ok">Faol (cheksiz)</span>
+        <div class="billing-title">Platforma to'liq sotib olingan</div>
+        <div class="billing-subtitle">
+            Ushbu markaz uchun oylik to'lov funksiyasi o'chirilgan. Platforma hech qachon bloklanmaydi.
+        </div>
+
+        {% else %}
+
+        <span class="billing-badge {% if is_overdue %}overdue{% else %}ok{% endif %}">
+            {% if is_overdue %}To'lov muddati o'tgan{% else %}Obuna faol{% endif %}
+        </span>
+
+        <div class="billing-title">To'lov holati</div>
+        <div class="billing-subtitle">
+            {% if is_overdue %}
+                Platformadan foydalanishni davom ettirish uchun to'lovni amalga oshiring.
+            {% else %}
+                Keyingi to'lov sanasi: {{ subscription.next_due_date|date:"d.m.Y" }}
+            {% endif %}
+        </div>
+
+        <div class="billing-row">
+            <span class="label">O'quvchilar soni</span>
+            <span class="value">{{ student_count }} ta</span>
+        </div>
+        <div class="billing-row">
+            <span class="label">1 o'quvchidan olinadigan summa</span>
+            <span class="value">{{ subscription.price_per_student }} so'm</span>
+        </div>
+
+        <div class="billing-total">
+            <div class="formula">{{ student_count }} ta × {{ subscription.price_per_student }} so'm</div>
+            <div class="amount">{{ total_amount }} so'm</div>
+        </div>
+
+        <div class="billing-card-box">
+            <div>
+                <div class="card-number" id="cardNumberText">{{ subscription.card_number }}</div>
+                {% if subscription.card_holder_name %}
+                <div class="card-holder">{{ subscription.card_holder_name }}</div>
+                {% endif %}
+            </div>
+            <button type="button" class="copy-btn" onclick="copyCardNumber()">Nusxalash</button>
+        </div>
+
+        {% if pending_receipt %}
+        <div class="pending-note">
+            ⏳ Chekingiz yuborilgan, ko'rib chiqilmoqda. Tasdiqlangach avtomatik ochiladi.
+        </div>
+        {% else %}
+        <div class="upload-section">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label>To'lov chekini yuklang</label>
+                {{ form.receipt_image }}
+                <button type="submit" class="upload-submit-btn">Chekni yuborish</button>
+            </form>
+        </div>
+        {% endif %}
+        {% endif %}
+            <a href="{% url 'manager:home' %}" class="btn btn-secondary text-nowrap" id="exitBtn">
+                <i class="fas fa-sign-out-alt"></i> Exit
+            </a>
+    </div>
+</div>
+
+<script>
+function copyCardNumber() {
+    const text = document.getElementById('cardNumberText').innerText;
+    navigator.clipboard.writeText(text.replace(/\s+/g, '')).then(function() {
+        alert('Karta raqami nusxalandi!');
+    });
+}
+</script>
+
+{% endblock %}

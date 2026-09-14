@@ -2,8 +2,48 @@
 {% load static %}
 {% block content %}
 
-<body id="kt_body"
-      class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<style>
+    /* FAQAT MOBIL EKRANLAR UCHUN SOZLAMALAR */
+    @media (max-width: 768px) {
+        /* Yozuvlarni (labels) chapga tekislash */
+        .form-group.row > label.col-form-label {
+            text-align: left !important;
+            padding-bottom: 5px;
+        }
+
+        /* Input va Select elementlarini to'liq kenglikka cho'zish */
+        .form-group.row > div[class*="col-"] {
+            width: 100% !important;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+
+        /* Save va Cancel tugmalarini yonma-yon qilish */
+        .card-footer .row > div {
+            width: 100% !important;
+            padding: 0 !important;
+        }
+
+        .mobile-btn-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 10px !important;
+            width: 100% !important;
+        }
+
+        .mobile-btn-wrapper .btn {
+            flex: 1 !important;
+            margin: 0 !important;
+            text-align: center !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 42px !important;
+        }
+    }
+</style>
+
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
 
 {% include "parts/header-mobile.html" %}
 
@@ -62,7 +102,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Teacher Info (bir qatorda) -->
+                                    <!-- Teacher Info -->
                                     <div id="teacher-info" class="form-group row" style="display:none;">
                                         <label class="col-lg-3 col-form-label text-right"></label>
                                         <div class="col-lg-9">
@@ -86,7 +126,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Monthly Salary Preview (bir qatorda, qizil) -->
+                                    <!-- Monthly Salary Preview -->
                                     <div id="salary-preview" class="form-group row" style="display:none;">
                                         <label class="col-lg-3 col-form-label text-right"></label>
                                         <div class="col-lg-9">
@@ -139,7 +179,7 @@
                                     <div class="card-footer">
                                         <div class="row">
                                             <div class="col-lg-3"></div>
-                                            <div class="col-lg-9">
+                                            <div class="col-lg-9 mobile-btn-wrapper">
                                                 <button type="submit" class="btn btn-primary mr-2">Save</button>
                                                 <a href="{% url 'manager:tsalary-list' %}" class="btn btn-secondary">Cancel</a>
                                             </div>

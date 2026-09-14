@@ -3,12 +3,23 @@
 <!--end::Head-->
 <!--begin::Body-->
 
+<style>
+    /* FAQAT MOBIL EKRANLAR UCHUN NOMLARNI (LABEL) CHAPGA SURISH */
+    @media (max-width: 767.98px) {
+        .form-group.row label.col-form-label {
+            text-align: left !important;
+            padding-bottom: 5px;
+        }
+    }
+</style>
+
 <body
     id="kt_body"
     class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
 >
     <!--begin::Main-->
     <div class="d-flex flex-column flex-root">
+        {% include 'accountant/parts/header-mobile.html' %}
         <!--begin::Page-->
         <div class="d-flex flex-row flex-column-fluid page">
             <!--begin::Aside-->
@@ -61,7 +72,6 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
                                                     <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
                                                     <a href="{% url 'accountant:tsalary-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
                                                 </div>
@@ -106,4 +116,3 @@
 </body>
 <!--end::Body-->
 {% endblock %}
-

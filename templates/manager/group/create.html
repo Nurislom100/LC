@@ -2,13 +2,39 @@
 {% load static %}
 {% block content %}
 
+<style>
+/* ⭐ FAQAT MOBIL UCHUN MOSLASHTIRISH */
+@media (max-width: 768px) {
+    /* Label va kontent matnlarini chapga tekislash */
+    .card-body .form-group label {
+        text-align: left !important;
+        margin-bottom: 5px;
+    }
+    
+    /* Footer qismidagi tugmalarni bir qatorda 50% / 50% va chapdan joylashtirish */
+    .card-footer .mobile-btn-container {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
+    .card-footer .mobile-btn-container > * {
+        flex: 1 1 50% !important;
+        margin-right: 0 !important;
+        text-align: center !important;
+    }
+}
+</style>
+
 <body
     id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading"
 >
-    {% include "parts/header-mobile.html" %}
 
-    <div class="d-flex flex-column flex-root">
+<div class="d-flex flex-column flex-root">
+        {% include "parts/header-mobile.html" %}
         <div class="d-flex flex-row flex-column-fluid page">
             {% include "parts/aside.html" with menu_parent="group-all" menu_child="group-create" %}
 
@@ -60,15 +86,14 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">
-                                                        Save and add new
-                                                    </button>
-                                                    <button type="submit" class="btn btn-primary mr-2" name="saved">
-                                                        Save
-                                                    </button>
-                                                    <a href="{% url 'manager:group-list' %}" class="btn btn-secondary">
-                                                        Cancel
-                                                    </a>
+                                                    <div class="mobile-btn-container">
+                                                        <button type="submit" class="btn btn-primary mr-2" name="saved">
+                                                            Save
+                                                        </button>
+                                                        <a href="{% url 'manager:group-list' %}" class="btn btn-secondary">
+                                                            Cancel
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,7 +165,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
-
 
 </body>
 {% endblock %}

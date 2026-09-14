@@ -3,8 +3,7 @@
 {% load i18n %}
 {% block content %}
 {% load humanize %}
-<!--begin::Head-->
-<!--end::Head-->
+
 <style>
 .card-toolbar{
   padding-left: 10px;
@@ -75,25 +74,68 @@ select.form-select:focus {
     }
 }
 
+/* MOBIL FORMAT UCHUN SOZLAMALAR */
 @media (max-width: 768px) {
+    .card-header.border-0.py-5 {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 15px !important;
+    }
+
     .filter-row {
         flex-direction: column;
         align-items: stretch !important;
+        width: 100% !important;
     }
     
     select.form-select {
         width: 100% !important;
-        max-width: 100%;
+        max-width: 100% !important;
     }
     
     .reset-btn {
-        width: 100%;
+        width: 100% !important;
         justify-content: center;
+    }
+
+    .search-form-row {
+        flex-direction: column !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    .search-form-row .search-input-col {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        padding: 0 !important;
+        margin-bottom: 10px !important;
+    }
+
+    .search-form-row .btn-search-mobile {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-bottom: 10px !important;
+        justify-content: center !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .search-form-row .card-toolbar {
+        width: 100% !important;
+        padding-left: 0 !important;
+    }
+
+    .search-form-row .card-toolbar a {
+        width: 100% !important;
+        text-align: center !important;
+        display: block !important;
     }
 }
 </style>
+
 <!--begin::Body-->
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   <!--begin::Main-->
   <!--begin::Header Mobile-->
   {% include "parts/header-mobile.html" %}
@@ -147,14 +189,14 @@ select.form-select:focus {
                           </div>
                       </form>
                     </div>
-                    <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                    <form method="get" class="px-8 pb-4">
+                      <div class="form-group row search-form-row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 ml-lg-10 search-input-col">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
+                          <button type="submit" class="btn btn-primary font-weight-bolder ml-lg-7 mb-1 btn-search-mobile">
+                              <span class="nav-icon mr-2">
                                   <i class="fas fa-search"></i>
                               </span>
                               <span class="nav-text">{% trans "Search" %}</span>
@@ -217,6 +259,7 @@ select.form-select:focus {
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                         </div>
                         <!--end::Table-->
@@ -249,20 +292,7 @@ select.form-select:focus {
   <!--end::Main-->
   <!-- begin::User Panel-->
   {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
-  <!--begin::Scrolltop-->
   {% include "parts/scrolltop.html" %}
-  <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
-
 
 </body>
 <!--end::Body-->

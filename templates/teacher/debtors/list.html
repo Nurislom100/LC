@@ -48,17 +48,7 @@
     font-weight: 600;
 }
 
-@media (max-width: 576px) {
-    .subheader .nav-tabs {
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-
-    .subheader .nav-tabs .nav-link {
-        text-align: center;
-    }
-}
-
+/* Mobil qurilmalar uchun moslashtirilgan qidiruv formasi */
 @media (max-width: 768px) {
     .subheader .container-fluid {
         flex-direction: column;
@@ -75,6 +65,38 @@
     .nav-tabs .nav-link {
         white-space: nowrap;
         padding: 12px 16px;
+    }
+
+    .search-form-row {
+        padding: 0 15px !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .search-input-col {
+        padding: 0 !important;
+        margin: 0 0 10px 0 !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    .search-btn-custom {
+        width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .subheader .nav-tabs {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .subheader .nav-tabs .nav-link {
+        text-align: center;
     }
 }
 </style>
@@ -136,13 +158,13 @@
                       </h3>
                     </div>
                     <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                      <div class="form-group row search-form-row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 search-input-col ml-lg-10">
                               <input type="text" class="form-control datatable-input" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
+                          <button type="submit" class="btn btn-primary font-weight-bolder search-btn-custom ml-lg-7 mb-1">
+                              <span class="nav-icon mr-2">
                                   <i class="fas fa-search"></i>
                               </span>
                               <span class="nav-text">Search</span>
@@ -183,15 +205,16 @@
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
+                          {% else %}
+                          {% include "parts/nothing-found.html" %}
+                          {% endif %}
                         </div>
                         <!--end::Table-->
-                        {% else %}
-                        {% include "parts/nothing-found.html" %}
-                        {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
-                      {%include 'parts/pagination.html' %}
+                      {% include 'parts/pagination.html' %}
                       {% endif %}
                     </div>
                     <!--end::Body-->
@@ -233,4 +256,3 @@
 </body>
 <!--end::Body-->
 {% endblock %}
-

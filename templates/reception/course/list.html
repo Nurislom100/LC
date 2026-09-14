@@ -6,14 +6,71 @@
 <!--end::Head-->
 <!--begin::Body-->
 <style>
-.card-toolbar{
+.card-toolbar {
   padding-left: 10px;
+}
+
+/* ⭐ MOBIL VA PLANSHETLAR UCHUN MOSLASHUVCHAN CSS */
+@media (max-width: 768px) {
+    /* Konteyner va Card ichidagi ortiqcha paddinglarni to'g'rilash */
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        max-width: 100% !important;
+        overflow-x: hidden;
+    }
+
+    .card-body {
+        padding: 15px !important;
+    }
+
+    /* Qidiruv va tugmalar blokini vertikal joylashtirish */
+    .mobile-search-form {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 0 15px !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Input blokini 100% kenglikka o'tkazish */
+    .mobile-search-form .search-input-col {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Input, Search tugmasi va Add buttonni 100% kenglikda tekislash */
+    .mobile-search-form input,
+    .mobile-search-btn,
+    .mobile-search-form .card-toolbar,
+    .mobile-search-form .card-toolbar a {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        height: 42px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Jadval gorizontal o'q bo'ylab chiroyli skroll bo'lishi uchun */
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 </style>
 
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <!--begin::Main-->
   <div class="d-flex flex-column flex-root">
+    {% include 'reception/parts/header-mobile.html' %}
     <!--begin::Page-->
     <div class="d-flex flex-row flex-column-fluid page">
       <!--begin::Aside-->
@@ -42,24 +99,27 @@
                         <small class='mt-2'>{% trans "Total" %}: {{objects | length}}</small>
                       </h3>
                     </div>
+                    
                     <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                      <div class="form-group row mobile-search-form">
+                          <div class="col-lg-3 col-md-9 col-sm-12 search-input-col">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
+                          <button type="submit" class="btn btn-primary font-weight-bolder mobile-search-btn">
+                              <span class="nav-icon mr-2">
                                   <i class="fas fa-search"></i>
                               </span>
                               <span class="nav-text">{% trans "Search" %}</span>
                           </button>
+                          
                           <div class="card-toolbar">
-                          <a href="{% url 'reception:course-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Add new course" %}</a>
+                              <a href="{% url 'reception:course-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Add new course" %}</a>
                           </div>
                       </div>
                     </form>
                     <!--end::Header-->
+                    
                     <!--begin::Body-->
                     <div class="card-body pt-0 pb-3">
                       <div class="tab-content">
@@ -69,8 +129,8 @@
                           <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
                             <thead>
                               <tr class="text-left text-uppercase">
-                                <th style="min-width: 100px">{% trans "Title" %}</th>
-                                <th style="min-width: 100px">{% trans "Duration" %}</th>
+                                <th style="min-width: 150px">{% trans "Title" %}</th>
+                                <th style="min-width: 120px">{% trans "Duration" %}</th>
                                 <th style="min-width: 100px">{% trans "Actions" %}</th>
                               </tr>
                             </thead>
@@ -84,26 +144,28 @@
                                     <div class="mr-4 symbol symbol-40 symbol-light-success">
                                       <span class="symbol-label">{{ object.full_name|slice:':1' }}</span>
                                     </div>
-                                    <a href="{% url 'reception:course-groups' object.pk %}"><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span> </a>     
+                                    <a href="{% url 'reception:course-groups' object.pk %}"><span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.title}}</span> </a>    
                                   </div>
                                 </td>
                                 
                                 <td>
                                   <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.duration}}</span>
+                                </td>
                                 <td nowrap="nowrap">
                                   {% include "parts/actions.html" with update_url=u delete_url=d %}
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
+                          <!--end::Table-->
+                          {% else %}
+                          {% include "parts/nothing-found.html" %}
+                          {% endif %}
                         </div>
-                        <!--end::Table-->
-                        {% else %}
-                        {% include "parts/nothing-found.html" %}
-                        {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
-                      {%include 'parts/pagination.html' %}
+                      {% include 'parts/pagination.html' %}
                       {% endif %}
                     </div>
                     <!--end::Body-->
@@ -116,7 +178,8 @@
             <!-- .container -->
           </div> <!-- .d-flex.flex-column-fluid -->
         </div>
-        <!--end::Content--> <!--begin::Footer-->
+        <!--end::Content--> 
+        <!--begin::Footer-->
         {% include "parts/footer.html" %}
         <!--end::Footer-->
       </div>
@@ -127,21 +190,9 @@
   <!--end::Main-->
   <!-- begin::User Panel-->
   {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
   <!--begin::Scrolltop-->
   {% include "parts/scrolltop.html" %}
   <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
-
-
 </body>
 <!--end::Body-->
 {% endblock %}

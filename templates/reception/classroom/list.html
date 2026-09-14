@@ -4,16 +4,82 @@
 {% block content %}
 <!--begin::Head-->
 <!--end::Head-->
-<!--begin::Body-->
+
 <style>
-.card-toolbar{
+.card-toolbar {
   padding-left: 10px;
+}
+
+/* DESKTOP UCHUN INLINE JOYLASHUV (ASL HOLATI) */
+.classroom-search-buttons {
+  display: flex;
+  align-items: center;
+}
+
+/* FAQAT MOBIL EKRON UCHUN */
+@media (max-width: 768px) {
+  html, body, .d-flex.flex-root, .page, #kt_wrapper, .content, .container {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  .table-responsive {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .classroom-search-row {
+    margin: 0 !important;
+    padding: 0 15px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .classroom-search-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 0 10px 0 !important;
+  }
+
+  .classroom-search-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    gap: 8px !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .classroom-search-buttons .btn-search-action,
+  .classroom-search-buttons .card-toolbar {
+    flex: 1 1 auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .classroom-search-buttons .card-toolbar a,
+  .classroom-search-buttons .btn-search-action {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    padding: 8px 12px !important;
+  }
 }
 </style>
 
+<!--begin::Body-->
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <!--begin::Main-->
   <div class="d-flex flex-column flex-root">
+    {% include 'reception/parts/header-mobile.html' %}
     <!--begin::Page-->
     <div class="d-flex flex-row flex-column-fluid page">
       <!--begin::Aside-->
@@ -35,37 +101,45 @@
                   <div class="card card-custom card-stretch gutter-b">
                     <!--begin::Header-->
                     <div class="card-header border-0 py-5">
-
                       <h3 class="card-title align-items-start flex-column">
                         <span class="card-label font-weight-bolder text-dark">{% trans "Classrooms" %}</span>
                         <small class='mt-2'>{% trans "Total" %}: {{objects | length}}</small>
                       </h3>
                     </div>
+                    
+                    <!-- Search & Actions Form -->
                     <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
-                              <input type="text" class="form-control datatable-input" placeholder="{% trans "Search" %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                      <div class="form-group row classroom-search-row align-items-center">
+                        
+                        <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 ml-10 classroom-search-input">
+                          <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
+                        </div>
+
+                        <div class="classroom-search-buttons">
+                          <button type="submit" class="btn btn-primary font-weight-bolder btn-search-action mr-3">
+                            <span class="nav-icon mr-1">
+                              <i class="fas fa-search"></i>
+                            </span>
+                            <span class="nav-text">{% trans "Search" %}</span>
+                          </button>
+
+                          <div class="card-toolbar pl-0 mr-3">
+                            <a href="{% url 'reception:classroom-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new classroom" %}</a>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
-                                  <i class="fas fa-search"></i>
-                              </span>
-                              <span class="nav-text">{% trans "Search" %}</span>
-                          </button>
-                          <div class="card-toolbar">
-                          <a href="{% url 'reception:classroom-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new classroom" %}</a>
+                          <div class="card-toolbar pl-0">
+                            <a href="{% url 'reception:schedule' %}" class="btn btn-primary font-weight-bolder font-size-sm">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
+                              </svg>
+                            </a>
                           </div>
-                          <div class="card-toolbar">
-                          <a href="{% url 'reception:schedule' %}" class="btn btn-primary font-weight-bolder font-size-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
-                            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"/>
-                          </svg>
-                          </a>
-                          </div>
+                        </div>
+
                       </div>
                     </form>
                     <!--end::Header-->
+
                     <!--begin::Body-->
                     <div class="card-body pt-0 pb-3">
                       <div class="tab-content">
@@ -101,12 +175,13 @@
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
+                          {% else %}
+                          {% include "parts/nothing-found.html" %}
+                          {% endif %}
                         </div>
                         <!--end::Table-->
-                        {% else %}
-                        {% include "parts/nothing-found.html" %}
-                        {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
                       {% include 'parts/pagination.html' %}
@@ -134,20 +209,9 @@
   <!--end::Main-->
   <!-- begin::User Panel-->
   {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
   <!--begin::Scrolltop-->
   {% include "parts/scrolltop.html" %}
   <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
-
 </body>
 <!--end::Body-->
 {% endblock %}

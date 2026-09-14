@@ -1,12 +1,40 @@
-
 {% extends "base/base.html" %} {% load static %} {% block content %}
 <!--begin::Head-->
 <!--end::Head-->
 <!--begin::Body-->
+<style>
+/* Faqat mobil versiya uchun adaptiv CSS */
+@media (max-width: 768px) {
+    /* Label'larni mobil ekranda chap tomonga taqash */
+    .form-group.row label.col-form-label {
+        text-align: left !important;
+        padding-bottom: 5px;
+    }
+    
+    /* Mobil ekranda card paddinglarini moslash */
+    .card-body {
+        padding: 1.25rem !important;
+    }
+
+    /* Save va Cancel tugmalarini yonma-yon qilish */
+    .mobile-btn-group {
+        display: flex !important;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .mobile-btn-group .btn {
+        flex: 1;
+        margin-right: 0 !important;
+        text-align: center;
+        justify-content: center;
+    }
+}
+</style>
 
 <body
     id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading"
 >
     <!--begin::Main-->
     <!--begin::Header Mobile-->
@@ -65,9 +93,10 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
-                                                    <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
-                                                    <a href="{% url 'manager:course-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
+                                                    <div class="mobile-btn-group">
+                                                        <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
+                                                        <a href="{% url 'manager:course-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -110,4 +139,3 @@
 </body>
 <!--end::Body-->
 {% endblock %}
-

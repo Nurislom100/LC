@@ -60,10 +60,20 @@
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     transform: scale(1.02);
 }
+
+/* Kichik ekranlarda jadval konteynerdan chiqib ketmasligi uchun scroll */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 </style>
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   <!--begin::Main-->
+  <!--begin::Header Mobile-->
+  {% include "reception/parts/header-mobile.html" %}
+  <!--end::Header Mobile-->
   <div class="d-flex flex-column flex-root">
     <!--begin::Page-->
     <div class="d-flex flex-row flex-column-fluid page">
@@ -107,6 +117,7 @@
                             <!-- TEACHERS -->
                             <div class="tab-pane fade show active mt-2" id="teachers">
                             <h5 class="text mb-3">Archived Teachers</h5>
+                                <div class="table-responsive">
                                   <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
                                     <thead>
                                     <tr class="text-left text-uppercase">
@@ -124,7 +135,7 @@
                                         <td class="pl-0 py-6">
                                         <div class="d-flex align-items-center">
                                             <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                            <span class="symbol-label">{{ g.title|slice:':1' }}</span>
+                                            <span class="symbol-label">{{ t.full_name|slice:':1' }}</span>
                                             </div>
                                             <a href="#">
                                             <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ t.full_name }}</span>
@@ -152,12 +163,14 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
 
                             <!-- STUDENTS -->
                             <div class="tab-pane fade mt-2" id="students">
                                 <h5 class="text mb-3">Archive Student</h5>
-                                <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
+                                <div class="table-responsive">
+                                  <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
                                     <thead>
                                     <tr class="text-left text-uppercase">
                                         <th style="min-width: 100px">Full Name</th>
@@ -174,7 +187,7 @@
                                         <td class="pl-0 py-6">
                                         <div class="d-flex align-items-center">
                                             <div class="mr-4 symbol symbol-40 symbol-light-success">
-                                            <span class="symbol-label">{{ g.title|slice:':1' }}</span>
+                                            <span class="symbol-label">{{ s.full_name|slice:':1' }}</span>
                                             </div>
                                             <a href="#">
                                             <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ s.full_name }}</span>
@@ -195,19 +208,21 @@
                                     </tr>
                                     {% empty %}
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="5">
                                         {% include "parts/nothing-found.html" %}
                                         </td>
                                     </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
 
                             <!-- GROUPS -->
                             <div class="tab-pane fade mt-2" id="groups">
                                 <h5 class="text mb-3">Finished Groups</h5>
-                                <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
+                                <div class="table-responsive">
+                                  <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
                                     <thead>
                                     <tr class="text-left text-uppercase">
                                         <th style="min-width: 100px">Title</th>
@@ -223,7 +238,7 @@
                                             <div class="mr-4 symbol symbol-40 symbol-light-success">
                                             <span class="symbol-label">{{ g.title|slice:':1' }}</span>
                                             </div>
-                                            <a href="#">
+                                            <a href="{% url 'reception:group-students' g.pk %}">
                                             <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ g.title }}</span>
                                             </a>
                                         </div>
@@ -239,13 +254,14 @@
                                     </tr>
                                     {% empty %}
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="5">
                                         {% include "parts/nothing-found.html" %}
                                         </td>
                                     </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         </div>
                         </div>
@@ -270,22 +286,10 @@
   <!--end::Main-->
   <!-- begin::User Panel-->
   {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
   <!--begin::Scrolltop-->
   {% include "parts/scrolltop.html" %}
   <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
-
 
 </body>
 <!--end::Body-->
 {% endblock %}
-

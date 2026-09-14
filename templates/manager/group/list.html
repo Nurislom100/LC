@@ -34,7 +34,7 @@ select.form-select:focus {
     box-shadow: 0 0 5px rgba(13,110,253,0.5);
 }
 
-/* ⭐ Attendance Date Input - Selectlarga o'xshash style */
+/* ⭐ Attendance Date Input */
 .attendance-date-input {
     min-width: 180px;
     max-width: 250px;
@@ -180,15 +180,51 @@ select.form-select:focus {
     }
 }
 
+/* ⭐ FAQAT MOBIL UCHUN MOSLASHTIRISH */
 @media (max-width: 768px) {
-    select.form-select, .attendance-date-input {
+    .filter-wrapper,
+    .filter-wrapper > div,
+    .filter-wrapper input,
+    .filter-wrapper select,
+    .filter-wrapper a,
+    .filter-wrapper button,
+    .flatpickr-wrapper {
         width: 100% !important;
-        max-width: 100%;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
     }
-    
-    .reset-btn {
-        width: 100%;
+
+    .btn-add-group-wrap {
+        width: 100% !important;
+        margin-top: 5px;
+    }
+
+    .btn-add-group-wrap a {
+        display: block !important;
+        text-align: center;
+    }
+
+    .search-form-row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0 15px !important;
+    }
+
+    .search-form-row .datatable-input-col {
+        padding: 0 !important;
+        margin-left: 0 !important;
+        margin-bottom: 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    .search-form-row .search-btn {
+        width: 100% !important;
+        margin-left: 0 !important;
+        display: flex !important;
         justify-content: center;
+        align-items: center;
     }
 }
 </style>
@@ -196,11 +232,11 @@ select.form-select:focus {
 <!-- ⭐ Flatpickr CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
-  {% include "parts/header-mobile.html" %}
+<body id="kt_body" class="header-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   <div class="d-flex flex-column flex-root">
+    {% include "parts/header-mobile.html" %}
     <div class="d-flex flex-row flex-column-fluid page">
-      {% include "parts/aside.html" with menu_parent='course-all' menu_child='course-list' %}
+      {% include "parts/aside.html" with menu_parent='group-all' menu_child='group-list' %}
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
         {% include "parts/header.html" %}
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -214,7 +250,7 @@ select.form-select:focus {
                     <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;">
                       
                       <!-- Left side: Filters -->
-                      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; flex: 1;">
+                      <div class="filter-wrapper" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; flex: 1;">
                         
                         <!-- Attendance Date Filter -->
                         <input 
@@ -267,7 +303,7 @@ select.form-select:focus {
                       </div>
 
                       <!-- Right side: Add New Group Button -->
-                      <div style="flex: 0 0 auto;">
+                      <div class="btn-add-group-wrap" style="flex: 0 0 auto;">
                         <a href="{% url 'manager:group-create' %}" class="btn btn-primary font-weight-bolder font-size-sm" style="white-space: nowrap;">
                           {% trans "Add new group" %}
                         </a>
@@ -277,6 +313,7 @@ select.form-select:focus {
                   </form>
                 </div>
               </div>
+
               <div class="row">
                 <div class="col-md-12">
                   <div class="card card-custom card-stretch gutter-b">
@@ -290,13 +327,13 @@ select.form-select:focus {
                     </div>
                     
                     <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                      <div class="form-group row search-form-row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 ml-10 datatable-input-col">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
+                          <button type="submit" class="btn btn-primary font-weight-bolder ml-7 mb-1 search-btn">
+                              <span class="nav-icon mr-2">
                                   <i class="fas fa-search"></i>
                               </span>
                               <span class="nav-text">{% trans "Search" %}</span>
@@ -353,18 +390,14 @@ select.form-select:focus {
                                   <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.price| intcomma}} UZS</span>
                                 </td>
                                 <td nowrap="nowrap">
-                                  <a href="{% url 'manager:group-settings' object.pk %}">
-                                      <span class="svg-icon svg-icon-md">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-                                          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
-                                          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
-                                          </svg>
-                                      </span>
+                                  <a href="{% url 'manager:group-settings' object.pk %}" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3">
+                                      <i class="flaticon2-gear text-primary"></i>
                                   </a>
                                   {% include "parts/actions.html" with update_url=u delete_url=d %}
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                         </div>
                         {% else %}
@@ -395,23 +428,20 @@ select.form-select:focus {
   <script>
     // ⭐ Flatpickr Calendar Initialization
     flatpickr("#attendanceDateFilter", {
-        dateFormat: "Y-m-d",  // Backend uchun format
+        dateFormat: "Y-m-d", 
         altInput: true,
-        altFormat: "F j, Y",  // Foydalanuvchi uchun chiroyli format
+        altFormat: "F j, Y",
         
-        // Agar URL'da sana bo'lsa, uni ko'rsatish
         defaultDate: "{{ request.GET.attendance_date }}",
         
-        // Sana tanlaganda formani submit qilish
         onChange: function(selectedDates, dateStr, instance) {
             if (dateStr) {
                 document.getElementById("filterForm").submit();
             }
         },
         
-        // Locale settings
         locale: {
-            firstDayOfWeek: 1, // Dushanba bilan boshlash
+            firstDayOfWeek: 1,
             weekdays: {
                 shorthand: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                 longhand: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']

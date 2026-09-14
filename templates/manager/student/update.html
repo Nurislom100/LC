@@ -1,12 +1,41 @@
-
 {% extends "base/base.html" %} {% load static %} {% block content %}
 <!--begin::Head-->
 <!--end::Head-->
-<!--begin::Body-->
 
+<style>
+/* MOBIL FORMAT UCHUN SOZLAMALAR */
+@media (max-width: 768px) {
+    /* Nomlarni (label) chapga surish */
+    .form-group.row label.col-form-label {
+        text-align: left !important;
+        padding-bottom: 5px;
+    }
+
+    /* Tugmalar konteynerini flex-row shakliga keltirish */
+    .card-footer .row .col-lg-9 {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* Save va Cancel tugmalarini teng kenglikda yonma-yon qilish */
+    .card-footer .row .col-lg-9 .btn {
+        flex: 1 !important;
+        margin-right: 0 !important;
+        text-align: center !important;
+        justify-content: center !important;
+        display: inline-flex !important;
+        align-items: center !important;
+    }
+}
+</style>
+
+<!--begin::Body-->
 <body
     id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading"
 >
     <!--begin::Main-->
     <!--begin::Header Mobile-->
@@ -16,7 +45,7 @@
         <!--begin::Page-->
         <div class="d-flex flex-row flex-column-fluid page">
             <!--begin::Aside-->
-            {% include "parts/aside.html" with menu_parent="student-all" menu_child="student-create" %}
+            {% include "parts/aside.html" with menu_parent="student-all" menu_child="student-list" %}
             <!--end::Aside-->
             <!--begin::Wrapper-->
             <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
@@ -37,7 +66,7 @@
                                 <div class="card-header">
                                     <div class="card-title">
                                         <h3 class="card-label">
-                                           Add student <i class="mr-2"></i>
+                                           Update student <i class="mr-2"></i>
                                         </h3>
                                     </div>
                                 </div>
@@ -61,7 +90,7 @@
                                                 {% if field.name == "code" %}
                                                 <button type="button" class="btn btn-sm btn-info mt-2" id="generate-code">Kod yaratish</button>
                                                 {% endif %}
- 
+                                        
                                             </div>
                                         </div>
                                         {% endfor %}    
@@ -69,7 +98,6 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
                                                     <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
                                                     <a href="{% url 'manager:student-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
                                                 </div>
@@ -97,21 +125,9 @@
     <!--end::Main-->
     <!-- begin::User Panel-->
     {% include "parts/user-panel.html" %}
-    <!--begin::Quick Cart-->
-    <!--end::Quick Cart-->
-    <!--begin::Quick Panel-->
-    <!--end::Quick Panel-->
-    <!--begin::Chat Panel-->
-    <!--end::Chat Panel-->
-    <!--begin::Scrolltop-->
     {% include "parts/scrolltop.html" %}
-    <!--end::Scrolltop-->
-    <!--begin::Sticky Toolbar-->
-    <!--end::Sticky Toolbar-->
-    <!--begin::Demo Panel-->
-    <!--end::Demo Panel-->
-    <!--end::Page Scripts-->
 </body>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const button = document.getElementById("generate-code");
@@ -132,4 +148,3 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <!--end::Body-->
 {% endblock %}
-

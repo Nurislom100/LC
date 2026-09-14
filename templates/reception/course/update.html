@@ -1,14 +1,60 @@
-
 {% extends "base/base.html" %} {% load static %} {% block content %}
 <!--begin::Head-->
 <!--end::Head-->
 <!--begin::Body-->
 
+<style>
+/* Tugmalarni har doim yonma-yon tekislash */
+.card-footer .btn-container {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px !important;
+}
+
+/* FAQAT TELEFON SHAKLI UCHUN STILLAR */
+@media (max-width: 768px) {
+    /* Label'larni input ustiga va chapga o'tkazish */
+    .form-group.row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    .form-group.row .col-form-label {
+        text-align: left !important;
+        width: 100% !important;
+        padding-bottom: 5px !important;
+    }
+
+    .form-group.row .col-lg-9,
+    .form-group.row .col-md-9,
+    .form-group.row .col-sm-12 {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Mobil ekranda tugmalarni teng bo'lib yonma-yon qilish */
+    .card-footer .btn-container {
+        width: 100% !important;
+    }
+
+    .card-footer .btn, 
+    .card-footer a {
+        flex: 1 !important;
+        text-align: center !important;
+        justify-content: center !important;
+        margin-right: 0 !important;
+    }
+}
+</style>
+
 <body
     id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
+>
     <!--begin::Main-->
     <div class="d-flex flex-column flex-root">
+        {% include 'reception/parts/header-mobile.html' %}
         <!--begin::Page-->
         <div class="d-flex flex-row flex-column-fluid page">
             <!--begin::Aside-->
@@ -60,9 +106,8 @@
                                         <div class="card-footer">
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
-                                                <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
-                                                    <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
+                                                <div class="col-lg-9 btn-container">
+                                                    <button type="submit" class="btn btn-primary" name="saved">Save</button>
                                                     <a href="{% url 'reception:course-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
                                                 </div>
                                             </div>
@@ -89,21 +134,9 @@
     <!--end::Main-->
     <!-- begin::User Panel-->
     {% include "parts/user-panel.html" %}
-    <!--begin::Quick Cart-->
-    <!--end::Quick Cart-->
-    <!--begin::Quick Panel-->
-    <!--end::Quick Panel-->
-    <!--begin::Chat Panel-->
-    <!--end::Chat Panel-->
     <!--begin::Scrolltop-->
     {% include "parts/scrolltop.html" %}
     <!--end::Scrolltop-->
-    <!--begin::Sticky Toolbar-->
-    <!--end::Sticky Toolbar-->
-    <!--begin::Demo Panel-->
-    <!--end::Demo Panel-->
-    <!--end::Page Scripts-->
 </body>
 <!--end::Body-->
 {% endblock %}
-

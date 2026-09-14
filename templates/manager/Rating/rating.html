@@ -414,6 +414,21 @@
         }
 
         @media (max-width: 768px) {
+            /* Mobile versiyada subheader navbarga ko'ndalang scroll qo'shish */
+            .subheader {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .subheader .nav-tabs {
+                flex-wrap: nowrap;
+            }
+
+            .subheader .nav-tabs .nav-link {
+                white-space: nowrap;
+            }
+
             .header h1 {
                 font-size: 1.8rem;
             }

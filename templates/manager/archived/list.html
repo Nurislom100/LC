@@ -60,9 +60,16 @@
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     transform: scale(1.02);
 }
+
+/* Kichik ekranlarda jadval konteynerdan chiqib ketmasligi uchun scroll */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 </style>
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   <!--begin::Main-->
   <!--begin::Header Mobile-->
   {% include "parts/header-mobile.html" %}
@@ -110,6 +117,7 @@
                             <!-- TEACHERS -->
                             <div class="tab-pane fade show active mt-2" id="teachers">
                             <h5 class="text mb-3">Archived Teachers</h5>
+                                <div class="table-responsive">
                                   <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
                                     <thead>
                                     <tr class="text-left text-uppercase">
@@ -155,12 +163,14 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
 
                             <!-- STUDENTS -->
                             <div class="tab-pane fade mt-2" id="students">
                                 <h5 class="text mb-3">Archive Student</h5>
-                                <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
+                                <div class="table-responsive">
+                                  <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
                                     <thead>
                                     <tr class="text-left text-uppercase">
                                         <th style="min-width: 100px">Full Name</th>
@@ -205,12 +215,14 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
 
                             <!-- GROUPS -->
                             <div class="tab-pane fade mt-2" id="groups">
                                 <h5 class="text mb-3">Finished Groups</h5>
-                                <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
+                                <div class="table-responsive">
+                                  <table class="table table-head-custom table-head-bg table-borderless table-vertical-center mt-4">
                                     <thead>
                                     <tr class="text-left text-uppercase">
                                         <th style="min-width: 100px">Title</th>
@@ -249,6 +261,7 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         </div>
                         </div>
@@ -273,22 +286,10 @@
   <!--end::Main-->
   <!-- begin::User Panel-->
   {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
   <!--begin::Scrolltop-->
   {% include "parts/scrolltop.html" %}
   <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
-
 
 </body>
 <!--end::Body-->
 {% endblock %}
-

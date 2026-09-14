@@ -308,6 +308,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        white-space: nowrap;
     }
 
     .toggle-schedule-btn:hover {
@@ -333,6 +334,8 @@
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid #2a3441;
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
     .schedule-top-bar h3 {
@@ -342,16 +345,24 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        margin: 0;
     }
 
     .schedule-filters {
         display: flex;
-        gap: 10px;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .schedule-filters a {
+        text-decoration: none;
+        display: inline-block;
     }
 
     .filter-btn-schedule {
-        padding: 8px 20px;
-        font-size: 14px;
+        padding: 8px 16px;
+        font-size: 13px;
         font-weight: 500;
         border: 1px solid #4285f4;
         border-radius: 6px;
@@ -359,6 +370,10 @@
         color: #4285f4;
         cursor: pointer;
         transition: all 0.3s ease;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .filter-btn-schedule:hover,
@@ -547,10 +562,38 @@
         .stats-grid {
             grid-template-columns: 1fr;
         }
+        .schedule-top-bar {
+            padding: 15px;
+        }
+        .schedule-filters {
+            width: 100%;
+            justify-content: flex-start;
+        }
+        .filter-btn-schedule {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .schedule-header-box {
+            padding: 15px;
+        }
+        .schedule-header-box h3 {
+            font-size: 18px;
+        }
+        .toggle-schedule-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+        .schedule-scroll-area {
+            padding: 15px;
+        }
     }
 </style>    
 
 <div class="d-flex flex-column flex-root">
+    {% include 'reception/parts/header-mobile.html' %}
     <div class="d-flex flex-row flex-column-fluid page">
         {% include 'reception/parts/aside.html' %}
         

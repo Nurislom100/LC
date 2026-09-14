@@ -3,9 +3,7 @@
 {% load i18n %}
 {% block content %}
 {% load humanize %}
-<!--begin::Head-->
-<!--end::Head-->
-<!--begin::Body-->
+
 <style>
 .card-toolbar{
   padding-left: 10px;
@@ -65,37 +63,66 @@ select.form-select:focus {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Responsive for smaller screens */
-@media (max-width: 992px) {
-    .filter-row {
-        justify-content: flex-start !important;
+/* -----------------------------------------------------------
+   FAQAT TELEFON (MOBILE) EKRANI UCHUN STILLAR (KOMPYUTERGA TEGMEYDI)
+----------------------------------------------------------- */
+@media (max-width: 768px) {
+    /* Header va sarlavhalar */
+    .card-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
     }
     
-    select.form-select {
-        min-width: 150px;
+    /* Qidiruv formasi */
+    .form-group.row {
+        flex-direction: column !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
-}
 
-@media (max-width: 768px) {
+    .form-group.row > div,
+    .form-group.row > button,
+    .form-group.row > .card-toolbar {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 10px !important;
+    }
+
+    .form-group.row button[type="submit"],
+    .card-toolbar a {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    /* Filter qatori */
     .filter-row {
-        flex-direction: column;
+        flex-direction: column !important;
         align-items: stretch !important;
+        width: 100% !important;
     }
     
     select.form-select {
         width: 100% !important;
-        max-width: 100%;
+        max-width: 100% !important;
     }
     
     .reset-btn {
-        width: 100%;
-        justify-content: center;
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    /* Jadval skroll paneli */
+    .table-responsive {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
     }
 }
 </style>
 
-
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   <!--begin::Main-->
   <!--begin::Header Mobile-->
   {% include "parts/header-mobile.html" %}
@@ -151,11 +178,11 @@ select.form-select:focus {
                     </div>
                     <form method="get">
                       <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 ml-10">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
+                          <button type="submit" class="btn btn-primary font-weight-bolder ml-7 mb-1">
                               <span class="nav-icon">
                                   <i class="fas fa-search"></i>
                               </span>
@@ -222,6 +249,7 @@ select.form-select:focus {
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                         </div>
                         <!--end::Table-->
@@ -230,7 +258,7 @@ select.form-select:focus {
                         {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
-                      {%include 'parts/pagination.html' %}
+                      {% include 'parts/pagination.html' %}
                       {% endif %}
                     </div>
                     <!--end::Body-->
@@ -243,7 +271,8 @@ select.form-select:focus {
             <!-- .container -->
           </div> <!-- .d-flex.flex-column-fluid -->
         </div>
-        <!--end::Content--> <!--begin::Footer-->
+        <!--end::Content--> 
+        <!--begin::Footer-->
         {% include "parts/footer.html" %}
         <!--end::Footer-->
       </div>
@@ -252,23 +281,9 @@ select.form-select:focus {
     <!--end::Page-->
   </div>
   <!--end::Main-->
-  <!-- begin::User Panel-->
-  {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
-  <!--begin::Scrolltop-->
-  {% include "parts/scrolltop.html" %}
-  <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
 
+  {% include "parts/user-panel.html" %}
+  {% include "parts/scrolltop.html" %}
 
 </body>
-<!--end::Body-->
 {% endblock %}

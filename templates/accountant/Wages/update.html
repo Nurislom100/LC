@@ -6,6 +6,7 @@
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
     <!--begin::Main-->
     <div class="d-flex flex-column flex-root">
+        {% include 'accountant/parts/header-mobile.html' %}
         <!--begin::Page-->
         <div class="d-flex flex-row flex-column-fluid page">
             <!--begin::Aside-->
@@ -41,7 +42,7 @@
                                         {% for field in form %}
 
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12" for="{{field.auto_id}}">
+                                            <label class="col-form-label text-left text-sm-left text-lg-right col-lg-3 col-sm-12" for="{{field.auto_id}}">
                                                 {% if field.field.required %}
                                                 <b>{{field.label}}</b>
                                                 {% else %}
@@ -58,9 +59,10 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
-                                                    <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
-                                                    <a href="{% url 'accountant:wages-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
+                                                    <div class="d-flex align-items-center flex-nowrap" style="gap: 8px;">
+                                                        <button type="submit" class="btn btn-primary text-nowrap mr-2" name="saved">Save</button>
+                                                        <a href="{% url 'accountant:wages-list' %}" class="btn btn-secondary text-nowrap"><span>Cancel</span></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -164,4 +166,3 @@
 </body>
 <!--end::Body-->
 {% endblock %}
-

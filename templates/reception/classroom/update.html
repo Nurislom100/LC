@@ -9,6 +9,7 @@
 >
     <!--begin::Main-->
     <div class="d-flex flex-column flex-root">
+        {% include 'reception/parts/header-mobile.html' %}
         <!--begin::Page-->
         <div class="d-flex flex-row flex-column-fluid page">
             <!--begin::Aside-->
@@ -44,7 +45,8 @@
                                         {% for field in form %}
 
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12" for="{{field.auto_id}}">
+                                            <!-- Kompyuterda aslingizdek text-right, mobilda esa text-left -->
+                                            <label class="col-form-label text-left text-md-right col-lg-3 col-sm-12" for="{{field.auto_id}}">
                                                 {% if field.field.required %}
                                                 <b>{{field.label}}</b>
                                                 {% else %}
@@ -57,14 +59,21 @@
                                             </div>
                                         </div>
                                         {% endfor %}    
+
                                         <div class="card-footer">
-                                            <div class="row">
+                                            <!-- KOMPYUTER VERSIYASI (Asl kodingiz, 100% tegish berilmagan) -->
+                                            <div class="row d-none d-md-flex">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
                                                     <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
                                                     <a href="{% url 'reception:classroom-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
                                                 </div>
+                                            </div>
+
+                                            <!-- MOBIL VERSIYASI (Faqat telefonda ko'rinadi, tugmalar yonma-yon) -->
+                                            <div class="d-flex d-md-none flex-row align-items-center justify-content-start" style="gap: 10px;">
+                                                <button type="submit" class="btn btn-primary" name="saved">Save</button>
+                                                <a href="{% url 'reception:classroom-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
                                             </div>
                                         </div>
                                     </form>
@@ -106,4 +115,3 @@
 </body>
 <!--end::Body-->
 {% endblock %}
-

@@ -31,9 +31,141 @@
     .reset-btn:hover {
         background: #d93636;
     }
+
+    /* FAQAT MOBIL EKRANLAR UCHUN STYLLAR (DESKTOPGA TA'SIR QILMAYDI) */
+    @media (max-width: 768px) {
+        /* Footer va sahifa balandligi zanjiri */
+        html, body {
+            height: 100% !important;
+        }
+
+        .d-flex.flex-root {
+            min-height: 100vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .page, #kt_wrapper {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 0 auto !important;
+        }
+
+        #kt_content {
+            flex: 1 0 auto !important;
+        }
+
+        .footer {
+            margin-top: auto !important;
+        }
+
+        /* Card Header sozlamasi */
+        .card-header-mobile-wrapper {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            padding-bottom: 0 !important;
+        }
+
+        .mobile-search-section {
+            width: 100% !important;
+        }
+
+        /* Filterlar (Oy va Yil) Search tepasida 50/50 */
+        .filter-container {
+            display: flex !important;
+            flex-direction: row !important;
+            width: 100% !important;
+            gap: 10px !important;
+            margin-bottom: 12px !important;
+        }
+
+        .filter-container select,
+        .filter-container .bootstrap-select {
+            flex: 1 !important;
+            width: 50% !important;
+            max-width: 50% !important;
+            margin: 0 !important;
+            height: 42px !important;
+        }
+
+        .filter-container .bootstrap-select > .dropdown-toggle {
+            width: 100% !important;
+            height: 42px !important;
+            border-radius: 8px !important;
+            border: 1px solid #e4e6ef !important;
+            background-color: #fff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+        }
+
+        .reset-btn {
+            width: 100% !important;
+            margin: 8px 0 0 0 !important;
+            height: 42px !important;
+        }
+
+        /* Search input */
+        .mobile-search-form {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+        }
+
+        .mobile-search-form .form-group {
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+
+        .mobile-search-input-col {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 0 12px 0 !important;
+            padding: 0 !important;
+        }
+
+        .mobile-search-input-col input {
+            height: 42px !important;
+            border-radius: 8px !important;
+            width: 100% !important;
+        }
+
+        /* Tugmalar row-i (Search va Create) Search ostida 50/50 va jadvaldan ajralgan */
+        .mobile-buttons-row {
+            display: flex !important;
+            flex-direction: row !important;
+            width: 100% !important;
+            gap: 10px !important;
+            margin: 0 0 24px 0 !important;
+            padding: 0 !important;
+        }
+
+        .mobile-buttons-row > button,
+        .mobile-buttons-row > .card-toolbar {
+            flex: 1 !important;
+            width: 50% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .mobile-buttons-row .btn-search,
+        .mobile-buttons-row .btn-create {
+            width: 100% !important;
+            height: 42px !important;
+            margin: 0 !important;
+            border-radius: 8px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 13px !important;
+            white-space: nowrap !important;
+        }
+    }
 </style>
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   {% include "parts/header-mobile.html" %}
 
   <div class="d-flex flex-column flex-root">
@@ -48,14 +180,16 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="card card-custom card-stretch gutter-b">
-                    <div class="card-header border-0 py-5">
-                      <h3 class="card-title align-items-start flex-column">
+                    
+                    <div class="card-header border-0 py-5 card-header-mobile-wrapper">
+                      <h3 class="card-title align-items-start flex-column mb-3 mb-md-0">
                         <span class="card-label font-weight-bolder text-dark">{% trans "Salary" %}</span>
                       </h3>
-                      <form method="get" id="filterForm">
-                          <div class="filter-container">
+                      
+                      <div class="mobile-search-section">
+                        <form method="get" id="filterForm">
+                          <div class="filter-container d-flex align-items-center">
 
-                              <!-- MONTH -->
                               <select id="month-select" name="month" class="form-select selectpicker">
                                   <option value="1"  {% if selected_month == 1 %}selected{% endif %}>{% trans "January" %}</option>
                                   <option value="2"  {% if selected_month == 2 %}selected{% endif %}>{% trans "February" %}</option>
@@ -71,28 +205,29 @@
                                   <option value="12" {% if selected_month == 12 %}selected{% endif %}>{% trans "December" %}</option>
                               </select>
 
-                              <!-- YEAR -->
                               <select id="year-select" name="year" class="form-select selectpicker ml-2"></select>
 
-                              <!-- RESET BUTTON -->
-                              <button type="button" id="resetBtn" class="reset-btn">{% trans "Reset" %}</button>
-
                           </div>
-                      </form>
+                          <button type="button" id="resetBtn" class="reset-btn">{% trans "Reset" %}</button>
+                        </form>
+                      </div>
                     </div>
                     
-                    <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                    <form method="get" class="mobile-search-form">
+                      <div class="form-group row align-items-center">
+                          <div class="col-lg-3 col-md-4 col-sm-12 mobile-search-input-col ml-lg-10">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans "Search" %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon"><i class="fas fa-search"></i></span>
-                              <span class="nav-text">{% trans "Search" %}</span>
-                          </button>
-                          <div class="card-toolbar">
-                          <a href="{% url 'manager:wages-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new wages" %}</a>
+                          <div class="d-flex align-items-center mobile-buttons-row ml-lg-7">
+                              <button type="submit" class="btn btn-primary font-weight-bolder btn-search mr-2">
+                                  <span class="nav-icon"><i class="fas fa-search"></i></span>
+                                  <span class="nav-text">{% trans "Search" %}</span>
+                              </button>
+                              
+                              <div class="card-toolbar">
+                                  <a href="{% url 'manager:wages-create' %}" class="btn btn-primary font-weight-bolder font-size-sm btn-create">{% trans "Create new wages" %}</a>
+                              </div>
                           </div>
                       </div>
                     </form>
@@ -132,6 +267,7 @@
                                 <td nowrap="nowrap">{% include "parts/actions.html" with update_url=u delete_url=d %}</td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                           {% else %}
                           {% include "parts/nothing-found.html" %}

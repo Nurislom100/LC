@@ -1,12 +1,23 @@
 {% load static %}
+
 <div class="aside aside-left aside-fixed d-flex flex-column flex-row-auto" id="kt_aside">
 					<!--begin::Brand-->
 					<div class="brand flex-column-auto" id="kt_brand">
-						<!--begin::Logo-->
-						<a href="{% url 'common:home' %}" class="brand-logo">
-							<img src="/static/euc_aside_logo.png" class="max-h-75px" alt="">
-						</a>
-						<!--end::Logo-->
+						<!--begin::Brand-->
+						<div class="aside-brand d-flex flex-stack" id="kt_aside_brand">
+							<!--begin::Logo-->
+							<a href="{% url 'common:home' %}" class="d-flex align-items-center logo-wrapper">
+								{% if center_info and center_info.logo %}
+									<img src="{{ center_info.logo.url }}" class="h-60px logo-img" style="object-fit: contain;" alt="Logo">
+								{% endif %}
+
+								{% if center_info and center_info.name %}
+									<span class="ms-3 fw-bold text-white fs-5 logo-text">{{ center_info.name }}</span>
+								{% endif %}
+							</a>
+							<!--end::Logo-->
+						</div>
+						<!--end::Brand-->
 						<!--begin::Toggle-->
 						<button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">
 							<span class="svg-icon svg-icon svg-icon-xl">
@@ -321,3 +332,110 @@
 					</div>
 					<!--end::Aside Menu-->
 				</div>
+
+<style>
+/* ============================================================
+   MENYU ELEMENTLARI UCHUN "STAGGERED" (BIRIN-KETIN) ANIMATSIYA
+   Aside kengaytirilganda (aside-minimize klassi olib tashlanganda)
+   har bir menu-item birin-ketin, kichik kechikish bilan paydo bo'ladi.
+
+   IKKI VARIANT bor, pastdagi @keyframes'dan FAQAT BITTASI aktiv:
+   1) YONDAN suziб chiqish (hozir aktiv)
+   2) TEPADAN tushish (izohga olingan, kerak bo'lsa almashtiring)
+   ============================================================ */
+
+/* --- VARIANT 1: yondan suzib chiqish (aktiv) --- */
+@keyframes kt-menu-item-in {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* --- VARIANT 2: tepadan tushish ---
+   Aktivlashtirish uchun yuqoridagi @keyframes'ni o'chirib,
+   quyidagini izohdan chiqaring: */
+
+/* @keyframes kt-menu-item-in {
+    from {
+        opacity: 0;
+        transform: translateY(-14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} */
+
+
+#kt_aside_menu .menu-nav.kt-animate-menu > li {
+    opacity: 0;
+    animation-name: kt-menu-item-in;
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: forwards;
+}
+
+    /* Aside yopilganda (minimize/minimize-on bo'lganda) logo va tekstni umuman ko'rsatmaslik */
+    body[data-kt-aside-minimize="on"] .logo-wrapper,
+    body.aside-minimize .logo-wrapper,
+    .aside-minimize .logo-img,
+    .aside-minimize .logo-text {
+        display: none !important;
+    }
+
+    /* Aside ochiq bo'lganda matn sig'may pastga tushib ketmasligini ta'minlash */
+    .logo-wrapper {
+        overflow: hidden;
+        white-space: nowrap;
+    }
+	.logo-text{
+		margin-left: 10px;
+	}
+</style>
+
+<script>
+(function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        var body = document.body;
+        var menuNav = document.querySelector('#kt_aside_menu .menu-nav');
+        if (!menuNav) return;
+
+        var topLevelItems = menuNav.querySelectorAll(':scope > li');
+
+        function isAsideMinimized() {
+            return body.classList.contains('aside-minimize');
+        }
+
+        function triggerMenuAnimation() {
+            // Har bir elementga o'z navbatidagi kechikishni beramiz
+            topLevelItems.forEach(function (li, index) {
+                li.style.animationDelay = (index * 45) + 'ms';
+            });
+
+            // Animatsiyani qayta ishga tushirish uchun klassni olib tashlab,
+            // reflow qilib, qayta qo'shamiz
+            menuNav.classList.remove('kt-animate-menu');
+            void menuNav.offsetWidth; // majburiy reflow
+            menuNav.classList.add('kt-animate-menu');
+        }
+
+        var wasMinimized = isAsideMinimized();
+
+        var observer = new MutationObserver(function () {
+            var nowMinimized = isAsideMinimized();
+            // Faqat "yopiq holatdan ochiq holatga" o'tganda animatsiya ishga tushadi
+            if (wasMinimized && !nowMinimized) {
+                triggerMenuAnimation();
+            }
+            wasMinimized = nowMinimized;
+        });
+
+        observer.observe(body, { attributes: true, attributeFilter: ['class'] });
+    });
+})();
+</script>

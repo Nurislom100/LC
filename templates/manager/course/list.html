@@ -9,9 +9,49 @@
 .card-toolbar{
   padding-left: 10px;
 }
+
+/* Faqat mobil versiya (768px va undan kichik) uchun CSS moslashuvi */
+@media (max-width: 768px) {
+  .mobile-form-container {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    width: 100% !important;
+  }
+  
+  .mobile-form-container .form-group-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Input, Search tugmasi va Add button konteyneri */
+  .mobile-form-container .form-group-wrapper > div,
+  .mobile-form-container input.datatable-input,
+  .mobile-form-container .search-btn,
+  .mobile-form-container .card-toolbar,
+  .mobile-form-container .card-toolbar a {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 10px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-form-container .card-toolbar a {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+}
 </style>
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   <!--begin::Main-->
   <!--begin::Header Mobile-->
   {% include "parts/header-mobile.html" %}
@@ -45,14 +85,14 @@
                         <small class='mt-2'>{% trans "Total" %}: {{objects | length}}</small>
                       </h3>
                     </div>
-                    <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                    <form method="get" class="mobile-form-container">
+                      <div class="form-group row form-group-wrapper align-items-center">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
+                          <button type="submit" class="btn btn-primary font-weight-bolder search-btn">
+                              <span class="nav-icon align-items-center">
                                   <i class="fas fa-search"></i>
                               </span>
                               <span class="nav-text">{% trans "Search" %}</span>
@@ -103,12 +143,13 @@
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
+                          {% else %}
+                          {% include "parts/nothing-found.html" %}
+                          {% endif %}
                         </div>
                         <!--end::Table-->
-                        {% else %}
-                        {% include "parts/nothing-found.html" %}
-                        {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
                       {%include 'parts/pagination.html' %}
@@ -135,20 +176,9 @@
   <!--end::Main-->
   <!-- begin::User Panel-->
   {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
   <!--begin::Scrolltop-->
   {% include "parts/scrolltop.html" %}
   <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
-
 
 </body>
 <!--end::Body-->

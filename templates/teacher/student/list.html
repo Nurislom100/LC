@@ -5,6 +5,25 @@
 <!--begin::Head-->
 <!--end::Head-->
 <style>
+/* Gorizontal scroll va o'ng panellarni butunlay yopish */
+html, body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+/* Offcanvas hamda foydalanuvchi va debug panellarini bloklash */
+.offcanvas, 
+.offcanvas-right, 
+#kt_offcanvas_toolbar,
+#kt_quick_user,
+.djdt-panel,
+#djDebug {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
 .card-toolbar{
   padding-left: 10px;
 }
@@ -61,6 +80,30 @@ select.form-select:focus {
 .reset-btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Mobil qurilmalar uchun Search qismini markazlashtirish va moslash */
+@media (max-width: 768px) {
+    .student-search-row {
+        padding: 0 15px !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .student-search-col {
+        padding: 0 !important;
+        margin: 0 0 10px 0 !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    .student-search-btn {
+        width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
 }
 
 /* Responsive for smaller screens */
@@ -147,13 +190,13 @@ select.form-select:focus {
                       </form>
                     </div>
                     <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                      <div class="form-group row student-search-row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 student-search-col ml-lg-10">
                               <input type="text" class="form-control datatable-input" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon">
+                          <button type="submit" class="btn btn-primary font-weight-bolder student-search-btn ml-lg-7 mb-1">
+                              <span class="nav-icon mr-2">
                                   <i class="fas fa-search"></i>
                               </span>
                               <span class="nav-text">Search</span>
@@ -207,12 +250,13 @@ select.form-select:focus {
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
+                          {% else %}
+                          {% include "parts/nothing-found.html" %}
+                          {% endif %}
                         </div>
                         <!--end::Table-->
-                        {% else %}
-                        {% include "parts/nothing-found.html" %}
-                        {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
                       {%include 'parts/pagination.html' %}
@@ -257,4 +301,3 @@ select.form-select:focus {
 </body>
 <!--end::Body-->
 {% endblock %}
-

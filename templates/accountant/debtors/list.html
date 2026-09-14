@@ -2,9 +2,7 @@
 {% load static %}
 {% block content %}
 {% load humanize %}
-<!--begin::Head-->
-<!--end::Head-->
-<!--begin::Body-->
+
 <style>
 .subheader {
     background-color: white;
@@ -48,6 +46,17 @@
     font-weight: 600;
 }
 
+/* Debtors qidiruv formasi stili */
+.debtors-search-form .form-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.debtors-search-form .search-input-col {
+    padding-left: 0;
+}
+
 @media (max-width: 576px) {
     .subheader .nav-tabs {
         flex-direction: column;
@@ -76,13 +85,37 @@
         white-space: nowrap;
         padding: 12px 16px;
     }
+
+    /* Mobil qurilmalarda Search input va tugmani o'rtalashtirish hamda 100% teng kenglik berish */
+    .debtors-search-form .form-group {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 0 15px !important;
+        margin: 0 !important;
+    }
+
+    .debtors-search-form .search-input-col {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 0 10px 0 !important;
+        padding: 0 !important;
+    }
+
+    .debtors-search-form .search-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
 }
 </style>
-
 
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <!--begin::Main-->
   <div class="d-flex flex-column flex-root">
+    {% include 'accountant/parts/header-mobile.html' %}
     <!--begin::Page-->
     <div class="d-flex flex-row flex-column-fluid page">
       <!--begin::Aside-->
@@ -123,17 +156,17 @@
                         <small class='mt-2'>Total: {{objects | length}}</small>
                       </h3>
                     </div>
-                    <form method="get">
+                    <form method="get" class="debtors-search-form">
                       <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 ml-lg-10 search-input-col">
                               <input type="text" class="form-control datatable-input" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
+                          <button type="submit" class="btn btn-primary font-weight-bolder ml-lg-7 mb-1 search-btn">
                               <span class="nav-icon">
                                   <i class="fas fa-search"></i>
                               </span>
-                              <span class="nav-text">Search</span>
+                              <span class="nav-text ml-2">Search</span>
                           </button>
                       </div>
                     </form>
@@ -171,6 +204,7 @@
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                         </div>
                         <!--end::Table-->
@@ -179,7 +213,7 @@
                         {% endif %}
                       </div>
                       {% if page_obj.paginator.num_pages > 1 %}
-                      {%include 'parts/pagination.html' %}
+                      {% include 'parts/pagination.html' %}
                       {% endif %}
                     </div>
                     <!--end::Body-->
@@ -192,7 +226,8 @@
             <!-- .container -->
           </div> <!-- .d-flex.flex-column-fluid -->
         </div>
-        <!--end::Content--> <!--begin::Footer-->
+        <!--end::Content--> 
+        <!--begin::Footer-->
         {% include "parts/footer.html" %}
         <!--end::Footer-->
       </div>
@@ -201,24 +236,14 @@
     <!--end::Page-->
   </div>
   <!--end::Main-->
+  
   <!-- begin::User Panel-->
   {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
+  
   <!--begin::Scrolltop-->
   {% include "parts/scrolltop.html" %}
   <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
-
 
 </body>
 <!--end::Body-->
 {% endblock %}
-

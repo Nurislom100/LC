@@ -500,6 +500,21 @@ def information_view(request):
 
     return render(request, "manager/information/informations.html", {"form": form})
 
+def center_information_view(request):
+    # Birinchi obyektni olamiz, agar yo'q bo'lsa None bo'ladi
+    info = Informations.objects.first()
+
+    if request.method == 'POST':
+        # MUHIM: instance=info berilmasa, Django har safar yangi yozuv yaratib yuboradi!
+        form = Informations(request.POST, request.FILES, instance=info)
+        if form.is_valid():
+            form.save()
+            return redirect('manager:center-info') # Sahifa nomingiz
+    else:
+        form = Informations(instance=info)
+
+    return render(request, 'manager/information/informations.html', {'form': form, 'center_info': info})
+
 
 class TeacherListView(ListView):
     model = models.Teacher
@@ -561,9 +576,7 @@ class CourseListView(ListView):
         queryset = models.Course.objects.all().order_by("id")
         search = self.request.GET.get("search", None)
         if search:
-            queryset = queryset.filter(
-                Q(title__icontains=search)
-            )
+            queryset = queryset.filter(Q(title__icontains=search))
         return queryset
 
 class CourseGroupListView(ListView):
@@ -615,7 +628,7 @@ class GroupListView(ListView):
         # Search
         search = self.request.GET.get("search", None)
         if search:
-            queryset = queryset.filter(Q(title__icontains=search))
+            queryset = queryset.filter(title__icontains=search)
         
         # Filter by lesson days
         day = self.request.GET.get('day')
@@ -1126,7 +1139,8 @@ class GroupStudentsAPIView(ListAPIView):
     
     def get_queryset(self):
         return models.Student.objects.filter(
-            group_id=self.kwargs['group_id']
+            group_id=self.kwargs['group_id'],
+            status="Active"
         ).only('id', 'full_name', 'date_joined')
 
 
@@ -1151,8 +1165,8 @@ class AttendanceListAPIView(ListAPIView):
 class SaveAttendanceAPIView(APIView):
     """
     Davomatni saqlash
-    - Hozirgi dars kunidan keyingi dars kunigacha ochiq
-    - O'tgan kunlar faqat ko'rinadi, tahrirlash mumkin emas
+    - Faqat keyingi dars kunigacha ochiq
+    - O'tgan kunlarni tahrirlash mumkin emas
     """
     def post(self, request):
         attendance_list = request.data.get('attendance', [])
@@ -1169,16 +1183,10 @@ class SaveAttendanceAPIView(APIView):
         first_item = attendance_list[0]
         group = models.Group.objects.get(id=first_item['group'])
         
-        # Hozirgi va keyingi dars kunini topish
-        current_lesson_date, next_lesson_date = self.get_current_and_next_lesson(today, group.lesson_days)
+        # Keyingi dars kunini topish
+        next_lesson_date = self.get_next_lesson_date(today, group.lesson_days)
         
-        # Ochiq kunlar: current_lesson_date dan next_lesson_date dan oldingi kungacha
-        last_open_date = next_lesson_date - timedelta(days=1)
-        
-        print(f"📅 Bugun: {today}")
-        print(f"📅 Hozirgi dars: {current_lesson_date}")
-        print(f"📅 Keyingi dars: {next_lesson_date}")
-        print(f"✅ Ochiq: {current_lesson_date} dan {last_open_date} gacha")
+        print(f"📅 Bugun: {today}, Keyingi dars: {next_lesson_date}")
         
         data_map = {}
         student_ids = set()
@@ -1187,13 +1195,13 @@ class SaveAttendanceAPIView(APIView):
         for item in attendance_list:
             date_str = item.get('date_time', '').split('T')[0]
             if date_obj := parse_date(date_str):
-                # Faqat current_lesson_date dan last_open_date gacha saqlash mumkin
-                if date_obj < current_lesson_date:
-                    print(f"⛔ Yopiq kun: {date_obj} (hozirgi darsdan oldin)")
+                # Faqat bugungi kun va keyingi dars kunigacha
+                if date_obj < today:
+                    print(f"⛔ O'tgan kun: {date_obj}")
                     continue
                 
-                if date_obj > last_open_date:
-                    print(f"⛔ Yopiq kun: {date_obj} (keyingi darsdan oldin)")
+                if date_obj > next_lesson_date:
+                    print(f"⛔ Keyingi darsdan keyin: {date_obj}")
                     continue
                 
                 student_id = item['student']
@@ -1210,7 +1218,7 @@ class SaveAttendanceAPIView(APIView):
         if not data_map:
             return Response({
                 'success': False,
-                'error': f'Faqat {current_lesson_date} dan {last_open_date} gacha davomat qo\'yish mumkin'
+                'error': 'Faqat bugungi kun va keyingi dars kunigacha davomat qo\'yish mumkin'
             })
         
         # Mavjud davomatlarni olish
@@ -1262,14 +1270,11 @@ class SaveAttendanceAPIView(APIView):
             'message': f'{created} ta yangi, {updated} ta yangilandi'
         })
     
-    def get_current_and_next_lesson(self, today, lesson_days_str):
+    def get_next_lesson_date(self, start_date, lesson_days_str):
         """
-        Hozirgi va keyingi dars kunlarini topish
-        
-        Misol: Dars kunlari Tu, Thu, Sat
-        - 18-dek (Thu): current=18, next=20
-        - 19-dek (Fri): current=18, next=20
-        - 20-dek (Sat): current=20, next=23
+        Keyingi dars kunini topish
+        Masalan: bugun Juma (12), keyingi dars Dushanba (15)
+        → Yakshanba 23:59:59 gacha ochiq
         """
         day_map = {
             'mo': 0, 'tu': 1, 'we': 2, 'thu': 3, 
@@ -1283,21 +1288,9 @@ class SaveAttendanceAPIView(APIView):
                 lesson_days.append(day_map[day])
         
         lesson_days.sort()
-        today_weekday = today.weekday()
         
-        # Hozirgi dars kunini topish (bugun yoki undan oldingi eng yaqin dars kuni)
-        current_lesson_date = None
-        
-        # Orqaga qarab eng yaqin dars kunini topish (maksimal 7 kun)
-        for i in range(8):
-            check_date = today - timedelta(days=i)
-            if check_date.weekday() in lesson_days:
-                current_lesson_date = check_date
-                break
-        
-        # Agar topilmasa (birinchi hafta), birinchi dars kunini olish
-        if not current_lesson_date:
-            current_lesson_date = today
+        # Bugungi kun
+        today_weekday = start_date.weekday()
         
         # Keyingi dars kunini topish
         next_days = [d for d in lesson_days if d > today_weekday]
@@ -1309,10 +1302,12 @@ class SaveAttendanceAPIView(APIView):
             # Keyingi haftaning birinchi dars kuni
             days_until = (7 - today_weekday) + lesson_days[0]
         
-        next_lesson_date = today + timedelta(days=days_until)
+        next_lesson = start_date + timedelta(days=days_until)
         
-        return current_lesson_date, next_lesson_date
-    
+        # Keyingi darsdan bir kun oldin (deadline)
+        deadline = next_lesson - timedelta(days=1)
+        
+        return deadline
 
 class EmployeeListView(ListView):
     model = models.Employee
@@ -1359,7 +1354,7 @@ class WagesListView(ListView):
     template_name = "manager/Wages/list.html"
     context_object_name = "objects"
     paginate_by = 20  # Pagination qo'shish
-
+ 
     def get_queryset(self):
         qs = super().get_queryset().select_related('employee')
         

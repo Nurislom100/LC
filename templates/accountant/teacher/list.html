@@ -7,9 +7,20 @@
 <!--end::Head-->
 <!--begin::Body-->
 <style>
-.card-toolbar{
-  padding-left: 10px;
+/* Gorizontal scroll oqib ketishini oldini olish */
+html, body {
+    overflow-x: hidden !important;
 }
+
+.card-custom {
+    max-width: 100% !important;
+    overflow: hidden;
+}
+
+.card-toolbar {
+    padding-left: 10px;
+}
+
 select.form-select {
     min-width: 180px;
     max-width: 250px;
@@ -65,6 +76,24 @@ select.form-select:focus {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* Teachers search form stili */
+.teachers-search-form .form-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.teachers-search-form .search-input-col {
+    padding-left: 0;
+}
+
+/* Jadval faqat o'z ichida scroll bo'lishini ta'minlash */
+.table-responsive {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
 /* Responsive for smaller screens */
 @media (max-width: 992px) {
     .filter-row {
@@ -91,6 +120,30 @@ select.form-select:focus {
         width: 100%;
         justify-content: center;
     }
+
+    /* Mobil qurilmalarda Search input va tugmani o'rtalashtirish hamda 100% teng kenglik berish */
+    .teachers-search-form .form-group {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 0 15px !important;
+        margin: 0 !important;
+    }
+
+    .teachers-search-form .search-input-col {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 0 10px 0 !important;
+        padding: 0 !important;
+    }
+
+    .teachers-search-form .search-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
 }
 </style>
 
@@ -98,6 +151,7 @@ select.form-select:focus {
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
   <!--begin::Main-->
   <div class="d-flex flex-column flex-root">
+    {% include 'accountant/parts/header-mobile.html' %}
     <!--begin::Page-->
     <div class="d-flex flex-row flex-column-fluid page">
       <!--begin::Aside-->
@@ -146,17 +200,17 @@ select.form-select:focus {
                           </div>
                       </form>
                     </div>
-                    <form method="get">
+                    <form method="get" class="teachers-search-form">
                       <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 search-input-col ml-lg-10">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans 'Search' %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
+                          <button type="submit" class="btn btn-primary font-weight-bolder search-btn ml-lg-7 mb-1">
                               <span class="nav-icon">
                                   <i class="fas fa-search"></i>
                               </span>
-                              <span class="nav-text">{% trans "Search" %}</span>
+                              <span class="nav-text ml-2">{% trans "Search" %}</span>
                           </button>
                       </div>
                     </form>
@@ -210,6 +264,7 @@ select.form-select:focus {
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                         </div>
                         <!--end::Table-->

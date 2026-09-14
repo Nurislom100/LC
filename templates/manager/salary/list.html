@@ -31,12 +31,65 @@
     .reset-btn:hover {
         background: #d93636;
     }
+
+    /* FAQAT MOBIL UCHUN MOSLASHTIRISH (Kompyuter versiyasiga tegmaslik uchun) */
+    @media (max-width: 767.98px) {
+        .mobile-header-wrapper {
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+        }
+        .mobile-filter-form {
+            width: 100% !important;
+            margin-top: 15px !important;
+        }
+        .mobile-filter-container {
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 10px !important;
+        }
+        .mobile-filter-container .bootstrap-select {
+            width: 100% !important;
+            margin-left: 0 !important;
+        }
+        .mobile-search-form {
+            width: 100% !important;
+        }
+        .mobile-search-form .form-group {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+        .mobile-search-form .col-lg-3 {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            margin-left: 0 !important;
+            margin-bottom: 15px !important;
+            width: 100% !important;
+        }
+        .mobile-buttons-row {
+            display: flex !important;
+            width: 100% !important;
+            gap: 10px !important;
+            margin-left: 0 !important;
+        }
+        .mobile-buttons-row .btn,
+        .mobile-buttons-row .card-toolbar,
+        .mobile-buttons-row .card-toolbar .btn {
+            flex: 1 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+            justify-content: center !important;
+            text-align: center !important;
+            font-size: 13px !important;
+        }
+    }
 </style>
 
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
-  {% include "parts/header-mobile.html" %}
-
   <div class="d-flex flex-column flex-root">
+    {% include 'parts/header-mobile.html' %}
     <div class="d-flex flex-row flex-column-fluid page">
       {% include "parts/aside.html" with menu_parent='finance-all' menu_child='teacher-list' %}
       <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
@@ -48,12 +101,12 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="card card-custom card-stretch gutter-b">
-                    <div class="card-header border-0 py-5">
+                    <div class="card-header border-0 py-5 mobile-header-wrapper">
                       <h3 class="card-title align-items-start flex-column">
                         <span class="card-label font-weight-bolder text-dark">{% trans "Teacher Salaries" %}</span>
                       </h3>
-                      <form method="get" id="filterForm">
-                          <div class="filter-container">
+                      <form method="get" id="filterForm" class="mobile-filter-form">
+                          <div class="filter-container mobile-filter-container">
 
                               <!-- MONTH -->
                               <select id="month-select" name="month" class="form-select selectpicker">
@@ -81,18 +134,20 @@
                       </form>
                     </div>
                     
-                    <form method="get">
+                    <form method="get" class="mobile-search-form">
                       <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6 ml-10">
                               <input type="text" class="form-control datatable-input" placeholder="{% trans "Search" %}" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
-                              <span class="nav-icon"><i class="fas fa-search"></i></span>
-                              <span class="nav-text">{% trans "Search" %}</span>
-                          </button>
-                          <div class="card-toolbar">
-                          <a href="{% url 'manager:tsalary-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new teacher" %}</a>
+                          <div class="mobile-buttons-row d-flex align-items-center">
+                              <button type="submit" class="btn btn-primary font-weight-bolder ml-7 mb-1">
+                                  <span class="nav-icon"><i class="fas fa-search"></i></span>
+                                  <span class="nav-text">{% trans "Search" %}</span>
+                              </button>
+                              <div class="card-toolbar">
+                                  <a href="{% url 'manager:tsalary-create' %}" class="btn btn-primary font-weight-bolder font-size-sm">{% trans "Create new teacher" %}</a>
+                              </div>
                           </div>
                       </div>
                     </form>
@@ -106,10 +161,10 @@
                               <tr class="text-left text-uppercase">
                                 <th style="min-width: 100px">{% trans "Full name" %}</th>
                                 <th style="min-width: 100px">{% trans "Course" %}</th>
-                                <th style="min-width: 100px">{% trans "group" %}</th>
+                                <th style="min-width: 100px">{% trans "Group" %}</th>
                                 <th style="min-width: 100px">{% trans "Salary Type" %}</th>
                                 <th style="min-width: 100px">{% trans "Salary" %}</th>
-                                <th style="min-width: 100px">{% trans "date" %}</th>
+                                <th style="min-width: 100px">{% trans "Date" %}</th>
                                 <th style="min-width: 100px">{% trans "Actions" %}</th>
                               </tr>
                             </thead>
@@ -134,6 +189,7 @@
                                 <td nowrap="nowrap">{% include "parts/actions.html" with update_url=u delete_url=d %}</td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                           {% else %}
                           {% include "parts/nothing-found.html" %}
@@ -186,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     resetBtn.addEventListener("click", function () {
-        window.location.href = "{% url 'manager:tsalary-list' %}";
+        window.location.href = "{% url 'accountant:tsalary-list' %}";
     });
 });
 </script>

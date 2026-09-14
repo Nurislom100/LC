@@ -20,7 +20,7 @@
         color: #333;
     }
     .form-group{
-        margin-left: 20px;
+        margin-left: 0px;
     }
 
     .prefix-input {
@@ -29,6 +29,7 @@
         background: #f3f4f6;
         border-radius: 16px;
         padding: 4px;
+        width: 100%;
     }
 
     .prefix {
@@ -48,6 +49,7 @@
         background: transparent;
         flex: 1;
         font-size: 14px;
+        width: 100%;
     }
 
     .save-btn {
@@ -166,12 +168,31 @@
         color: #666;
         text-align: center;
     }
+
+    /* FAQAT MOBIL UCHUN FIX (Komp versiyasiga zarracha ta'sir qilmaydi) */
+    @media (max-width: 768px) {
+        .select2-container, 
+        .select2-container--default, 
+        .select2-container .selection, 
+        .select2-selection {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .form-group select, 
+        .form-group input, 
+        .prefix-input {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+    }
 </style>
 
-<body id="kt_body" class="header-fixed header-mobile-fixed aside-enabled aside-fixed">
-  {% include "parts/header-mobile.html" %}
-
-  <div class="d-flex flex-column flex-root">
+<body id="kt_body" class="header-fixed h aside-enabled aside-fixed">
+    <div class="d-flex flex-column flex-root">
+      {% include "parts/header-mobile.html" %}
     <div class="d-flex flex-row flex-column-fluid page">
 
       {% include "parts/aside.html" with menu_parent='settings-all' menu_child='lead-list' %}
@@ -194,9 +215,16 @@
                       <h3 class="info">{% trans "Markaz ma'lumotlari" %}</h3>
                       <div class="container py-5">
                         <div class="card p-4">
-                          <div class="row mt-3">
+                          <div class="row">
 
-                            <div class="form-group mt-3">
+                            <div class="col-12 form-group mt-3">
+                                <label>{% trans "O'quv markaz nomi" %}:</label>
+                                <div class="prefix-input">
+                                    {{ form.name }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 form-group mt-3">
                                 <label>{% trans "Administrator telegram username" %}:</label>
                                 <div class="prefix-input">
                                     <span class="prefix">https://t.me/</span>
@@ -204,7 +232,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group mt-3">
+                            <div class="col-md-4 form-group mt-3">
                                 <label>{% trans "Telegram Kanal" %}:</label>
                                 <div class="prefix-input">
                                     <span class="prefix">https://t.me/</span>
@@ -212,7 +240,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group mt-3">
+                            <div class="col-md-4 form-group mt-3">
                                 <label>{% trans "Instagram" %}:</label>
                                 <div class="prefix-input">
                                     <span class="prefix">https://www.instagram.com/</span>
@@ -220,12 +248,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 mt-3">
+                            <div class="col-md-6 form-group mt-3">
                                 <label>{% trans "Operator telefon raqami" %}:</label>
                                 {{ form.phone }}
                             </div>
 
-                            <div class="col-md-6 mt-3">
+                            <div class="col-md-6 form-group mt-3">
                                 <label>{% trans "Manzil" %}:</label>
                                 {{ form.regions }}
                             </div>
@@ -233,7 +261,6 @@
                           </div>
                         </div>
 
-                        <!-- LOGO SECTION -->
                         <h3 class="logo">{% trans "O'quv markaz logosi" %}</h3>
                         <div class="card p-4 mt-4">
                             <div class="row mt-3">

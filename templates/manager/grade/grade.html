@@ -29,6 +29,7 @@
             border-radius: 6px;
             text-decoration: none;
             transition: all 0.2s;
+            white-space: nowrap;
         }
         .subheader .nav-link:hover {
             background-color: #e5e7eb;
@@ -47,13 +48,9 @@
             padding: 8px;
         }
 
-        /* O'tgan kunlar - ko'rinadi */
+        /* O'tgan kunlar */
         .grade-cell.past-date {
-            opacity: 0.7;
-        }
-
-        .grade-cell.past-date .grade-value {
-            cursor: not-allowed !important;
+            opacity: 0.85;
         }
 
         /* Qulflangan katakchalar */
@@ -68,17 +65,18 @@
         }
 
         .grade-cell.locked .lock-icon {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             fill: #6b7280;
         }
 
-        /* Kelmagan belgisi - katakcha ichida */
+        /* Kelmagan belgisi */
         .grade-cell.absent-mark .grade-value {
             background: #fee2e2 !important;
             color: #ef4444 !important;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
+            cursor: not-allowed;
         }
 
         .grade-value {
@@ -93,10 +91,11 @@
             transition: all 0.2s;
             margin: 0 auto;
             cursor: pointer;
+            user-select: none;
         }
 
         .grade-value:hover:not(.locked) {
-            transform: scale(1.15);
+            transform: scale(1.1);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
@@ -115,7 +114,7 @@
             display: flex;
             gap: 6px;
             background: white;
-            padding: 10px;
+            padding: 8px;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             z-index: 1000;
@@ -128,8 +127,8 @@
         }
 
         .grade-option {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -160,9 +159,9 @@
             transform: translateX(-50%);
             background: #1f2937;
             color: white;
-            padding: 6px 12px;
+            padding: 4px 8px;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 11px;
             white-space: nowrap;
             z-index: 1000;
             pointer-events: none;
@@ -192,6 +191,39 @@
             background: #f3f4f6;
             font-weight: 600;
             text-align: center;
+        }
+
+        /* MOBIL UCHUN ADAPTATSIYA */
+        @media (max-width: 768px) {
+            .subheader {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .subheader .nav-tabs {
+                flex-wrap: nowrap;
+                width: max-content;
+            }
+
+            .table-container {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+                max-width: 100%;
+            }
+
+            table th:first-child,
+            table td:first-child {
+                position: sticky;
+                left: 0;
+                background-color: #ffffff;
+                z-index: 10;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            }
+
+            table th:first-child {
+                background-color: #f3f4f6;
+                z-index: 11;
+            }
         }
     </style>
 </head>
@@ -272,48 +304,34 @@
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
     let currentSelector = null;
-    let deadlineDate = null;
 
-    function getTodayDateString() {
-        return new Date().toISOString().split('T')[0];
+    function toLocalDateString(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
     }
 
-    function getNextLessonDeadline(startDate, lessonDaysStr) {
-        const dayMap = { mo:0, tu:1, we:2, thu:3, fri:4, sa:5, sun:6 };
-        const days = lessonDaysStr.toLowerCase().split(' ').map(d => dayMap[d]).filter(n => n !== undefined).sort();
-        
-        const today = new Date(startDate);
-        const todayWeekday = today.getDay();
-        const todayIndex = todayWeekday === 0 ? 6 : todayWeekday - 1;
-        
-        const nextDays = days.filter(d => d > todayIndex);
-        let daysUntil = nextDays.length > 0 ? nextDays[0] - todayIndex : (7 - todayIndex) + days[0];
-        
-        const nextLesson = new Date(today);
-        nextLesson.setDate(nextLesson.getDate() + daysUntil);
-        
-        const deadline = new Date(nextLesson);
-        deadline.setDate(deadline.getDate() - 1);
-        
-        return deadline.toISOString().split('T')[0];
+    function parseLocalDate(dateStr) {
+        const [y, m, d] = dateStr.split('-').map(Number);
+        return new Date(y, m - 1, d);
+    }
+
+    function getTodayDateString() {
+        return toLocalDateString(new Date());
     }
 
     function canEditDate(dateString) {
-        const today = getTodayDateString();
-        if (!deadlineDate) return dateString >= today;
-        return dateString >= today && dateString <= deadlineDate;
+        return dateString === getTodayDateString();
     }
 
     function isLockedDate(dateString) {
-        const today = getTodayDateString();
-        if (!deadlineDate) return false;
-        return dateString > deadlineDate;
+        return dateString > getTodayDateString();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        deadlineDate = getNextLessonDeadline(getTodayDateString(), lessonDays);
-        console.log('⏰ Deadline:', deadlineDate);
-        
+        console.log('📅 Bugun:', getTodayDateString());
+
         initializeYearSelect();
         setCurrentDate();
         loadStudentsFromAPI();
@@ -329,10 +347,12 @@
     async function loadStudentsFromAPI() {
         try {
             const res = await fetch(`/manager/api/groups/${groupId}/students/`);
+            if (!res.ok) throw new Error("Talabalarni yuklashda xatolik");
+            
             const data = await res.json();
             students = data.map(s => ({
                 id: s.id,
-                name: s.full_name,
+                name: s.full_name || s.name,
                 joinDate: s.date_joined ? s.date_joined.split('T')[0] : getTodayDateString()
             }));
             
@@ -352,8 +372,8 @@
 
     async function loadExistingGrades() {
         try {
-            const start = new Date(currentYear, currentMonth, 1).toISOString().split('T')[0];
-            const end = new Date(currentYear, currentMonth + 1, 0).toISOString().split('T')[0];
+            const start = toLocalDateString(new Date(currentYear, currentMonth, 1));
+            const end = toLocalDateString(new Date(currentYear, currentMonth + 1, 0));
             const res = await fetch(`/manager/api/grades/?group=${groupId}&start_date=${start}&end_date=${end}`);
             
             if (res.ok) {
@@ -361,20 +381,19 @@
                 grades = {};
                 data.forEach(item => {
                     const studentId = item.student || item.student_id;
-                    const date = item.date_time.split('T')[0];
+                    const date = item.date_time ? item.date_time.split('T')[0] : item.date;
                     grades[`${studentId}-${date}`] = item.grade;
                 });
-                console.log('✅ Baholar yuklandi:', Object.keys(grades).length);
             }
         } catch (e) {
-            console.error(e);
+            console.error('Baholarni yuklashda xatolik:', e);
         }
     }
 
     async function loadExistingAttendance() {
         try {
-            const start = new Date(currentYear, currentMonth, 1).toISOString().split('T')[0];
-            const end = new Date(currentYear, currentMonth + 1, 0).toISOString().split('T')[0];
+            const start = toLocalDateString(new Date(currentYear, currentMonth, 1));
+            const end = toLocalDateString(new Date(currentYear, currentMonth + 1, 0));
             const res = await fetch(`/manager/api/attendance/?group=${groupId}&start_date=${start}&end_date=${end}`);
             
             if (res.ok) {
@@ -382,19 +401,20 @@
                 attendance = {};
                 data.forEach(item => {
                     const studentId = item.student || item.student_id;
-                    const date = item.date_time.split('T')[0];
+                    const date = item.date_time ? item.date_time.split('T')[0] : item.date;
                     attendance[`${studentId}-${date}`] = item.is_present;
                 });
-                console.log('✅ Davomat yuklandi:', Object.keys(attendance).length);
             }
         } catch (e) {
-            console.error(e);
+            console.error('Davomatni yuklashda xatolik:', e);
         }
     }
 
     function initializeYearSelect() {
         const sel = document.getElementById('year-select');
-        for (let y = 2020; y <= 2030; y++) {
+        sel.innerHTML = '';
+        const currentY = new Date().getFullYear();
+        for (let y = currentY - 2; y <= currentY + 2; y++) {
             const opt = document.createElement('option');
             opt.value = y;
             opt.textContent = y;
@@ -436,8 +456,9 @@
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(year, month, day);
             if (!allowedDays.includes(date.getDay())) continue;
-            
-            const dateStr = date.toISOString().split('T')[0];
+
+            const dateStr = toLocalDateString(date);
+
             dates.push({
                 date: dateStr,
                 display: `${String(day).padStart(2,'0')}.${String(month+1).padStart(2,'0')}`,
@@ -456,7 +477,6 @@
     function showGradeSelector(event, cell, studentId, date) {
         event.stopPropagation();
         
-        // Davomat tekshiruvi
         const attKey = `${studentId}-${date}`;
         const attStatus = attendance[attKey];
         
@@ -471,7 +491,7 @@
         }
         
         if (!canEditDate(date)) {
-            alert('Bu kunni tahrirlash mumkin emas!');
+            alert('Bu kunni tahrirlash muddat o\'tgani sababli yopilgan!');
             return;
         }
         
@@ -487,8 +507,10 @@
             opt.onclick = async (e) => {
                 e.stopPropagation();
                 await submitGrade(studentId, date, i);
-                currentSelector.remove();
-                currentSelector = null;
+                if (currentSelector) {
+                    currentSelector.remove();
+                    currentSelector = null;
+                }
             };
             selector.appendChild(opt);
         }
@@ -515,24 +537,24 @@
             
             const data = await res.json();
             
-            if (data.success) {
+            if (res.ok && data.success) {
                 grades[`${studentId}-${date}`] = gradeValue;
                 renderTable();
             } else {
-                alert(data.error);
+                alert(data.error || 'Baho saqlashda xatolik yuz berdi!');
             }
         } catch(e) {
             console.error(e);
-            alert('Xatolik yuz berdi');
+            alert('Server bilan bog\'lanishda xatolik yuz berdi');
         }
     }
 
     function getGradeStats(studentId) {
         const vals = Object.entries(grades)
-            .filter(([k, v]) => k.startsWith(`${studentId}-`) && v != null)
+            .filter(([k, v]) => k.startsWith(`${studentId}-`) && v != null && v > 0)
             .map(([_, v]) => v);
         
-        if (vals.length === 0) return { average: 0 };
+        if (vals.length === 0) return { average: '-' };
         const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
         return { average: avg.toFixed(1) };
     }
@@ -540,7 +562,7 @@
     function renderTable() {
         const content = document.getElementById('table-content');
         
-        let html = `<table><thead><tr><th style="min-width:150px;">O'quvchi</th>`;
+        let html = `<table><thead><tr><th style="min-width:180px; text-align:left; padding-left:15px;">O'quvchi</th>`;
         lessonDates.forEach(d => {
             html += `<th>${d.display}</th>`;
         });
@@ -549,7 +571,7 @@
         students.forEach((s, idx) => {
             const stats = getGradeStats(s.id);
             html += `<tr style="background:${idx%2===0?'#fff':'#f9fafb'}">
-                <td style="font-weight:500;">${s.name}</td>`;
+                <td style="font-weight:500; text-align:left; padding-left:15px;">${s.name}</td>`;
             
             lessonDates.forEach(d => {
                 const gradeKey = `${s.id}-${d.date}`;
@@ -567,7 +589,6 @@
                 let clickable = false;
                 
                 if (isLocked) {
-                    // Keyingi dars kunlari - yopiq qulf
                     cellClass = 'locked';
                     cellContent = `<div class="grade-value">
                         <svg xmlns="http://www.w3.org/2000/svg" class="lock-icon" viewBox="0 0 16 16">
@@ -576,7 +597,6 @@
                     </div>`;
                     tooltip = 'Keyingi dars kunigacha yopiq';
                 } else if (attStatus === undefined || attStatus === null) {
-                    // Davomat qilinmagan - ochiq qulf
                     cellClass = 'locked';
                     cellContent = `<div class="grade-value">
                         <svg xmlns="http://www.w3.org/2000/svg" class="lock-icon" viewBox="0 0 16 16">
@@ -585,18 +605,16 @@
                     </div>`;
                     tooltip = 'Avval davomatni to\'ldiring';
                 } else if (attStatus === false) {
-                    // Kelmagan - ❌ katakcha ichida
                     cellClass = 'absent-mark';
                     cellContent = '<div class="grade-value">✕</div>';
                     tooltip = 'Talaba kelmagan';
                 } else if (attStatus === true) {
-                    // Kelgan - baho qo'yish mumkin
                     if (isPast) {
                         cellClass = 'past-date';
                     }
                     cellContent = `<div class="grade-value ${gradeVal ? `grade-${gradeVal}` : 'empty'}">${gradeVal || ''}</div>`;
-                    tooltip = canEdit ? 'Baho qo\'yish' : 'O\'tgan kun';
-                    clickable = canEdit && !isPast;
+                    tooltip = canEdit ? 'Baho qo\'yish' : 'Tahrirlash yopilgan';
+                    clickable = canEdit;
                 }
                 
                 html += `<td class="grade-cell ${cellClass}" ${clickable ? `onclick="showGradeSelector(event, this, ${s.id}, '${d.date}')"` : ''}>
@@ -605,7 +623,7 @@
                 </td>`;
             });
             
-            html += `<td style="text-align:center;font-weight:600;">${stats.average}</td></tr>`;
+            html += `<td style="text-align:center;font-weight:700;color:#1f2937;">${stats.average}</td></tr>`;
         });
         
         html += `</tbody></table>`;

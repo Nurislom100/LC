@@ -76,11 +76,37 @@
         white-space: nowrap;
         padding: 12px 16px;
     }
+
+    /* FAQAT MOBIL UCHUN SEARCH VA BUTTON MOSLASHTIRISHI */
+    form .form-group.row {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0 15px !important;
+    }
+
+    form .form-group.row .col-lg-3 {
+        flex: 1 !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-bottom: 0 !important;
+        padding: 0 !important;
+    }
+
+    form .form-group.row button {
+        margin-left: 0 !important;
+        margin-bottom: 0 !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+    }
 }
 </style>
 
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
   <!--begin::Main-->
   <!--begin::Header Mobile-->
   {% include "parts/header-mobile.html" %}
@@ -238,4 +264,3 @@
 </body>
 <!--end::Body-->
 {% endblock %}
-

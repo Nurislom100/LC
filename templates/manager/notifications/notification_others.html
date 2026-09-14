@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading">
     {% include "parts/header-mobile.html" %}
     <div class="d-flex flex-column flex-root">
         <div class="d-flex flex-row flex-column-fluid page">
@@ -24,7 +24,7 @@
                                         
                                         <!-- Role -->
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Role *</b></label>
+                                            <label class="col-form-label text-left col-lg-3 col-sm-12"><b>Role *</b></label>
                                             <div class="col-lg-9 col-md-9 col-sm-12">
                                                 <select name="recipient_role" id="role" class="form-control" required>
                                                     <option value="">Roleni tanlang</option>
@@ -39,7 +39,7 @@
 
                                         <!-- Course (faqat teacher uchun) -->
                                         <div class="form-group row" id="courseGroup" style="display:none;">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Course *</b></label>
+                                            <label class="col-form-label text-left col-lg-3 col-sm-12"><b>Course *</b></label>
                                             <div class="col-lg-9 col-md-9 col-sm-12">
                                                 <select name="course" id="course" class="form-control">
                                                     <option value="">Kursni tanlang</option>
@@ -50,7 +50,7 @@
 
                                         <!-- Person (Recipient) -->
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Select Person *</b></label>
+                                            <label class="col-form-label text-left col-lg-3 col-sm-12"><b>Select Person *</b></label>
                                             <div class="col-lg-9 col-md-9 col-sm-12">
                                                 <select name="recipient" id="person" class="form-control" required disabled>
                                                     <option value="">Avval roleni tanlang</option>
@@ -61,7 +61,7 @@
 
                                         <!-- Message Type (faqat teacher uchun) -->
                                         <div class="form-group row" id="typeGroup" style="display:none;">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Type *</b></label>
+                                            <label class="col-form-label text-left col-lg-3 col-sm-12"><b>Type *</b></label>
                                             <div class="col-lg-9 col-md-9 col-sm-12">
                                                 <select name="message_type" id="messageType" class="form-control">
                                                     <option value="">Xabar turini tanlang</option>
@@ -75,7 +75,7 @@
 
                                         <!-- Message -->
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Message *</b></label>
+                                            <label class="col-form-label text-left col-lg-3 col-sm-12"><b>Message *</b></label>
                                             <div class="col-lg-9 col-md-9 col-sm-12">
                                                 <textarea name="message" id="message" class="form-control" rows="5" placeholder="Xabar matni..." required></textarea>
                                                 <small class="form-text text-muted">Yubormoqchi bo'lgan xabaringizni kiriting</small>
@@ -86,12 +86,17 @@
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
                                                 <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" id="submitBtn">
-                                                        <i class="fas fa-paper-plane"></i> Send Notification
-                                                    </button>
-                                                    <button type="reset" class="btn btn-secondary" id="resetBtn">
-                                                        <i class="fas fa-redo"></i> Reset
-                                                    </button>
+                                                    <div class="d-flex align-items-center flex-nowrap" style="gap: 8px;">
+                                                        <button type="submit" class="btn btn-primary text-nowrap" id="submitBtn">
+                                                            <i class="fas fa-paper-plane"></i> Send Notification
+                                                        </button>
+                                                        <button type="reset" class="btn btn-secondary text-nowrap" id="resetBtn">
+                                                            <i class="fas fa-redo"></i> Reset
+                                                        </button>
+                                                        <a href="{% url 'manager:home' %}" class="btn btn-secondary text-nowrap" id="exitBtn">
+                                                            <i class="fas fa-sign-out-alt"></i> Exit
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

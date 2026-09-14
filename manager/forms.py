@@ -414,9 +414,10 @@ class NotificationForm(forms.ModelForm):
 class InformationsForm(forms.ModelForm):
     class Meta:
         model = models.Informations
-        fields = ['tg_admin', 'tg_channel', 'instagram', 'phone', 'logo', 'regions']
+        fields = ['name','tg_admin', 'tg_channel', 'instagram', 'phone', 'logo', 'regions']
 
         widgets = {
+            "name" : forms.TextInput(attrs={"class" : "form-control", "placeholder" : "Learning Center Name"}),
             'tg_admin': forms.TextInput(attrs={'class': 'form-control'}),
             'tg_channel': forms.TextInput(attrs={'class': 'form-control'}),
             'instagram': forms.TextInput(attrs={'class': 'form-control'}),

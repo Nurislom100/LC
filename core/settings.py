@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,10 +23,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^x)-ywaa^*_m!j&$(!gx$8yiiw2h76&qa(nfur+yy8fwmplv%@'
+# ============================================================
+# O'ZGARDI: SECRET_KEY endi kodda ochiq yozilmaydi, environment
+# o'zgaruvchidan olinadi. Railway'da "Variables" bo'limiga
+# SECRET_KEY qo'shishni unutmang. Agar u yerda topilmasa, xato
+# bermasligi uchun default sifatida eski (lokal) kalit qoldirildi -
+# lekin production'da albatta Railway'da yangisini kiriting.
+# ============================================================
+SECRET_KEY = config(
+    'SECRET_KEY',
+    default='django-insecure-^x)-ywaa^*_m!j&$(!gx$8yiiw2h76&qa(nfur+yy8fwmplv%@'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# ============================================================
+# O'ZGARDI: Railway'da DEBUG=False qo'yiladi (Variables bo'limida).
+# Agar hech narsa qo'yilmasa, lokalda ishlashda True bo'lib qoladi
+# (default=True) - shuning uchun kompyuteringizda hech narsa
+# buzilmaydi, faqat Railway'da DEBUG=False deb yozishni unutmang.
+# ============================================================
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 
 
@@ -47,6 +66,7 @@ INSTALLED_APPS = [
     'accountant',
     'reception',
     'teacher',
+    'billing',
 
 ]
 
@@ -63,6 +83,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'billing.middleware.SubscriptionGateMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -81,6 +102,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'common.context_processors.center_info',
             ],
         },
     },
@@ -92,18 +115,48 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ahl-0kpu.onrender.com',]
+# ============================================================
+# O'ZGARDI: ALLOWED_HOSTS endi environment o'zgaruvchidan
+# vergul bilan ajratilgan holda o'qiladi. Agar Railway'da
+# ALLOWED_HOSTS o'rnatilmasa, default sifatida '*' qoladi -
+# ya'ni HECH NARSA BUZILMAYDI, faqat xavfsizlik uchun Railway'da
+# aniq domeningizni yozib qo'yish tavsiya etiladi.
+# ============================================================
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
 
+# ============================================================
+# YANGI: CSRF_TRUSTED_ORIGINS - Railway (va boshqa https orqali
+# ishlaydigan) domenlar uchun forma yuborishda "CSRF verification
+# failed" xatosining oldini oladi. Lokalda kerak emas, shuning
+# uchun default bo'sh.
+# ============================================================
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip() for origin in config('CSRF_TRUSTED_ORIGINS', default='').split(',') if origin.strip()
+]
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }       
-}
+# ============================================================
+# O'ZGARDI: DATABASES endi DATABASE_URL environment
+# o'zgaruvchisi orqali PostgreSQL'ga ulanadi (Railway PostgreSQL
+# qo'shganda buni avtomatik beradi). Agar DATABASE_URL topilmasa
+# (masalan lokal kompyuteringizda), avvalgidek SQLite ishlataveradi -
+# demak lokal ishlashingiz HECH NARSA O'ZGARMAYDI.
+# ============================================================
+DATABASE_URL = config('DATABASE_URL', default='')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 
@@ -146,6 +199,15 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static/"
 STATICFILES_DIRS = [BASE_DIR / "staticfiles"]
 
+# ============================================================
+# YANGI: WhiteNoise orqali statik fayllarni siqib (compress)
+# va keshlab beradigan rejim - Railway'da CSS/JS/rasm fayllar
+# to'g'ri va tez yuklanishi uchun kerak. MIDDLEWARE'da
+# WhiteNoiseMiddleware sizda allaqachon bor edi, shu bilan birga
+# ishlaydi.
+# ============================================================
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "mediafiles"
@@ -157,7 +219,7 @@ AUTH_USER_MODEL = "common.BaseUser"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = "/accounts/sign-in/"
+LOGIN_URL = "/sign-in/"
 
 # Til sozlamalari
 LANGUAGE_CODE = 'uz'  # Default til

@@ -4,11 +4,11 @@
 {% block content %}
 
 <style>
-    .info{
+    .info {
         padding-left: 30px;
         padding-top: 25px;
     }
-    .logo{
+    .logo {
         margin-top: 20px;
         margin-left: 10px;
     }
@@ -19,9 +19,6 @@
         display: block;
         color: #333;
     }
-    .form-group{
-        margin-left: 20px;
-    }
 
     .prefix-input {
         display: flex;
@@ -29,6 +26,8 @@
         background: #f3f4f6;
         border-radius: 16px;
         padding: 4px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .prefix {
@@ -48,6 +47,7 @@
         background: transparent;
         flex: 1;
         font-size: 14px;
+        min-width: 0;
     }
 
     .save-btn {
@@ -94,10 +94,6 @@
         width: 100%;
         padding: 20px;
         transition: opacity 0.3s ease;
-    }
-
-    .logo-upload-box:hover .upload-content {
-        opacity: 0.9;
     }
 
     .upload-icon {
@@ -166,10 +162,17 @@
         color: #666;
         text-align: center;
     }
+
+    /* BARCHA ELEMENTLARNI MOBILDA CHEGARADAN CHIQARMAYDIGAN MUTLAQ STRUKTURA */
+    input, select, textarea, .form-control {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
 </style>
 
 <body id="kt_body" class="header-fixed header-mobile-fixed aside-enabled aside-fixed">
   <div class="d-flex flex-column flex-root">
+    {% include 'reception/parts/header-mobile.html' %}
     <div class="d-flex flex-row flex-column-fluid page">
 
       {% include "reception/parts/aside.html" with menu_parent='settings-all' menu_child='lead-list' %}
@@ -181,20 +184,27 @@
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
           <div class="d-flex flex-column-fluid">
-            <div class="container">
+            <div class="container-fluid">
               <div class="row mt-5">
-                <div class="col-md-12">
+                <div class="col-12">
 
-                  <form action="{% url 'reception:center-info' %}" method="POST" enctype="multipart/form-data">
+                  <form action="{% url 'reception:center-info' %}" method="POST" enctype="multipart/form-data" id="centerInfoForm">
                     {% csrf_token %}
 
                     <div class="card card-custom card-stretch gutter-b">
                       <h3 class="info">{% trans "Markaz ma'lumotlari" %}</h3>
-                      <div class="container py-5">
+                      <div class="card-body p-4">
                         <div class="card p-4">
-                          <div class="row mt-3">
+                          <div class="row">
 
-                            <div class="form-group mt-3">
+                            <!-- O'QUV MARKAZ NOMI -->
+                            <div class="col-12 form-group mt-3">
+                                <label>{% trans "O'quv markaz nomi" %}:</label>
+                                {{ form.name }}
+                            </div>
+
+                            <!-- BIR QATORDA 3 TA -->
+                            <div class="col-md-4 col-12 form-group mt-3">
                                 <label>{% trans "Administrator telegram username" %}:</label>
                                 <div class="prefix-input">
                                     <span class="prefix">https://t.me/</span>
@@ -202,15 +212,15 @@
                                 </div>
                             </div>
 
-                            <div class="form-group mt-3">
-                                <label>{% trans "Telegram Kanal" %}:</label>
+                            <div class="col-md-4 col-12 form-group mt-3">
+                                <label>{% trans "Telegram Channel" %}:</label>
                                 <div class="prefix-input">
                                     <span class="prefix">https://t.me/</span>
                                     {{ form.tg_channel }}
                                 </div>
                             </div>
 
-                            <div class="form-group mt-3">
+                            <div class="col-md-4 col-12 form-group mt-3">
                                 <label>{% trans "Instagram" %}:</label>
                                 <div class="prefix-input">
                                     <span class="prefix">https://www.instagram.com/</span>
@@ -218,14 +228,17 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 mt-3">
+                            <!-- OPERATOR TELEFON VA MANZIL -->
+                            <div class="col-md-6 col-12 form-group mt-3">
                                 <label>{% trans "Operator telefon raqami" %}:</label>
                                 {{ form.phone }}
                             </div>
 
-                            <div class="col-md-6 mt-3">
+                            <div class="col-md-6 col-12 form-group mt-3">
                                 <label>{% trans "Manzil" %}:</label>
-                                {{ form.regions }}
+                                <div style="width: 100%;">
+                                    {{ form.regions }}
+                                </div>
                             </div>
 
                           </div>
@@ -234,8 +247,8 @@
                         <!-- LOGO SECTION -->
                         <h3 class="logo">{% trans "O'quv markaz logosi" %}</h3>
                         <div class="card p-4 mt-4">
-                            <div class="row mt-3">
-                                <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-12">
                                     <div class="logo-upload-box" id="uploadBox" onclick="document.getElementById('logoFileInput').click()">
                                         <input type="file" id="logoFileInput" name="logo" class="logo-file-input" accept="image/*" onchange="handleFileSelect(event)">
                                         
@@ -254,7 +267,7 @@
                             </div>
                         </div>
 
-                        <button id="saveBtn" class="mt-6 save-btn" type="submit">{% trans "Save Information" %}</button>
+                        <button id="saveBtn" class="mt-6 save-btn" type="submit" disabled>{% trans "Save Information" %}</button>
 
                       </div>
                     </div>
@@ -275,14 +288,26 @@
 <script>
 window.addEventListener('DOMContentLoaded', function() {
     const previewImage = document.getElementById('previewImage');
+    const form = document.getElementById('centerInfoForm');
+    const saveBtn = document.getElementById('saveBtn');
+
     if (previewImage.src && previewImage.src !== window.location.href) {
         previewImage.style.display = 'block';
         document.getElementById('uploadContent').style.display = 'none';
     }
+
+    form.addEventListener('input', function() {
+        saveBtn.disabled = false;
+    });
+
+    form.addEventListener('change', function() {
+        saveBtn.disabled = false;
+    });
 });
 
 function handleFileSelect(event) {
     const file = event.target.files[0];
+    const saveBtn = document.getElementById('saveBtn');
     
     if (file) {
         if (file.size > 5 * 1024 * 1024) {
@@ -307,6 +332,7 @@ function handleFileSelect(event) {
             previewImage.style.display = 'block';
             uploadContent.style.display = 'none';
             fileName.textContent = file.name;
+            saveBtn.disabled = false;
         };
         reader.readAsDataURL(file);
     }
@@ -318,12 +344,14 @@ function deleteImage(event) {
     const uploadContent = document.getElementById('uploadContent');
     const fileName = document.getElementById('fileName');
     const logoInput = document.getElementById('logoFileInput');
+    const saveBtn = document.getElementById('saveBtn');
     
     previewImage.src = '';
     previewImage.style.display = 'none';
     uploadContent.style.display = 'block';
     fileName.textContent = '';
     logoInput.value = '';
+    saveBtn.disabled = false;
 }
 </script>
 

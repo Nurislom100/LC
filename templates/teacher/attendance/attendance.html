@@ -31,6 +31,7 @@
             border-radius: 6px;
             text-decoration: none;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .subheader .nav-link:hover {
@@ -279,6 +280,42 @@
             color: #6b7280;
             margin-top: 2px;
         }
+
+        /* ⭐ FAQAT MOBIL UCHUN ADAPTATSIYA ⭐ */
+        @media (max-width: 768px) {
+            /* Navbar uchun gorizontal scroll */
+            .subheader {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .subheader .nav-tabs {
+                flex-wrap: nowrap;
+                width: max-content;
+            }
+
+            /* Jadval containeriga scroll qo'shish va birinchi ustunni muzlatib qo'yish (Sticky) */
+            .table-container {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+                max-width: 100%;
+            }
+
+            /* Birinchi ustun (O'quvchi ismi) scroll bo'lganda joyida qoladi */
+            table th:first-child,
+            table td:first-child {
+                position: sticky;
+                left: 0;
+                background-color: #ffffff;
+                z-index: 10;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            }
+
+            table th:first-child {
+                background-color: #f3f4f6;
+                z-index: 11;
+            }
+        }
     </style>
 </head>
 <body>
@@ -289,7 +326,7 @@
                     <li><a class="nav-link" href="{% url 'teacher:group-settings' group.pk %}">All</a></li>
                     <li><a class="nav-link active" href="{% url 'teacher:attendance-list' group.pk %}">Davomat</a></li>
                     <li><a class="nav-link" href="{% url 'teacher:grades' group.pk %}">Baholash</a></li>
-                    <li><a class="nav-link" href="{% url 'manager:rating' group.pk %}">Rating</a></li>
+                    <li><a class="nav-link" href="{% url 'teacher:rating' group.pk %}">Rating</a></li>
                     <li><a class="nav-link" href="{% url 'teacher:group-debtors' group.pk %}">Debtors</a></li>
                 </ul>
             </div>
@@ -356,10 +393,21 @@
         let lessonDates = [];
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
-        let deadlineDate = null;
+
+        function toLocalDateString(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function parseLocalDate(dateStr) {
+            const [y, m, d] = dateStr.split('-').map(Number);
+            return new Date(y, m - 1, d);
+        }
 
         function getTodayDateString() {
-            return new Date().toISOString().split('T')[0];
+            return toLocalDateString(new Date());
         }
 
         function isPastDate(dateString) {
@@ -367,51 +415,16 @@
         }
 
         function isEditableDate(dateString) {
-            const today = getTodayDateString();
-            if (!deadlineDate) return dateString >= today;
-            return dateString >= today && dateString <= deadlineDate;
+            return dateString === getTodayDateString();
         }
 
         function isLockedDate(dateString) {
-            const today = getTodayDateString();
-            if (!deadlineDate) return false;
-            return dateString > deadlineDate;
-        }
-
-        function getNextLessonDeadline(startDate, lessonDaysStr) {
-            const dayMap = { mo:0, tu:1, we:2, thu:3, fri:4, sa:5, sun:6 };
-            const days = lessonDaysStr.toLowerCase().split(' ').map(d => dayMap[d]).filter(n => n !== undefined).sort();
-            
-            const today = new Date(startDate);
-            const todayWeekday = today.getDay();
-            const todayIndex = todayWeekday === 0 ? 6 : todayWeekday - 1;
-            
-            const nextDays = days.filter(d => d > todayIndex);
-            let daysUntil;
-            
-            if (nextDays.length > 0) {
-                daysUntil = nextDays[0] - todayIndex;
-            } else {
-                daysUntil = (7 - todayIndex) + days[0];
-            }
-            
-            const nextLesson = new Date(today);
-            nextLesson.setDate(nextLesson.getDate() + daysUntil);
-            
-            // Keyingi darsdan 1 kun oldin - deadline
-            const deadline = new Date(nextLesson);
-            deadline.setDate(deadline.getDate() - 1);
-            
-            console.log('📅 Bugun:', startDate);
-            console.log('📅 Keyingi dars:', nextLesson.toISOString().split('T')[0]);
-            console.log('⏰ Deadline:', deadline.toISOString().split('T')[0], '23:59:59');
-            
-            return deadline.toISOString().split('T')[0];
+            return dateString > getTodayDateString();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            deadlineDate = getNextLessonDeadline(getTodayDateString(), lessonDays);
-            
+            console.log('📅 Bugun:', getTodayDateString());
+
             initializeYearSelect();
             setCurrentDate();
             loadStudentsFromAPI();
@@ -419,12 +432,12 @@
 
         async function loadStudentsFromAPI() {
             try {
-                const res = await fetch(`/teacher/api/groups/${groupId}/students/`);
+                const res = await fetch(`/manager/api/groups/${groupId}/students/`);
                 const data = await res.json();
                 students = data.map(s => ({
                     id: s.id,
                     name: s.full_name,
-                    joinDate: s.date_joined ? s.date_joined.split('T')[0] : getTodayDateString()
+                    joinDate: s.date_joined ? s.date_joined.split('T')[0] : '2000-01-01'
                 }));
                 
                 document.getElementById('student-count').textContent = `${students.length} ta o'quvchi`;
@@ -442,9 +455,9 @@
 
         async function loadExistingAttendance() {
             try {
-                const start = new Date(currentYear, currentMonth, 1).toISOString().split('T')[0];
-                const end = new Date(currentYear, currentMonth + 1, 0).toISOString().split('T')[0];
-                const res = await fetch(`/teacher/api/attendance/?group=${groupId}&start_date=${start}&end_date=${end}`);
+                const start = toLocalDateString(new Date(currentYear, currentMonth, 1));
+                const end = toLocalDateString(new Date(currentYear, currentMonth + 1, 0));
+                const res = await fetch(`/manager/api/attendance/?group=${groupId}&start_date=${start}&end_date=${end}`);
                 
                 if (res.ok) {
                     const data = await res.json();
@@ -503,13 +516,20 @@
                 const date = new Date(year, month, day);
                 if (!allowedDays.includes(date.getDay())) continue;
                 
-                const dateStr = date.toISOString().split('T')[0];
+                const dateStr = toLocalDateString(date);
+                
+                const isPast = isPastDate(dateStr);
+                const isEdit = isEditableDate(dateStr);
+                const isLock = isLockedDate(dateStr);
+                
+                console.log(`📆 ${dateStr}: isPast=${isPast}, isEdit=${isEdit}, isLock=${isLock}`);
+                
                 dates.push({
                     date: dateStr,
                     display: `${String(day).padStart(2,'0')}.${String(month+1).padStart(2,'0')}`,
-                    isPast: isPastDate(dateStr),
-                    isEditable: isEditableDate(dateStr),
-                    isLocked: isLockedDate(dateStr)
+                    isPast: isPast,
+                    isEditable: isEdit,
+                    isLocked: isLock
                 });
             }
             return dates;
@@ -529,7 +549,6 @@
             const key = `${studentId}-${date}`;
             attendance[key] = status;
             
-            // Buttonlarni yopish
             document.querySelectorAll('.attendance-cell').forEach(cell => {
                 cell.classList.remove('active');
             });
@@ -537,7 +556,7 @@
             renderTable();
             
             try {
-                const res = await fetch('/teacher/api/attendance/save/', {
+                const res = await fetch('/manager/api/attendance/save/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -568,14 +587,12 @@
         }
         
         function toggleButtons(cellElement) {
-            // Oldingi ochiq buttonlarni yopish
             document.querySelectorAll('.attendance-cell').forEach(cell => {
                 if (cell !== cellElement) {
                     cell.classList.remove('active');
                 }
             });
             
-            // Hozirgi cellni toggle
             cellElement.classList.toggle('active');
         }
 
@@ -583,19 +600,18 @@
             const student = students.find(s => s.id === studentId);
             if (!student) return { present: 0, total: 0, percentage: 0 };
             
-            const studentJoinDate = new Date(student.joinDate);
+            const studentJoinDate = parseLocalDate(student.joinDate);
             
-            // HAMMA katakchalar (yopiq ham, ochiq ham)
             const allAttendance = lessonDates
                 .filter(d => {
-                    const lessonDate = new Date(d.date);
+                    const lessonDate = parseLocalDate(d.date);
                     return lessonDate >= studentJoinDate;
                 })
                 .map(d => {
                     const key = `${studentId}-${d.date}`;
                     return attendance[key];
                 })
-                .filter(val => val === true || val === false); // faqat belgilangan
+                .filter(val => val === true || val === false);
             
             const present = allAttendance.filter(v => v === true).length;
             const total = allAttendance.length;
@@ -624,24 +640,23 @@
                 lessonDates.forEach(d => {
                     const key = `${s.id}-${d.date}`;
                     const val = attendance[key];
-                    const isLocked = d.isLocked;
-                    const isPast = d.isPast;
-                    const isEditable = d.isEditable;
+                    
+                    const isPast = isPastDate(d.date);
+                    const isEditable = isEditableDate(d.date);
+                    const isLocked = isLockedDate(d.date);
                     
                     const cellClass = isLocked ? 'locked' : isPast ? 'past-date' : '';
                     const cellId = `cell-${s.id}-${d.date}`;
                     
                     html += `<td class="attendance-cell ${cellClass}" id="${cellId}" onclick="toggleButtons(this)">`;
                     
-                    // Qulf (keyingi dars kunlari) - markazda
                     if (isLocked) {
                         html += `<svg xmlns="http://www.w3.org/2000/svg" class="lock-icon" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
                         </svg>`;
-                        html += `<div class="tooltip">Bu kunga hali kelmadi</div>`;
+                        html += `<div class="tooltip">Bu kun hali kelmadi</div>`;
                     }
                     
-                    // Attendance button
                     html += `<div class="attendance-button ${val===true?'present':val===false?'absent':'empty'}">`;
                     if (val === true) {
                         html += `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
@@ -650,8 +665,7 @@
                     }
                     html += `</div>`;
                     
-                    // Click buttons (faqat edit qilish mumkin bo'lgan kunlar)
-                    if (isEditable && !isPast && !isLocked) {
+                    if (isEditable) {
                         html += `<div class="click-buttons">
                             <button class="hover-btn present" onclick="event.stopPropagation(); markAttendance(${s.id},'${d.date}',true)">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -667,18 +681,18 @@
                     
                     html += `</td>`;
                 });
-                
-                html += `<td style="text-align:center;">
-                    <div class="percentage-badge ${stats.percentage>=80?'high':stats.percentage>=60?'medium':'low'}">
-                        ${stats.percentage}%
-                    </div>
-                    <div class="percentage-details">${stats.present}/${stats.total}</div>
-                </td></tr>`;
-            });
             
-            html += `</tbody></table>`;
-            content.innerHTML = html;
-        }
+            html += `<td style="text-align:center;">
+                <div class="percentage-badge ${stats.percentage>=80?'high':stats.percentage>=60?'medium':'low'}">
+                    ${stats.percentage}%
+                </div>
+                <div class="percentage-details">${stats.present}/${stats.total}</div>
+            </td></tr>`;
+        });
+        
+        html += `</tbody></table>`;
+        content.innerHTML = html;
+    }
 
         function getCookie(name) {
             let val = null;
@@ -693,7 +707,6 @@
             return val;
         }
         
-        // Tashqariga bosish - buttonlarni yopish
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.attendance-cell')) {
                 document.querySelectorAll('.attendance-cell').forEach(cell => {

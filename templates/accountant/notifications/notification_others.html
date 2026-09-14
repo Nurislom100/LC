@@ -2,6 +2,18 @@
 {% load static %}
 {% block content %}
 
+<style>
+    /* Mobil va kompyuter versiyasida tugmalarni bir tekis ushlab turish uchun */
+    .action-btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .action-btn-group .btn {
+        margin: 0 !important;
+    }
+</style>
+
 <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
     <div class="d-flex flex-column flex-root">
         <div class="d-flex flex-row flex-column-fluid page">
@@ -11,7 +23,8 @@
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <div class="d-flex flex-column-fluid">
                         <div class="container">
-                            <div class="card card-custom card-sticky" id="kt_page_sticky_card">
+                            <!-- Scroll payti tushib ketmasligi uchun card-sticky olib tashlandi -->
+                            <div class="card card-custom" id="kt_page_card">
                                 <div class="card-header">
                                     <div class="card-title">
                                         <h3 class="card-label">Send Notification - Others <i class="mr-2"></i></h3>
@@ -23,8 +36,8 @@
                                         
                                         <!-- Role -->
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Role *</b></label>
-                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <div class="col-12">
+                                                <label class="col-form-label text-left"><b>Role *</b></label>
                                                 <select name="recipient_role" id="role" class="form-control" required>
                                                     <option value="">Roleni tanlang</option>
                                                     <option value="manager">Manager</option>
@@ -38,8 +51,8 @@
 
                                         <!-- Course (faqat teacher uchun) -->
                                         <div class="form-group row" id="courseGroup" style="display:none;">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Course *</b></label>
-                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <div class="col-12">
+                                                <label class="col-form-label text-left"><b>Course *</b></label>
                                                 <select name="course" id="course" class="form-control">
                                                     <option value="">Kursni tanlang</option>
                                                 </select>
@@ -49,8 +62,8 @@
 
                                         <!-- Person (Recipient) -->
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Select Person *</b></label>
-                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <div class="col-12">
+                                                <label class="col-form-label text-left"><b>Select Person *</b></label>
                                                 <select name="recipient" id="person" class="form-control" required disabled>
                                                     <option value="">Avval roleni tanlang</option>
                                                 </select>
@@ -60,8 +73,8 @@
 
                                         <!-- Message Type (faqat teacher uchun) -->
                                         <div class="form-group row" id="typeGroup" style="display:none;">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Type *</b></label>
-                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <div class="col-12">
+                                                <label class="col-form-label text-left"><b>Type *</b></label>
                                                 <select name="message_type" id="messageType" class="form-control">
                                                     <option value="">Xabar turini tanlang</option>
                                                     <option value="payment">Payment (To'lov)</option>
@@ -72,24 +85,25 @@
 
                                         <!-- Message -->
                                         <div class="form-group row">
-                                            <label class="col-form-label text-right col-lg-3 col-sm-12"><b>Message *</b></label>
-                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <div class="col-12">
+                                                <label class="col-form-label text-left"><b>Message *</b></label>
                                                 <textarea name="message" id="message" class="form-control" rows="5" placeholder="Xabar matni..." required></textarea>
                                                 <small class="form-text text-muted">Yubormoqchi bo'lgan xabaringizni kiriting</small>
                                             </div>
                                         </div>
 
-                                        <div class="card-footer">
-                                            <div class="row">
-                                                <div class="col-lg-3"></div>
-                                                <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" id="submitBtn">
-                                                        <i class="fas fa-paper-plane"></i> Send Notification
-                                                    </button>
-                                                    <button type="reset" class="btn btn-secondary" id="resetBtn">
-                                                        <i class="fas fa-redo"></i> Reset
-                                                    </button>
-                                                </div>
+                                        <div class="card-footer px-0 pb-0">
+                                            <!-- Tugmalarni har qanday ekranda bir qatorda chiroyli joylashtirish -->
+                                            <div class="action-btn-group">
+                                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                                    <i class="fas fa-paper-plane"></i> Send Notification
+                                                </button>
+                                                <button type="reset" class="btn btn-secondary" id="resetBtn">
+                                                    <i class="fas fa-redo"></i> Reset
+                                                </button>
+                                                <a href="{% url 'accountant:home' %}" class="btn btn-secondary" id="exitBtn">
+                                                    <i class="fas fa-sign-out-alt"></i> Exit
+                                                </a>
                                             </div>
                                         </div>
                                     </form>

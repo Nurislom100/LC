@@ -1,11 +1,58 @@
-{% extends "base/base.html" %} {% load static %} {% block content %}
-<!--begin::Head-->
-<!--end::Head-->
-<!--begin::Body-->
+{% extends "base/base.html" %} 
+{% load static %} 
+{% block content %}
+
+<style>
+    /* FAQAT MOBIL EKRANLAR UCHUN SOZLAMALAR */
+    @media (max-width: 768px) {
+        /* Yozuvlarni (labels) mobil qurilmada chapga tekislash */
+        .form-group.row > label.col-form-label {
+            text-align: left !important;
+            padding-bottom: 5px;
+        }
+
+        /* Form input va selectlarini ekranga mos to'liq kenglikda ko'rsatish */
+        .form-group.row > div[class*="col-"] {
+            width: 100% !important;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+
+        /* Form elementlarining o'zi (input, select, textarea) 100% enini egallashi */
+        .form-group.row input, 
+        .form-group.row select, 
+        .form-group.row textarea {
+            width: 100% !important;
+        }
+
+        /* Save va Cancel tugmalarini mobil ekranda bir qatorda yonma-yon qilish */
+        .card-footer .row > div {
+            width: 100% !important;
+            padding: 0 !important;
+        }
+
+        .mobile-btn-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 10px !important;
+            width: 100% !important;
+        }
+
+        .mobile-btn-wrapper .btn {
+            flex: 1 !important;
+            margin: 0 !important;
+            text-align: center !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 42px !important;
+        }
+    }
+</style>
 
 <body
     id="kt_body"
-    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading"
+    class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed page-loading"
 >
     <!--begin::Main-->
     <!--begin::Header Mobile-->
@@ -63,8 +110,7 @@
                                         <div class="card-footer">
                                             <div class="row">
                                                 <div class="col-lg-3"></div>
-                                                <div class="col-lg-9">
-                                                    <button type="submit" class="btn btn-primary mr-2" name="save-create">Save and add new</button>
+                                                <div class="col-lg-9 mobile-btn-wrapper">
                                                     <button type="submit" class="btn btn-primary mr-2" name="saved">Save</button>
                                                     <a href="{% url 'manager:tsalary-list' %}" class="btn btn-secondary"><span>Cancel</span></a>
                                                 </div>
@@ -92,21 +138,17 @@
     <!--end::Main-->
     <!-- begin::User Panel-->
     {% include "parts/user-panel.html" %}
-    <!--begin::Quick Cart-->
-    <!--end::Quick Cart-->
-    <!--begin::Quick Panel-->
-    <!--end::Quick Panel-->
-    <!--begin::Chat Panel-->
-    <!--end::Chat Panel-->
     <!--begin::Scrolltop-->
     {% include "parts/scrolltop.html" %}
     <!--end::Scrolltop-->
-    <!--begin::Sticky Toolbar-->
-    <!--end::Sticky Toolbar-->
-    <!--begin::Demo Panel-->
-    <!--end::Demo Panel-->
-    <!--end::Page Scripts-->
 </body>
 <!--end::Body-->
-{% endblock %}
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Django formasi orqali generatsiya qilingan barcha input/select/textarea larga Bootstrap klasini avtomatik biriktirish
+        $('.form-group input, .form-group select, .form-group textarea').addClass('form-control');
+    });
+</script>
+{% endblock %}

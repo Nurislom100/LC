@@ -39,6 +39,7 @@ class Informations(models.Model):
         ('xorazm', 'Xorazm'),
     ]
 
+    name = models.CharField(_("Name"), max_length=255,)
     tg_admin = models.CharField(_("Admin"), max_length=100)
     tg_channel = models.CharField(_("Telegram Kanal"), max_length=100)
     instagram = models.CharField(_("Instagram"), max_length=100)
@@ -213,8 +214,8 @@ class Group(BaseModel):
 
 class Student(BaseModel):
     status_choices = [
-        (_("Active"), _("Active")),
-        (_("Archive"), _("Archive")),
+        ("Active", _("Active")),
+        ("Archive", _("Archive")),
 
     ]
     full_name = models.CharField(_("full name"), max_length=256)
@@ -224,7 +225,7 @@ class Student(BaseModel):
     address = models.CharField(_("address"), max_length=256)
     balance = models.IntegerField(_("balance"))
     date_joined = models.DateField(_("joined"), null=True, blank=True,  default=date.today)
-    status = models.CharField(_("status"), max_length=256, choices=status_choices)
+    status = models.CharField(_("status"), max_length=256, choices=status_choices, default="Active")
 
     class Meta:
         db_table = "students"

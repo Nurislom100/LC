@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from django.views.generic import View
 from django.views.generic import ListView
 from django.contrib.auth import authenticate, login, logout
@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from common import models
+from .models import *
 from helpers.views import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from common.mixins import RoleRequiredMixin

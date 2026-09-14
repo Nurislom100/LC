@@ -76,6 +76,26 @@ select.form-select:focus {
 }
 
 @media (max-width: 768px) {
+    /* Ekrandan o'ngga chiqib ketish va yonboshga scroll bo'lishni yo'qotish */
+    html, body, .d-flex.flex-root, .wrapper, .content {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+
+    /* Yon tomonga chiqib turgan metronic sticky/panel elementlarini mobil uchun yashirish */
+    #kt_demo_panel, .offcanvas {
+        max-width: 100vw !important;
+    }
+
+    .container, .content, .card-custom {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
     .filter-row {
         flex-direction: column;
         align-items: stretch !important;
@@ -89,6 +109,33 @@ select.form-select:focus {
     .reset-btn {
         width: 100%;
         justify-content: center;
+    }
+
+    /* Search input va Tugmani mobil ko'rinishida markazlashtirish va moslash */
+    .search-form-row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0 10px !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .search-input-wrapper {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .search-btn-mobile {
+        margin-left: 0 !important;
+        margin-top: 8px !important;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
 }
 </style>
@@ -129,7 +176,7 @@ select.form-select:focus {
                       <form method="get" id="filterForm">
                           <div class="filter-row" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; align-items: center; justify-content: flex-end;">
                               
-                              <select name="day" class="form-select selectpicker" onchange="this.form.submit()" style="width: auto; flex: 0 0 auto;">
+                              <select name="day" id="dayFilter" class="form-select selectpicker" onchange="this.form.submit()" style="width: auto; flex: 0 0 auto;">
                                   <option value="">Lesson Days</option>
                                   <option value="odd" {% if request.GET.day == 'odd' %}selected{% endif %}>Mo We Fri</option>
                                   <option value="even" {% if request.GET.day == 'even' %}selected{% endif %}>Tu Thu Sat</option>
@@ -148,13 +195,15 @@ select.form-select:focus {
                           </div>
                       </form>
                     </div>
+                    
+                    <!-- Search qismi -->
                     <form method="get">
-                      <div class="form-group row">
-                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-6  ml-10 ">
+                      <div class="form-group row search-form-row">
+                          <div class="col-lg-3 col-md-9 col-sm-12 mb-lg-0 mb-2 ml-lg-10 search-input-wrapper">
                               <input type="text" class="form-control datatable-input" placeholder="Search" value="{{request.GET.search}}" name="search" data-col-index="0"/>
                           </div>
 
-                          <button type="submit" class="btn btn-primary font-weight-bolder  ml-7 mb-1">
+                          <button type="submit" class="btn btn-primary font-weight-bolder ml-lg-7 mb-1 search-btn-mobile">
                               <span class="nav-icon">
                                   <i class="fas fa-search"></i>
                               </span>
@@ -208,23 +257,24 @@ select.form-select:focus {
                                   <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.lesson_days}}</span>
                                 </td>
                                 <td>
-                                  <span class="t/ext-dark-75 font-weight-bolder d-block font-size-lg">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</span>
+                                  <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</span>
                                 </td>
                                 <td>
                                   <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{object.price| intcomma}} UZS</span>
                                 </td>
                                 <td nowrap="nowrap">
                                   <a href="{% url 'teacher:group-settings' object.pk %}">
-                                      <span class="svg-icon svg-icon-md">
-                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                                    <span class="svg-icon svg-icon-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                                           <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
                                           <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
-                                          </svg>
-                                      </span>
+                                        </svg>
+                                    </span>
                                   </a>
                                 </td>
                               </tr>
                               {% endfor %}
+                            </tbody>
                           </table>
                         </div>
                         <!--end::Table-->
@@ -257,47 +307,21 @@ select.form-select:focus {
   <!--end::Main-->
   <!-- begin::User Panel-->
   {% include "parts/user-panel.html" %}
-  <!--begin::Quick Cart-->
-  <!--end::Quick Cart-->
-  <!--begin::Quick Panel-->
-  <!--end::Quick Panel-->
-  <!--begin::Chat Panel-->
-  <!--end::Chat Panel-->
   <!--begin::Scrolltop-->
   {% include "parts/scrolltop.html" %}
   <!--end::Scrolltop-->
-  <!--begin::Sticky Toolbar-->
-  <!--end::Sticky Toolbar-->
-  <!--begin::Demo Panel-->
-  <!--end::Demo Panel-->
 
 <script>
 // Sahifa refresh bo'lganda filterni reset qilish
 window.addEventListener('load', function() {
-    // Agar URL'da filter parametrlari bo'lmasa, selectlarni reset qilish
     const urlParams = new URLSearchParams(window.location.search);
     
     if (!urlParams.has('day') && !urlParams.has('teacher') && !urlParams.has('course')) {
-        document.getElementById('dayFilter').selectedIndex = 0;
-        document.getElementById('teacherFilter').selectedIndex = 0;
-        document.getElementById('courseFilter').selectedIndex = 0;
+        const dayFilter = document.getElementById('dayFilter');
+        if(dayFilter) dayFilter.selectedIndex = 0;
     }
-});
-
-// Select o'zgarganda avtomatik submit
-document.getElementById('dayFilter').addEventListener('change', function() {
-    document.getElementById('filterForm').submit();
-});
-
-document.getElementById('teacherFilter').addEventListener('change', function() {
-    document.getElementById('filterForm').submit();
-});
-
-document.getElementById('courseFilter').addEventListener('change', function() {
-    document.getElementById('filterForm').submit();
 });
 </script>
 </body>
 <!--end::Body-->
 {% endblock %}
-

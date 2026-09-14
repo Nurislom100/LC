@@ -94,12 +94,27 @@
     background: #94a3b8;
 }
 
+/* ============================================================
+   HEADER LAYOUT — FLEX
+   ============================================================ */
+.header-flex-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 16px;
+}
+
+.header-search-wrapper {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+}
+
 .search-container {
     position: relative;
     width: 100%;
     max-width: 600px;
-    margin-left: 300px;
-    margin-right: 350px;
 }
 
 .search-input {
@@ -164,30 +179,11 @@
     letter-spacing: 0.3px;
 }
 
-.type-teacher {
-    background: #e3f2fd;
-    color: #1976d2;
-}
-
-.type-student {
-    background: #e8f5e9;
-    color: #388e3c;
-}
-
-.type-group {
-    background: #fff3e0;
-    color: #f57c00;
-}
-
-.type-course {
-    background: #f3e5f5;
-    color: #7b1fa2;
-}
-
-.type-employee {
-    background: #fce4ec;
-    color: #c2185b;
-}
+.type-teacher { background: #e3f2fd; color: #1976d2; }
+.type-student { background: #e8f5e9; color: #388e3c; }
+.type-group { background: #fff3e0; color: #f57c00; }
+.type-course { background: #f3e5f5; color: #7b1fa2; }
+.type-employee { background: #fce4ec; color: #c2185b; }
 
 .no-results, .loading {
     padding: 16px;
@@ -215,62 +211,97 @@
     background: #999;
 }
 
-/* Language selector styling */
-.language-selector {
+/* ============================================================
+   TOPBAR ITEMLARINI BIR QATORDA TEKISLASH
+   ============================================================ */
+.topbar {
+    display: flex;
+    align-items: center !important;
+    gap: 8px;
+}
+
+.topbar-item {
+    display: flex;
+    align-items: center !important;
+}
+
+.lang-selector-wrapper {
+    position: relative;
+}
+
+.lang-toggle-btn {
+    width: 38px;
+    height: 38px;
     display: inline-flex;
     align-items: center;
-}
-
-.language-selector select {
-    min-width: 150px;
-    padding: 8px 12px;
-    border: 1px solid #e4e6ef;
+    justify-content: center;
     border-radius: 6px;
-    background-color: #f3f6f9;
-    font-size: 13px;
-    font-weight: 500;
-    color: #3f4254;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.type-teacher { background: #e3f2fd; color: #1976d2; }
-.type-student { background: #e8f5e9; color: #388e3c; }
-.type-group { background: #fff3e0; color: #f57c00; }
-.type-course { background: #f3e5f5; color: #7b1fa2; }
-.type-employee { background: #fce4ec; color: #c2185b; }
-
-.no-results, .loading {
-    padding: 16px;
-    text-align: center;
-    color: #999;
-    font-size: 14px;
-}
-
-/* Language selector */
-.language-selector select {
-    min-width: 150px;
-    padding: 8px 12px;
     border: 1px solid #e4e6ef;
-    border-radius: 6px;
     background-color: #f3f6f9;
-    font-size: 13px;
-    font-weight: 500;
-    color: #3f4254;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    padding: 0;
 }
 
-.language-selector select:hover {
+.lang-toggle-btn:hover {
     background-color: #ebedf3;
     border-color: #d1d3e0;
 }
 
-.language-selector select:focus {
-    outline: none;
-    border-color: #3699ff;
-    background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(54, 153, 255, 0.1);
+.lang-toggle-btn .lang-flag-icon {
+    font-size: 18px;
+    line-height: 1;
+    display: inline-block;
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    min-width: 160px;
+    padding: 6px;
+    z-index: 1001;
+}
+
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #3f4254;
+    transition: background 0.15s;
+}
+
+.lang-option:hover {
+    background: #f3f6f9;
+}
+
+.lang-option.active {
+    background: #e8f4fd;
+    color: #3699ff;
+}
+
+.lang-option .lang-option-flag {
+    font-size: 16px;
+}
+
+/* Header Action Button (Jadval va yangi tugmalar) */
+.header-action-btn {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
 }
 
 /* Send button in dropdown */
@@ -294,106 +325,211 @@
     color: white;
     text-decoration: none;
 }
+
+.billing-lock-btn {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #e4e6ef;
+    background-color: #f3f6f9;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.billing-lock-btn:hover { background-color: #ebedf3; }
+.billing-lock-btn svg { width: 18px; height: 18px; color: #6b7280; }
+
+.billing-login-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+}
+.billing-login-modal-overlay.active { display: flex; }
+
+.billing-login-modal {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px;
+    width: 100%;
+    max-width: 320px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+.billing-login-modal h5 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color:#111827; }
+.billing-login-modal input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.billing-login-modal .err { color: #dc2626; font-size: 12px; margin-bottom: 8px; display:none; }
+.billing-login-modal button.submit {
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: 700;
+    color: #fff;
+    background: #111827;
+    cursor: pointer;
+}
 </style>
 
+{% get_current_language as LANGUAGE_CODE %}
+
 <div id="kt_header" class="header header-fixed">
-    <div class="container-fluid d-flex align-items-stretch justify-content-between">
-        <div class="headersearch" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px;">
-            <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+    <div class="container-fluid d-flex align-items-stretch justify-content-between" style="padding: 10px 20px;">
+        <div class="header-flex-row">
+
+            <!-- Search Area -->
+            <div class="header-search-wrapper">
                 <div class="search-container">
-                    <input 
-                        type="text" 
-                        id="universalSearch" 
-                        class="form-control search-input" 
+                    <input
+                        type="search"
+                        id="universalSearch"
+                        class="form-control search-input"
                         placeholder="Search : Teachers,Groups,Courses,Students.."
+                        value=""
                         autocomplete="off"
+                        data-lpignore="true"
+                        data-1p-ignore
+                        data-bwignore="true"
+                        data-form-type="other"
                     >
                     <div id="searchResults" class="search-results" style="display: none;"></div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Right: Topbar -->
-        <div class="topbar">
-            
-            <!-- Language Selector -->
-            <div class="topbar-item language-selector mr-2">
-                <form action="{% url 'set_language' %}" method="post" style="margin: 0;">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.path }}">
-                    <select name="language" onchange="this.form.submit()">
-                        {% get_current_language as LANGUAGE_CODE %}
-                        <option value="uz" {% if LANGUAGE_CODE == 'uz' %}selected{% endif %}>O'zbekcha</option>
-                        <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
-                        <option value="ru" {% if LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
-                    </select>
-                </form>
+
+            <!-- Qulf (Lock) tugmasi -->
+            <div class="topbar-item" title="Admin panel">
+                <button type="button" class="billing-lock-btn" id="billingLockBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 10-8 0v4h8z" />
+                    </svg>
+                </button>
             </div>
-            
-            <!-- Notification Bell -->
-            <div class="dropdown">
-                <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
-                    <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1">
-                        <span class="svg-icon svg-icon-xl svg-icon-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
-                            </svg>
+
+            <!-- To'lov holati sahifasiga (billing:status) o'tish tugmasi -->
+            <div class="topbar-item" title="Sozlamalar">
+                <a href="{% url 'billing:status' %}" class="billing-lock-btn" style="text-decoration: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                        <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Login modal — ICHI BO'SH.
+                 Login/parol inputlari MUHIM SABABGA KO'RA endi HTML'da statik
+                 yozilmagan: agar type="text" + type="password" jufti sahifa
+                 yuklanganda DOM'da doim mavjud bo'lsa (hatto CSS bilan
+                 yashirin bo'lsa ham), brauzer/parol menejeri kengaytmalari
+                 (Chrome avtofill, LastPass, Bitwarden va h.k.) buni "login
+                 formasi" deb aniqlab, saqlangan kimlik ma'lumotini SAHIFADAGI
+                 BOSHQA matn maydonlariga (masalan qidiruv qutisiga) ham
+                 tarqatib yuborishi mumkin. Shuning uchun bu maydonlar endi
+                 pastdagi JS orqali FAQAT tugma bosilganda yaratiladi va
+                 modal yopilganda DOM'dan butunlay o'chiriladi. -->
+            <div class="billing-login-modal-overlay" id="billingLoginOverlay"></div>
+
+            <!-- Right: Topbar -->
+            <div class="topbar">
+
+                <!-- Language Selector -->
+                <div class="topbar-item lang-selector-wrapper">
+                    <button type="button" id="langToggleBtn" class="lang-toggle-btn" title="{% trans 'Tilni tanlash' %}">
+                        <span id="langFlagIcon" class="lang-flag-icon">
+                            {% if LANGUAGE_CODE == 'uz' %}🇺🇿{% elif LANGUAGE_CODE == 'ru' %}🇷🇺{% elif LANGUAGE_CODE == 'en' %}🇬🇧{% else %}🌐{% endif %}
                         </span>
-                        <span id="notificationBadge" class="label label-sm label-rounded font-weight-bolder position-absolute" 
-                              style="top: -5px; right: -5px; min-width: 22px; height: 22px; background: #ef4444; color: white; font-size: 12px; display: none; align-items: center; justify-content: center; padding: 0 6px; border-radius: 11px; box-shadow: 0 2px 4px rgba(239,68,68,0.4);">
-                            0
-                        </span>
+                    </button>
+
+                    <div id="langDropdown" class="lang-dropdown" style="display:none;">
+                        <div class="lang-option {% if LANGUAGE_CODE == 'uz' %}active{% endif %}" data-lang="uz" data-flag="🇺🇿">
+                            <span class="lang-option-flag">🇺🇿</span> O'zbekcha
+                        </div>
+                        <div class="lang-option {% if LANGUAGE_CODE == 'en' %}active{% endif %}" data-lang="en" data-flag="🇬🇧">
+                            <span class="lang-option-flag">🇬🇧</span> English
+                        </div>
+                        <div class="lang-option {% if LANGUAGE_CODE == 'ru' %}active{% endif %}" data-lang="ru" data-flag="🇷🇺">
+                            <span class="lang-option-flag">🇷🇺</span> Русский
+                        </div>
                     </div>
+
+                    <form id="langForm" action="{% url 'set_language' %}" method="post" style="display:none;">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.path }}">
+                        <input type="hidden" name="language" id="langFormInput" value="{{ LANGUAGE_CODE }}">
+                    </form>
                 </div>
-                
-                <!-- Dropdown -->
-                <div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up" style="width: 380px; max-width: 90vw; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-                    <!-- Header -->
-                    <div style="background: #f8f9fa; padding: 16px 20px; border-bottom: 1px solid #e5e7eb;">
-                        <h6 class="font-weight-bold mb-2" style="color: #1f2937; font-size: 16px;">
-                            Messages
-                            <span class="text-muted font-size-sm ml-2" id="notifCountText" style="font-weight: 400;">0 ta yangi</span>
-                        </h6>
-                        <!-- Send Button -->
-                        <a href="{% url 'reception:others-notification' %}" class="send-notif-btn">
-                            <i class="fas fa-paper-plane mr-2"></i>Xabar yuborish
-                        </a>
+
+
+                <!-- Notification Bell -->
+                <div class="dropdown topbar-item">
+                    <div data-toggle="dropdown" data-offset="10px,0px" style="cursor: pointer;">
+                        <div class="btn btn-icon btn-clean btn-dropdown btn-lg" style="width: 38px; height: 38px; position: relative;">
+                            <span class="svg-icon svg-icon-xl svg-icon-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
+                                </svg>
+                            </span>
+                            <span id="notificationBadge" class="label label-sm label-rounded font-weight-bolder position-absolute"
+                                  style="top: -2px; right: -2px; min-width: 18px; height: 18px; background: #ef4444; color: white; font-size: 11px; display: none; align-items: center; justify-content: center; padding: 0 4px; border-radius: 9px; box-shadow: 0 2px 4px rgba(239,68,68,0.4);">
+                                0
+                            </span>
+                        </div>
                     </div>
-                    
-                    <!-- Notifications List -->
-                    <div style="max-height: 400px; overflow-y: auto; padding: 12px;" id="notificationScrollArea">
-                        <div class="text-center py-8" id="notifLoading">
-                            <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;">
-                                <span class="sr-only">Yuklanmoqda...</span>
+
+                    <!-- Dropdown -->
+                    <div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up" style="width: 380px; max-width: 90vw; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                        <div style="background: #f8f9fa; padding: 16px 20px; border-bottom: 1px solid #e5e7eb;">
+                            <h6 class="font-weight-bold mb-2" style="color: #1f2937; font-size: 16px;">
+                                Messages
+                                <span class="text-muted font-size-sm ml-2" id="notifCountText" style="font-weight: 400;">0 ta yangi</span>
+                            </h6>
+                            <a href="{% url 'reception:others-notification' %}" class="send-notif-btn">
+                                <i class="fas fa-paper-plane mr-2"></i>Xabar yuborish
+                            </a>
+                        </div>
+
+                        <div style="max-height: 400px; overflow-y: auto; padding: 12px;" id="notificationScrollArea">
+                            <div class="text-center py-8" id="notifLoading">
+                                <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;">
+                                    <span class="sr-only">Yuklanmoqda...</span>
+                                </div>
+                            </div>
+                            <div id="notificationCards"></div>
+                            <div class="text-center py-10 d-none" id="notifEmptyState">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3" style="opacity: 0.5;"></i>
+                                <p class="text-muted mb-0">Xabarlar yo'q</p>
                             </div>
                         </div>
-                        <div id="notificationCards"></div>
-                        <div class="text-center py-10 d-none" id="notifEmptyState">
-                            <i class="fas fa-inbox fa-3x text-muted mb-3" style="opacity: 0.5;"></i>
-                            <p class="text-muted mb-0">Xabarlar yo'q</p>
+
+                        <div style="background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #e5e7eb;">
+                            <a href="{% url 'reception:notification-inbox' %}" class="btn btn-light-primary btn-block font-weight-bold" style="border-radius: 8px;">
+                                <i class="fas fa-eye mr-2"></i>Barchasini ko'rish
+                            </a>
                         </div>
                     </div>
-                    
-                    <!-- Footer -->
-                    <div style="background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #e5e7eb;">
-                        <a href="{% url 'reception:notification-inbox' %}" class="btn btn-light-primary btn-block font-weight-bold" style="border-radius: 8px;">
-                            <i class="fas fa-eye mr-2"></i>Barchasini ko'rish
-                        </a>
+                </div>
+
+                <!-- User -->
+                <div class="topbar-item">
+                    <div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
+                        <span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
+                        <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">Manager</span>
+                        <span class="symbol symbol-lg-35 symbol-25 symbol-light-success">
+                            <span class="symbol-label font-size-h5 font-weight-bold">M</span>
+                        </span>
                     </div>
                 </div>
             </div>
-            
-            <!-- User -->
-            <div class="topbar-item">
-                <div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
-                    <span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
-                    <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">Reception</span>
-                    <span class="symbol symbol-lg-35 symbol-25 symbol-light-success">
-                        <span class="symbol-label font-size-h5 font-weight-bold">R</span>
-                    </span>
-                </div>
-            </div>
-            
         </div>
     </div>
 </div>
@@ -428,11 +564,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function loadNotifications() {
         try {
-            const countRes = await fetch('{% url "reception:notification-count" %}');
+            const countRes = await fetch('{% url "manager:notification-count" %}');
             const countData = await countRes.json();
             updateBadge(countData.unread_count);
             
-            const listRes = await fetch('{% url "reception:notification-list-api" %}?limit=4&status=all');
+            const listRes = await fetch('{% url "manager:notification-list-api" %}?limit=4&status=all');
             const listData = await listRes.json();
             
             notifLoading.classList.add('d-none');
@@ -493,7 +629,7 @@ document.addEventListener('DOMContentLoaded', function() {
             detailContent.innerHTML = '<div class="text-center py-10"><div class="spinner-border text-primary"></div></div>';
             detailModal.show();
             
-            const res = await fetch(`{% url "reception:notification-detail-api" 0 %}`.replace('0', id));
+            const res = await fetch(`{% url "manager:notification-detail-api" 0 %}`.replace('0', id));
             const data = await res.json();
             
             if (data.success) {
@@ -585,6 +721,128 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
             searchResults.style.display = 'none';
         }
+    });
+});
+
+// Til tanlash dropdown
+document.addEventListener('DOMContentLoaded', function() {
+    const langToggleBtn = document.getElementById('langToggleBtn');
+    const langDropdown = document.getElementById('langDropdown');
+    const langForm = document.getElementById('langForm');
+    const langFormInput = document.getElementById('langFormInput');
+
+    if (!langToggleBtn) return;
+
+    langToggleBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        langDropdown.style.display = langDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    langDropdown.querySelectorAll('.lang-option').forEach(function(option) {
+        option.addEventListener('click', function() {
+            const lang = this.getAttribute('data-lang');
+            langFormInput.value = lang;
+            langForm.submit();
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!langToggleBtn.contains(e.target) && !langDropdown.contains(e.target)) {
+            langDropdown.style.display = 'none';
+        }
+    });
+});
+
+// ============================================================
+// Admin panel login modal — inputlar FAQAT tugma bosilganda
+// dinamik yaratiladi, yopilganda DOM'dan butunlay o'chiriladi.
+// (Sabab: sahifa yuklanganda username+password jufti doim DOM'da
+// mavjud bo'lsa, brauzer/parol menejeri kengaytmalari uni "login
+// formasi" deb aniqlab, saqlangan qiymatlarni sahifadagi BOSHQA
+// matn maydonlariga - masalan qidiruv qutisiga - ham avtomatik
+// tarqatib yuborishi mumkin edi.)
+// ============================================================
+document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('billingLockBtn');
+    var overlay = document.getElementById('billingLoginOverlay');
+
+    function getCookie(name) {
+        let val = null;
+        if (document.cookie) {
+            document.cookie.split(';').forEach(c => {
+                const cookie = c.trim();
+                if (cookie.startsWith(name + '=')) {
+                    val = decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            });
+        }
+        return val;
+    }
+
+    function buildModalContent() {
+        overlay.innerHTML = `
+            <div class="billing-login-modal">
+                <h5>Admin panelga kirish</h5>
+                <div class="err" id="billingLoginErr"></div>
+                <input type="text" id="billingUsername" placeholder="Login"
+                       autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore="true">
+                <input type="password" id="billingPassword" placeholder="Parol"
+                       autocomplete="new-password" data-lpignore="true" data-1p-ignore data-bwignore="true">
+                <button type="button" class="submit" id="billingLoginSubmit">Kirish</button>
+            </div>
+        `;
+
+        var submitBtn = document.getElementById('billingLoginSubmit');
+        var errBox = document.getElementById('billingLoginErr');
+        var usernameInput = document.getElementById('billingUsername');
+        var passwordInput = document.getElementById('billingPassword');
+
+        submitBtn.addEventListener('click', function () {
+            var username = usernameInput.value;
+            var password = passwordInput.value;
+
+            fetch('/billing/admin-login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    errBox.textContent = data.error || "Xatolik";
+                    errBox.style.display = 'block';
+                }
+            })
+            .catch(() => {
+                errBox.textContent = "Server bilan bog'lanishda xatolik";
+                errBox.style.display = 'block';
+            });
+        });
+
+        passwordInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') submitBtn.click();
+        });
+
+        usernameInput.focus();
+    }
+
+    function closeModal() {
+        overlay.classList.remove('active');
+        overlay.innerHTML = '';
+    }
+
+    btn.addEventListener('click', function () {
+        buildModalContent();
+        overlay.classList.add('active');
+    });
+
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeModal();
     });
 });
 </script>

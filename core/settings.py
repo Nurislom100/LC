@@ -131,7 +131,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
 # uchun default bo'sh.
 # ============================================================
 CSRF_TRUSTED_ORIGINS = [
-    origin.strip() for origin in config('CSRF_TRUSTED_ORIGINS', default='').split(',') if origin.strip()
+    "https://*.up.railway.app"
 ]
 
 

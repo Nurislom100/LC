@@ -1915,7 +1915,8 @@ class RatingView(View):
     """Rating sahifasi - O'quvchilar reytingi"""
     def get(self, request, group_id):
         group = get_object_or_404(models.Group, id=group_id)
-        return render(request, "manager/rating/rating.html", {
+        return render(request, "manager/rating/rating.html", 
+        {
             "group": group,
             "active_tab": "rating"
         })

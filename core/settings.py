@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'reception',
     'teacher',
     'billing',
+    'telegram_bot',
 
 ]
 
@@ -240,3 +241,7 @@ LOCALE_PATHS = [
 ]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+BOT_TOKEN = config('BOT_TOKEN', default='')
+BOT_USERNAME = config('BOT_USERNAME', default='')   # @ belgisiz
+BOT_TIMEZONE = 'Asia/Tashkent'  

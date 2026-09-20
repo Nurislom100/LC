@@ -48,6 +48,7 @@ urlpatterns = [
     path('accountant/', include("accountant.urls")),
     path('teacher/', include("teacher.urls")),
     path('billing/', include('billing.urls')),
+    path('bot/', include('telegram_bot.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path("__debug__/", include("debug_toolbar.urls")),

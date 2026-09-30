@@ -63,7 +63,8 @@ class Teacher(BaseModel):
     ]
     type_choice = [
         ("Precent", "Precent"),
-        ("Group by", "Group by")
+        ("Group by", "Group by"),
+        ("Student by", "Student by"),   # YANGI
     ]
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(_("full name"), max_length=256)
@@ -71,7 +72,10 @@ class Teacher(BaseModel):
     course = models.ForeignKey("common.Course", on_delete=models.SET_NULL, verbose_name="course", related_name="teachers", null=True, blank=False)
     phone = models.CharField(_("phone"), max_length=256)
     type = models.CharField(_("type"), max_length=100, choices=type_choice)
-    salary = models.CharField(_("salary"), max_length=100, help_text="Foiz: '20%' yoki Fix summa: '500000'")
+    salary = models.CharField(
+        _("salary"), max_length=100,
+        help_text="Foiz: '20%', Fix summa (guruh uchun): '500000', Fix summa (o'quvchi boshiga): '200000'"
+    )
     address = models.CharField(_("address"), max_length=256)
     status = models.CharField(_("status"), max_length=256, choices=status_choices)
 
@@ -82,16 +86,16 @@ class Teacher(BaseModel):
 
     def __str__(self):
         return self.full_name
-    
+
     def get_salary_percent(self):
-        """Foiz miqdorini olish"""
+        """Foiz miqdorini olish (Precent uchun)"""
         if self.type == "Precent" and '%' in str(self.salary):
             try:
                 return float(str(self.salary).replace('%', '').strip())
             except:
                 return 0
         return 0
-    
+
     def get_fixed_salary(self):
         """Fix summa olish (Group by uchun)"""
         if self.type == "Group by":
@@ -100,14 +104,23 @@ class Teacher(BaseModel):
             except:
                 return 0
         return 0
-    
+
+    def get_student_salary(self):
+        """Bir o'quvchi boshiga belgilangan summa (Student by uchun)"""
+        if self.type == "Student by":
+            try:
+                return float(str(self.salary).replace(',', '').replace(' ', '').strip())
+            except:
+                return 0
+        return 0
+
     def calculate_monthly_salary(self, group):
         """
-        Oylik maoshni hisoblash
-        
+        Oylik maoshni hisoblash (joriy oy bo'yicha)
+
         Args:
             group: Group obyekti
-        
+
         Returns:
             dict: Hisoblangan oylik va detallari
         """
@@ -117,37 +130,57 @@ class Teacher(BaseModel):
             'salary': self.salary,
             'details': {}
         }
-        
+
         if self.type == "Group by":
-            # Fix summa
+            # O'zgarishsiz: to'liq belgilangan summa
             result['monthly_salary'] = self.get_fixed_salary()
             result['details'] = {
                 'description': f"Fixed salary for group: {self.salary}"
             }
-        
-        elif self.type == "Precent":
-            # O'quvchilar soni (group.students ga qarab)
-            students_count = group.students.filter().count()
+            return result
+
+        # Precent va Student by uchun: shu oyda to'lov qilgan (kamida 1 ta Payment yozuvi
+        # bo'lgan) o'quvchilar soni asos bo'ladi, summasi qancha bo'lishidan qat'i nazar.
+        today = date.today()
+        paid_students_count = (
+            group.payments
+            .filter(date__year=today.year, date__month=today.month)
+            .values('student')
+            .distinct()
+            .count()
+        )
+        total_students = group.students.filter().count()
+
+        if self.type == "Precent":
             group_price = group.price
             percent = self.get_salary_percent()
-            
-            # Jami to'lov: students_count × group_price
-            total_payment = students_count * group_price
-            
-            # Teacher foizi
+
+            total_payment = paid_students_count * group_price
             monthly_salary = (total_payment * percent) / 100
-            
+
             result['monthly_salary'] = monthly_salary
             result['details'] = {
-                'students_count': students_count,
+                'students_count': total_students,
+                'paid_students_count': paid_students_count,
                 'group_price': group_price,
                 'total_payment': total_payment,
                 'percent': percent,
-                'calculation': f"{students_count} students × {group_price:,} so'm = {total_payment:,} so'm × {percent}% = {monthly_salary:,} so'm"
+                'calculation': f"{paid_students_count}/{total_students} students × {group_price:,} so'm = {total_payment:,} so'm × {percent}% = {monthly_salary:,.1f} so'm"
             }
-        
+
+        elif self.type == "Student by":
+            per_student = self.get_student_salary()
+            monthly_salary = paid_students_count * per_student
+
+            result['monthly_salary'] = monthly_salary
+            result['details'] = {
+                'students_count': total_students,
+                'paid_students_count': paid_students_count,
+                'per_student': per_student,
+                'calculation': f"{paid_students_count}/{total_students} students × {per_student:,} so'm = {monthly_salary:,} so'm"
+            }
+
         return result
-        return self.full_name
 
 class Course(BaseModel):
     title = models.CharField(_("title"), max_length=256)
